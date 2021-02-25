@@ -13,6 +13,11 @@ class Product extends Model
 
     protected $fillable = ['id', 'title', 'category', 'country', 'city', 'location', 'start_time', 'end_time', 'supplier'];
 
+
+    function get_supplier(){
+      $supplier = Account::find($this->supplier);
+      return $supplier;
+    }
     function getDescription(){
         return $this->hasMany('App\Models\ProductDescription','product_id','id');
     }
@@ -30,14 +35,27 @@ class Product extends Model
     }
 
     function getCategory() {
-        return $this->hasOne('App\Models\Category','id','category');
+      return $this->hasOne('App\Models\Category','id','category');
     }
+    function get_category() {
+      $category =Category::find($this->category);
+      return $category;
+
+  }
 
     function getCountry() {
         return $this->hasOne('App\Models\Country','id','country');
     }
+    function get_country() {
+      $country =Country::find($this->country);
+      return $country;
+  }
 
     function getCity() {
         return $this->hasOne('App\Models\City','id','city');
     }
+    function get_city() {
+      $city =City::find($this->city);
+      return $city;
+  }
 }

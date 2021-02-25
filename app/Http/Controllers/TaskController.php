@@ -22,6 +22,7 @@ use App\Models\Task_Type;
 use App\Models\Language;
 use App\Models\ItineraryDaily;
 use App\Models\ItineraryTemplate;
+use App\Models\Confirmation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use DB;
@@ -170,14 +171,43 @@ class TaskController extends Controller
       }
       else
       {
-        $task = new Task();
-        $task->fill($data);
-        $task->save();
-        $data['mode'] = "create";
+        $t = Task::where('itinerary_id', $data['itinerary_id'])->where('service_id', $data['service_id'])->first();
+        if(empty($t))
+        {
+          $task = new Task();
+          $task->fill($data);
+          $task->save();
+
+          if($task->service_id == 0)
+          {
+            $task_itinerary_id = $task->itinerary_id;
+            $itinerary_dailys = ItineraryDaily::where('itinerary_id', $task_itinerary_id)->get();
+            if(!empty($itinerary_dailys))
+            {
+              foreach($itinerary_dailys as $itinerary_daily)
+              {
+                $confirm = new Confirmation();
+                $confirm->itinerary_daily_id = $itinerary_daily->id;
+                $confirm->task_id = $task->id;
+                $confirm->product_id = $itinerary_daily->product_id;
+                $confirm->flag = 1;
+                $confirm->status = 0;
+                $confirm->save();
+              }
+            }
+
+          }
+          $data['mode'] = "create";
+        }
+        else
+        {
+          $data['result'] = "error";
+          return json_encode($data);
+        }
       }
       $data['result'] = "success";
 
-      echo json_encode($data);
+      return json_encode($data);
   }
   public function save_product_task(Request $request){
 
@@ -201,9 +231,34 @@ class TaskController extends Controller
     $task->fill($data);
     $task->save();
 
-    $data['result'] = "success";
+    $t = Task::where('itinerary_id', $data['itinerary_id'])->where('service_id', $data['service_id'])->first();
+    if(empty($t)){
+      if($task->service_id != 0)
+      {
+        $task_itinerary_id = $task->itinerary_id;
+        $itinerary_daily = ItineraryDaily::find($task->service_id);
+        if(!empty($itinerary_daily))
+        {
+            $confirm = new Confirmation();
+            $confirm->itinerary_daily_id = $itinerary_daily->id;
+            $confirm->task_id = $task->id;
+            $confirm->product_id = $itinerary_daily->product_id;
+            $confirm->flag = 0;
+            $confirm->status = 0;
+            $confirm->save();
+        }
 
-    echo json_encode($data);
+      }
+
+      $data['result'] = "success";
+
+      echo json_encode($data);
+    }
+    else
+    {
+      $data['result'] = "error";
+      echo json_encode($data);
+    }
   }
 }
 

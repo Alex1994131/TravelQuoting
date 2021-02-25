@@ -54,8 +54,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/save_task', ['uses' => 'TaskController@save_task'])->name('save_task');
 
     //Contact
-    Route::get('/contact_management', ['uses' => 'ContactController@contact_management'])->name('contact_management');
-
+    Route::get('/contact_management/{itinerary_id}', ['uses' => 'ContactController@contact_management'])->name('contact_management');
+    Route::post('/save_status', ['uses' => 'ContactController@save_status'])->name('save_status');
     //Itinerary
 
     Route::get('/itinerary_add_info/{id}/{type}',['uses' => 'ItineraryController@add_itinerary_info'])->name('add_itinerary_info'); /**create or edit and get itinerary info */

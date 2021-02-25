@@ -410,6 +410,7 @@ label{
                         <span class="bx bx-slider-alt font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu"></span>
                         <div class="dropdown-menu dropdown-menu-right">
+                          <a class="dropdown-item" href="{{ route('contact_management', $task->id) }}"><i class="bx bx-edit-alt mr-1"></i> contact </a>
                           <a class="dropdown-item" href="javascript:void(0)" onClick="task_edit({{$task->id}})"><i class="bx bx-edit-alt mr-1"></i> edit</a>
                           <a class="dropdown-item" href="javascript:void(0)" onClick="task_del({{$task->id}})"><i class="bx bx-trash mr-1"></i> delete</a>
                         </div>

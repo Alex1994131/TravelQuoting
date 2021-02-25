@@ -417,7 +417,6 @@ function save_task(){
     var date2 = new Date(end_date[2], end_date[0] - 1, end_date[1]);
 
     var delta = date2.getTime() - date1.getTime();
-
     if(delta < 0)
     {
       toastr.warning('The end date must be greater than start date!', 'warning', {'closeButton': true, timeOut: 2000});
@@ -442,11 +441,13 @@ function save_task(){
 
             location.reload();
           }
+          else if(data.result == 'error'){
+            toastr.warning('The task already exist!', 'warning', {'closeButton': true, timeOut: 2000});
+          }
 
         }
       });
     }
-
   }
 }
 function select_task(type_id)

@@ -1,39 +1,22 @@
 @extends('layouts.contentLayoutMaster')
-{{-- page title --}}
+
 @section('title','Travel Quoting System | Contact')
+
 @section('vendor-styles')
-  <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/extensions/bootstrap-treeview.min.css')}}">
-
-  <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/forms/select/select2.min.css')}}">
-
-  <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/editors/quill/katex.min.css')}}">
-  <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/editors/quill/monokai-sublime.min.css')}}">
-  <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/editors/quill/quill.snow.css')}}">
-  <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/editors/quill/quill.bubble.css')}}">
-
-  <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/pickers/pickadate/pickadate.css')}}">
-  <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/pickers/daterange/daterangepicker.css')}}">
-
-  <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/ui/prism.min.css')}}">
-  <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/file-uploaders/dropzone.min.css')}}">
-
-  <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/forms/spinner/jquery.bootstrap-touchspin.css')}}">
-
-  <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/animate/animate.css')}}">
-  <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/extensions/sweetalert2.min.css')}}">
-
-  <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/charts/apexcharts.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('vendors/css/charts/apexcharts.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/extensions/dragula.min.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/pickers/daterange/daterangepicker.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('vendors/css/extensions/sweetalert2.min.css')}}">
 
+<link rel="stylesheet" type="text/css" href="{{asset('vendors/css/extensions/swiper.min.css')}}">
 @endsection
+
 @section('custom-horizontal-style')
 <link rel="stylesheet" type="text/css" href="{{asset('css/core/menu/menu-types/horizontal-custom-menu.css')}}">
 @endsection
 
 @section('page-styles')
-<link rel="stylesheet" type="text/css" href="{{asset('css/pages/widgets.css')}}">
-  <link rel="stylesheet" type="text/css" href="{{asset('css/pages/app-chat.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{asset('css/pages/widgets.css')}}">
   <link rel="stylesheet" type="text/css" href="{{asset('css/pages/app-file-manager.css')}}">
   <link rel="stylesheet" type="text/css" href="{{asset('css/plugins/extensions/ext-component-treeview.css')}}">
   <link rel="stylesheet" type="text/css" href="{{asset('css/plugins/forms/validation/form-validation.css')}}">
@@ -48,82 +31,248 @@
     }
   </style>
 @endsection
-
 @section('content')
-<div class="alert bg-rgba-primary">
-  <i class="bx bx-info-circle mr-1 align-middle"></i>
-  <span class="align-middle">
-    Click <a href="https://getbootstrap.com/docs/4.3/components/card/" target="_blank"><u>here</u></a>
-    for more info on cards.
-  </span>
-</div>
-<!-- Basic card section start -->
+<!-- Widgets Advance start -->
+<section id="widgets-advance">
 
-<section id="content-types">
   <div class="row">
-    <div class="col-xl-5 col-md-5 col-sm-5">
-      <div class="card collapse-icon accordion-icon-rotate">
-        <div class="card-header">
-          <h1 class="card-title pl-1">Services For Booking</h1>
+    <div class="col-md-12">
+    <div class="collapsible collapse-icon accordion-icon-rotate">
+      <div class="card collapse-header">
+        <div id="headingCollapse6" class="card-header" data-toggle="collapse" role="button" data-target="#collapse6"  aria-expanded="false" aria-controls="collapse6">
+          <span class="collapse-title">
+            <i class='bx bx-help-circle align-middle'></i>
+              <span class="align-middle">
+              Itinerary Information | Ref.No:
+              <?php
+              $str = $itinerary->reference_number;
+
+              echo $str;
+                ?>
+              </span>
+            </span>
         </div>
-        <div class="card-content">
-          <div class="card-body">
-            <div class="accordion" id="cardAccordion">
-              <div class="card">
-                <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne"
-                  aria-expanded="false" aria-controls="collapseOne" role="button">
-                  <span class="collapsed collapse-title">Accordion Item 1</span>
-                </div>
-                <div id="collapseOne" class="collapse pt-1" aria-labelledby="headingOne" data-parent="#cardAccordion">
-                  <div class="card-body">
-                    Cheesecake muffin cupcake dragée lemon drops tiramisu cake gummies chocolate cake. Marshmallow tart
-                    croissant. Tart dessert tiramisu marzipan lollipop lemon drops.
+
+        <div id="collapse6" role="tabpanel" aria-labelledby="headingCollapse6" class="collapse">
+          <div class="card-content">
+            <div class="card-body">
+
+                <form class="form-horizontal" novalidate>
+                @csrf
+                <input type="hidden" name="enquiry_id" id = "enquiry_id" value="{{ $itinerary->enquiry_id }}">
+
+                <input type="hidden" name="itinerary_id" id="itinerary_id" value="{{ $itinerary->id }}">
+
+                <div class="row">
+                  <div class="col-md-6 col-sm-6">
+                    <h6>Itinerary Title</h6>
+                    <fieldset class="form-group position-relative has-icon-left">
+                        <div class="controls">
+                            <input type="text" class="form-control" id="title" name="title" value="{{ $itinerary->title }}" placeholder="Itinerary Title" required data-validation-required-message="This Title field is required" aria-invalid="false" readonly>
+                        </div>
+                        <div class="form-control-position">
+                            <i class="bx bx-purchase-tag-alt"></i>
+                        </div>
+                    </fieldset>
+                  </div>
+
+                  <div class="col-md-2 col-sm-2">
+                    <h6>Pick up duration</h6>
+                    <fieldset class="form-group position-relative has-icon-left">
+                        <?php
+
+                          $from_date = $itinerary->from_date;
+                          $from_date= date_create($from_date);
+                          $from_date = date_format($from_date,"m/d/Y");
+
+                          $to_date = $itinerary->to_date;
+                          $to_date = date_create($to_date);
+                          $to_date = date_format($to_date,"m/d/Y");
+
+                          $duration = $from_date . ' - ' . $to_date;
+                        ?>
+                        <input type="text" class="form-control showdropdowns" placeholder="Select duration" id="duration" name="duration" value="{{ $duration }}" required data-validation-required-message="This Duration field is required" aria-invalid="false" readonly>
+                        <div class="form-control-position">
+                            <i class='bx bx-calendar-check'></i>
+                        </div>
+                    </fieldset>
+                  </div>
+                  <div class="col-md-2 col-sm-2">
+                      <h6>Adults Number:</h6>
+                      <div class="d-inline-block mb-1 mr-1">
+                          <input type="number" class="touchspin" value="{{ $itinerary->adult_number }}" id="adults_num" name="adults_num" required data-validation-required-message="This Title field is required" aria-invalid="false" readonly>
+                      </div>
+                  </div>
+                  <div class="col-md-2 col-sm-2">
+                      <h6>Children Number:</h6>
+                      <div class="d-inline-block mb-1 mr-1">
+                          <input type="number" class="touchspin" value="{{ $itinerary->children_number}}" id="children_num" name="children_num" readonly>
+                      </div>
                   </div>
                 </div>
-              </div>
-              <div class="card collapse-header">
-                <div class="card-header" id="headingTwo" data-toggle="collapse" data-target="#collapseTwo"
-                  aria-expanded="false" aria-controls="collapseTwo" role="button">
-                  <span class="collapsed collapse-title">Accordion Item 2</span>
-                </div>
-                <div id="collapseTwo" class="collapse pt-1" aria-labelledby="headingTwo" data-parent="#cardAccordion">
-                  <div class="card-body">
-                    Pastry pudding cookie toffee bonbon jujubes jujubes powder topping. Jelly beans gummi bears sweet
-                    roll bonbon muffin liquorice. Wafer lollipop sesame snaps.
+                <div class="row">
+                  <div class="col-md-2 col-sm-2">
+                    <h6>Single Rooms:</h6>
+                    <div class="d-inline-block mb-1 mr-1">
+                      <input type="number" class="touchspin" value="{{ $itinerary->single_count }}" id="single_room" name="single_room" readonly>
+                    </div>
+                  </div>
+                  <div class="col-2 col-sm-2">
+                    <h6>Double Rooms:</h6>
+                    <div class="d-inline-block mb-1 mr-1">
+                      <input type="number" class="touchspin" value="{{ $itinerary->double_count }}" id="double_room" name="double_room" readonly>
+                    </div>
+                  </div>
+                  <div class="col-2 col-sm-2">
+                    <h6>Twin Rooms:</h6>
+                    <div class="d-inline-block mb-1 mr-1">
+                      <input type="number" class="touchspin" value="{{ $itinerary->twin_count }}" id="twin_room" name="twin_room" readonly>
+                    </div>
+                  </div>
+                  <div class="col-2 col-sm-2">
+                    <h6>Triple Rooms:</h6>
+                    <div class="d-inline-block mb-1 mr-1">
+                      <input type="number" class="touchspin" value="{{ $itinerary->triple_count }}" id="triple_room" name="triple_room" readonly>
+                    </div>
+                  </div>
+                  <div class="col-2 col-sm-2">
+                    <h6>Family Rooms:</h6>
+                    <div class="d-inline-block mb-1 mr-1">
+                      <input type="number" class="touchspin" value="{{ $itinerary->family_count }}" id="family_room" name="family_room" readonly>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="card open">
-                <div class="card-header" id="headingThree" data-toggle="collapse" data-target="#collapseThree"
-                  aria-expanded="true" aria-controls="collapseThree" role="button">
-                  <span class="collapsed collapse-title">Accordion Item 3</span>
-                </div>
-                <div id="collapseThree" class="collapse show pt-1" aria-labelledby="headingThree"
-                  data-parent="#cardAccordion">
-                  <div class="card-body">
-                    Sweet pie candy jelly. Sesame snaps biscuit sugar plum. Sweet roll topping fruitcake. Caramels
-                    liquorice biscuit ice cream fruitcake cotton candy tart.
+                <div class="row">
+                  <div class="col-12 col-sm-12 col-md-12">
+                    <h6>Note:</h6>
+                    <textarea class="form-control" rows="6" name="note1" id="note1" readOnly>
+                      {{ $itinerary->note }}
+                    </textarea>
                   </div>
                 </div>
-              </div>
-              <div class="card">
-                <div class="card-header" id="headingFour" data-toggle="collapse" data-target="#collapseFour"
-                  aria-expanded="false" aria-controls="collapseFour" role="button">
-                  <span class="collapsed  collapse-title">Accordion Item 4</span>
-                </div>
-                <div id="collapseFour" class="collapse pt-1" aria-labelledby="headingFour" data-parent="#cardAccordion">
-                  <div class="card-body">
-                    Sweet pie candy jelly. Sesame snaps biscuit sugar plum. Sweet roll topping fruitcake. Caramels
-                    liquorice biscuit ice cream fruitcake cotton candy tart.
-                  </div>
-                </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
+
       </div>
     </div>
+    </div>
+  </div>
+  <div class="row">
 
+    <!-- Services Starts -->
+    <div class="col-xl-5 col-md-5 earnings-card" id="widget-earnings">
+      <div class="card">
+        <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+          <h5 class="card-title">Services </h5>
+          <i class="bx bx-dots-vertical-rounded font-medium-3 cursor-pointer"></i>
+        </div>
+        <div class="card-content">
+          <div class="card-body py-1">
+            <!-- services swiper starts -->
+            <div class="widget-earnings-swiper swiper-container p-1">
+              <div class="swiper-wrapper">
+                @foreach($itinerary_dailys as $itinerary_daily)
+                <div class="swiper-slide rounded swiper-shadow py-75 px-2 d-flex align-items-center" id="service_{{$itinerary_daily->id}}">
+                  <i class="bx bx-pyramid mr-50 font-large-1"></i>
+                  <div class="swiper-text">{{$itinerary_daily->get_product()->title}}
+                    <p class="mb-0 font-small-2 font-weight-normal">{{$itinerary_daily->get_time()}}</p>
+                  </div>
+                </div>
+                @endforeach
+              </div>
+            </div>
+            <!-- services swiper ends -->
+          </div>
+        </div>
+        <div class="main-wrapper-content">
+        @foreach($itinerary_dailys as $itinerary_daily)
+          <div class="wrapper-content" data-earnings="service_{{$itinerary_daily->id}}">
+                  @php
+                        $product_gallery = $product_gallery_model->where('product_id', $itinerary_daily->product_id)->first();
+                        $path = $product_gallery?$product_gallery->path:'';
+                        $product = $itinerary_daily->get_product();
+
+                        $product_prices = $itinerary_daily->get_product_prices();
+                    @endphp
+            <div class="widget-earnings-scroll table-responsive">
+              <table class="table table-borderless widget-earnings-width mb-0">
+                <tbody>
+                  <tr>
+                    <td>
+                    <div class="row">
+                    <div class = "col-md-8">
+                      <div class="d-flex align-items-center mt-75">
+                        <p style="margin-right: 20px;" class="text-danger">Category:</p>
+                        <p class="font-weight-bold" id="category_title">{{ $product->get_category()->title?$product->get_category()->title:''  }}</p>
+                      </div>
+                      <div class="d-flex align-items-center">
+                          <p style="margin-right: 20px;" class="text-danger">location:</p>
+                          <p class="font-weight-bold" id="location">{{ $product->get_country()->title?$product->get_country()->title:'' }} {{  $product->get_city()->title?$product->get_city()->title:'' }}</p>
+                      </div>
+                    </div>
+                    <div class = "col-md-4 mt-75" style="color: green">
+
+                    <button type="button" onClick="confirm_check({{$itinerary_daily->confirm_check()->id}})" class="btn btn-danger confirm_btn" {{$itinerary_daily->confirm_check()->status == 1 ? "disabled" : ""}}> confirm </button>
+                    </div>
+                    </td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td class="col-lg-6 col-md-6 col-sm-6">
+                      <div class="app-file-content-logo card-img-top act-image" style="background: url({{asset($path)}}); width: 100%; height: 300px">
+                      </div>
+                      <div class="card border shadow-none mb-1 app-file-info p-act">
+                        <div class="card-content">
+                          <i class="bx bx-dots-vertical-rounded app-file-edit-icon d-block float-right"></i>
+                        </div>
+
+                        <div class="card-body p-50">
+                          <div class="d-flex align-items-center mt-75">
+                              <p style="margin-right: 20px;" class="text-danger">Travelers:</p>
+                              <p class="font-weight-bold" id="category_title">adults: {{ $itinerary_daily->adults_num}}</p>
+                              <p style="margin-left: 30px;" class="font-weight-bold" id="category_title">childs: {{ $itinerary_daily->children_num}}</p>
+                          </div>
+                          <div class="app-file-recent-details">
+                            @foreach($product_prices as $product_price)
+
+                              <div class="d-flex align-items-center mt-75">
+                                <p style="margin-right: 20px;" class="text-danger">Tag:</p>
+                                <p class="font-weight-bold" id="category_title">{{ $product_price->getTagg($product_price->tag)->title}}</p>
+
+                                <p style="margin-left: 30px;" class="font-weight-bold" id="season_duration">{{ $product_price->duration}}</p>
+                                <p style="margin-left: 30px;" class="font-weight-bold" id="category_price">{{ $product_price->price}}({{$product_price->getCurr($product_price->currency)->title}})</p>
+                              </div>
+
+                            @endforeach
+                            <div class="d-flex align-items-center mt-75">
+                              <p style="margin-right: 20px;" class="text-danger">Margin Price:</p>
+                              <p class="font-weight-bold" id="category_title">{{ $itinerary_daily->itinerary_margin_price  }}(%)</p>
+                            </div>
+                            <div class="d-flex align-items-center mt-75">
+                              <p style="margin-right: 20px;" class="text-danger">Supplier:</p>
+                              <p class="font-weight-bold" id="category_title">{{ $itinerary_daily->get_product()->get_supplier()->first_name . '.' . $itinerary_daily->get_product()->get_supplier()->last_name }}</p>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        @endforeach
+        </div>
+      </div>
+    </div>
+    <!-- Earnings Widget Swiper Ends -->
+
+    <!-- chat Widget Starts -->
     <div class="col-xl-7 col-md-7 widget-chat-card">
       <div class="widget-chat widget-chat-messages">
         <div class="card">
@@ -238,63 +387,34 @@
       </div>
     </div>
     <!-- chat Widget Ends -->
-
   </div>
 </section>
-<!-- Basic Card types section end -->
-
+<!-- Widgets Advance End -->
 @endsection
-
+{{-- page styles --}}
 
 @section('vendor-scripts')
 
-  <script src="{{asset('vendors/js/extensions/bootstrap-treeview.min.js')}}"></script>
-
-  <script src="{{asset('vendors/js/forms/validation/jqBootstrapValidation.js')}}"></script>
-  <script src="{{asset('vendors/js/forms/validation/jquery.validate.min.js')}}"></script>
-
-  <script src="{{asset('vendors/js/forms/select/select2.full.min.js')}}"></script>
-
-  <script src="{{asset('vendors/js/pickers/pickadate/picker.js')}}"></script>
-  <script src="{{asset('vendors/js/pickers/pickadate/picker.date.js')}}"></script>
-  <script src="{{asset('vendors/js/pickers/pickadate/picker.time.js')}}"></script>
-  <script src="{{asset('vendors/js/pickers/pickadate/legacy.js')}}"></script>
-  <script src="{{asset('vendors/js/pickers/daterange/moment.min.js')}}"></script>
-  <script src="{{asset('vendors/js/pickers/daterange/daterangepicker.js')}}"></script>
-
-  <script src="{{asset('vendors/js/editors/quill/katex.min.js')}}"></script>
-  <script src="{{asset('vendors/js/editors/quill/highlight.min.js')}}"></script>
-  <script src="{{asset('vendors/js/editors/quill/quill.min.js')}}"></script>
-  <script src="{{asset('vendors/js/extensions/jquery.steps.min.js')}}"></script>
-
-  <script src="{{asset('vendors/js/extensions/dropzone.min.js')}}"></script>
-  <script src="{{asset('vendors/js/ui/prism.min.js')}}"></script>
-
-  <script src="{{asset('vendors/js/forms/spinner/jquery.bootstrap-touchspin.js')}}"></script>
-
-  <script src="{{asset('//maps.googleapis.com/maps/api/js?key=AIzaSyBgjNW0WA93qphgZW-joXVR6VC3IiYFjfo')}}"></script>
-  <script src="{{asset('vendors/js/charts/gmaps.min.js')}}"></script>
-
-  <script src="{{asset('vendors/js/forms/repeater/jquery.repeater.min.js')}}"></script>
-
-  <script src="{{asset('vendors/js/ckeditor/ckeditor.js')}}"></script>
-  <script src="{{asset('vendors/js/extensions/sweetalert2.all.min.js')}}"></script>
-  <script src="{{asset('vendors/js/extensions/polyfill.min.js')}}"></script>
-  <script src="{{asset('vendors/js/pickers/daterange/moment.min.js')}}"></script>
+<script src="{{asset('vendors/js/pickers/daterange/moment.min.js')}}"></script>
 <script src="{{asset('vendors/js/pickers/daterange/daterangepicker.js')}}"></script>
 <script src="{{asset('vendors/js/charts/apexcharts.min.js')}}"></script>
-  <script src="{{asset('vendors/js/extensions/dragula.min.js')}}"></script>
-  <script src="{{asset('vendors/js/extensions/swiper.min.js')}}"></script>
+<script src="{{asset('vendors/js/extensions/dragula.min.js')}}"></script>
+<script src="{{asset('vendors/js/extensions/swiper.min.js')}}"></script>
+<script src="{{asset('vendors/js/extensions/sweetalert2.all.min.js')}}"></script>
+
+
 @endsection
 
 @section('page-scripts')
+<script src="{{asset('vendors/js/ckeditor/ckeditor.js')}}"></script>
+<script src="{{asset('js/scripts/cards/widgets.js')}}"></script>
+<script src="{{asset('js/scripts/pages/contact_management.js')}}"></script>
+
   <script>
       var base_url = "{{ url('/') }}";
+
       function back(){
           document.location.href=base_url + '/';
       }
   </script>
-  <script src="{{asset('js/scripts/pages/product_edit.js')}}"></script>
-  <script src="{{asset('js/scripts/pages/app-chat.js')}}"></script>
-  <script src="{{asset('js/scripts/cards/widgets.js')}}"></script>
 @endsection

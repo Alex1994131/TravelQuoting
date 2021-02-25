@@ -54,14 +54,6 @@ $(document).ready(function () {
       lineCap: "round",
     }
   };
-  var radialPrimaryChart = new ApexCharts(
-    document.querySelector("#radial-chart-primary"),
-    radialPrimaryoptions
-  );
-
-  radialPrimaryChart.render();
-
-
   // Radial Users Chart - Success
   // ----------------------------
   var radialSuccessoptions = {
@@ -98,13 +90,6 @@ $(document).ready(function () {
       lineCap: "round",
     }
   };
-  var radialSuccessChart = new ApexCharts(
-    document.querySelector("#radial-chart-success"),
-    radialSuccessoptions
-  );
-
-  radialSuccessChart.render();
-
 
   // Radial Registrations Chart - Danger
   // -----------------------------------
@@ -142,13 +127,6 @@ $(document).ready(function () {
       lineCap: "round",
     }
   };
-  var radialDangerChart = new ApexCharts(
-    document.querySelector("#radial-chart-danger"),
-    radialDangeroptions
-  );
-  radialDangerChart.render();
-
-
   // Multi Radial Statistics
   // -----------------------
   var multiRadialOptions = {
@@ -192,12 +170,6 @@ $(document).ready(function () {
     },
     labels: ['Comments', 'Sharing', 'Replies']
   };
-
-  var multiradialChart = new ApexCharts(
-    document.querySelector("#radial-chart-multi"),
-    multiRadialOptions
-  );
-  multiradialChart.render();
 
   // Half Radial Chart
   // -----------------
@@ -244,12 +216,6 @@ $(document).ready(function () {
       lineCap: "round"
     }
   };
-
-  var radialHalfChart = new ApexCharts(
-    document.querySelector("#radial-chart-half"),
-    radialHalfChartOptions
-  );
-  radialHalfChart.render();
 
 
   // Donut Chart Spending
@@ -309,12 +275,6 @@ $(document).ready(function () {
     }
   }
 
-  var donustChartSpending = new ApexCharts(
-    document.querySelector("#donut-chart-spending"),
-    donustSpendingChart
-  );
-
-  donustChartSpending.render();
 
 
   // Donut Chart Statistics
@@ -375,13 +335,6 @@ $(document).ready(function () {
       show: false
     }
   }
-
-  var donustChartStatistics = new ApexCharts(
-    document.querySelector("#donut-chart-statistics"),
-    donustChartStatistics
-  );
-  donustChartStatistics.render();
-
 
   // Bar Chart
   // ---------
@@ -461,14 +414,6 @@ $(document).ready(function () {
     }
   }
 
-  var barChart = new ApexCharts(
-    document.querySelector("#avg-order-chart"),
-    barchartOptions
-  );
-
-  barChart.render();
-
-
   // Line Chart
   // ----------
 
@@ -541,13 +486,6 @@ $(document).ready(function () {
     }
   }
 
-  var lineChart = new ApexCharts(
-    document.querySelector("#statistics-line-chart"),
-    lineChartoptions
-  );
-
-  lineChart.render();
-
   // Statistics Multi Radial
   // -----------------------
   var statisticsRadialChartOptions = {
@@ -591,12 +529,6 @@ $(document).ready(function () {
       lineCap: "round",
     }
   }
-
-  var statisticsRadialChart = new ApexCharts(
-    document.querySelector("#statistics-multi-radial-chart"),
-    statisticsRadialChartOptions
-  );
-  statisticsRadialChart.render();
 
 
   // Order Activity Line Chart
@@ -655,12 +587,6 @@ $(document).ready(function () {
     }
   }
 
-  var orderActivityChart = new ApexCharts(
-    document.querySelector("#order-activity-line-chart"),
-    orderActivityChartOptions
-  );
-  orderActivityChart.render();
-
   // Followers Line Chart - Danger
   // -----------------------------
   var followerChartDangerOptions = {
@@ -706,11 +632,6 @@ $(document).ready(function () {
     }
   }
 
-  var followerChartDanger = new ApexCharts(
-    document.querySelector("#follower-danger-chart"),
-    followerChartDangerOptions
-  );
-  followerChartDanger.render();
 
   // Followers Line Chart - Primary
   // ------------------------------
@@ -757,12 +678,6 @@ $(document).ready(function () {
     }
   }
 
-  var followerChartPrimary = new ApexCharts(
-    document.querySelector("#follower-primary-chart"),
-    followerChartPrimaryOptions
-  );
-  followerChartPrimary.render();
-
   // Followers Line Chart - Success
   // ------------------------------
   var followerChartSuccessOptions = {
@@ -808,11 +723,6 @@ $(document).ready(function () {
     }
   }
 
-  var followerChartSuccess = new ApexCharts(
-    document.querySelector("#follower-success-chart"),
-    followerChartSuccessOptions
-  );
-  followerChartSuccess.render();
 
   // Radar Multi Series Chart
   // ------------------------
@@ -857,11 +767,6 @@ $(document).ready(function () {
     }
   }
 
-  var radarMultiChart = new ApexCharts(
-    document.querySelector("#radar-multi-chart"),
-    radarMultiChartOptions
-  );
-  radarMultiChart.render();
 
   // Gauge Chart
   // -----------
@@ -904,12 +809,6 @@ $(document).ready(function () {
     labels: ['Time Spent'],
 
   }
-  var gaugeChart = new ApexCharts(
-    document.querySelector("#gauge-chart"),
-    gaugeChartOptions
-  );
-  gaugeChart.render();
-
 
   // Daily Sales States - Heat Map Chart
   // -----------------------------------
@@ -1048,11 +947,6 @@ $(document).ready(function () {
       }
     }
   }
-  var heatChart = new ApexCharts(
-    document.querySelector("#sales-heatmap-chart"),
-    heatChartOptions);
-  heatChart.render();
-
 
   // Single Date Range
   //----------------------

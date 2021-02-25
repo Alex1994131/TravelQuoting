@@ -1363,6 +1363,10 @@ function save_task(){
             $('#task_detail_modal').modal('hide');
             //location.reload();
           }
+          else if(data.result == 'error')
+          {
+            toastr.warning('The task already exist!', 'warning', {'closeButton': true, timeOut: 2000});
+          }
 
         }
       });
