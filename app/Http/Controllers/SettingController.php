@@ -44,7 +44,7 @@ class SettingController extends Controller
         $citys = City::all();
         $countrys = Country::all();
 
-
+        // ---------------------------
 
         return view('pages.settings_general',compact(
             'pageConfigs', 'breadcrumbs', 'account_types', 'task_types', 'currencys', 'customers', 'languages', 'categorys', 'category_tags', 'citys', 'countrys',
