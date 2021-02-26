@@ -20,9 +20,265 @@
 <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/pickers/daterange/daterangepicker.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/forms/spinner/jquery.bootstrap-touchspin.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset('css/plugins/forms/validation/form-validation.css')}}">
+
+<style>
+@media (min-width: 992px){
+  .modal-lg, .modal-xl {
+      max-width: 1410px;
+  }
+}
+.mr-2, .mx-2 {
+    margin-right: 0.5rem !important;
+}
+label{
+  font-size: 0.86rem;
+}
+</style>
 @endsection
 
 @section('content')
+<!-- modal section -->
+<div class="modal fade text-left" id="customer_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel21"
+    aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel21">Customer Details</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <i class="bx bx-x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" id="customer_add_form" method="post" action="../add_account_enquiry" novalidate>
+        @csrf
+        <div class="row">
+          <div class="col-md-6">
+              <div class="row">
+                  <div class="col-md-6">
+                      <h6>First Name</h6>
+                      <fieldset class="form-group position-relative has-icon-left">
+                          <div class="controls">
+                              <input type="text" class="form-control" id="first_name" name="first_name" required
+                                  placeholder="First Name" data-validation-required-message="This first name field is required">
+                          </div>
+                          <div class="form-control-position">
+                              <i class="bx bx-purchase-tag-alt"></i>
+                          </div>
+                      </fieldset>
+                  </div>
+                  <div class="col-md-6">
+                      <h6>Last Name</h6>
+                      <fieldset class="form-group position-relative has-icon-left">
+                          <div class="controls">
+                              <input type="text" class="form-control" id="last_name" name="last_name" required
+                                  placeholder="Last Name" data-validation-required-message="This last name field is required">
+                          </div>
+                          <div class="form-control-position">
+                              <i class="bx bx-purchase-tag-alt"></i>
+                          </div>
+                      </fieldset>
+                  </div>
+              </div>
+          </div>
+          <div class="col-md-6">
+              <h6>Customer Type</h6>
+              <fieldset class="form-group position-relative has-icon-left">
+                  <select class="form-control" id="account_type" name="account_type">
+                      <option value="1">Direct Customer</option>
+                      <option value="2">Operator</option>
+                  </select>
+                  <div class="form-control-position">
+                      <i class="bx bxs-group"></i>
+                  </div>
+              </fieldset>
+          </div>
+          <div class="col-md-6" style="padding-bottom: 20px; padding-top: 20px;">
+              <h6 style="font-weight: 500">Main Information</h6>
+          </div>
+          <div class="col-md-6" style="padding-bottom: 20px; padding-top: 20px;">
+              <h6 style="font-weight: 500">Company Information</h6>
+          </div>
+
+          <div class="col-md-6">
+              <h6>State/Region</h6>
+              <fieldset class="form-group position-relative has-icon-left">
+                  <select class="select2 form-control" id="main_region_state" name="main_region_state" >
+                      <option value="">- Region/State -</option>
+                      @foreach($regions as $region)
+                      <option value="{{$region->id}}">{{$region->title}}</option>
+                      @endforeach
+                  </select>
+                  <div class="form-control-position">
+                      <i class="bx bxs-map"></i>
+                  </div>
+              </fieldset>
+          </div>
+          <div class="col-md-6">
+              <h6>State/Region</h6>
+              <fieldset class="form-group position-relative has-icon-left">
+                  <select class="select2 form-control" id="billing_region_state" name="billing_region_state" disabled>
+                      <option value="">- Region/State -</option>
+                      @foreach($regions as $region)
+                      <option value="{{$region->id}}">{{$region->title}}</option>
+                      @endforeach
+                  </select>
+                  <div class="form-control-position">
+                      <i class="bx bxs-map"></i>
+                  </div>
+              </fieldset>
+          </div>
+
+          <div class="col-md-6">
+              <h6>Country</h6>
+              <fieldset class="form-group position-relative has-icon-left">
+                  <select class="select2 form-control" id="main_country" name="main_country" >
+                      <option value="">- Country -</option>
+                      @foreach($countries as $country)
+                      <option value="{{$country->id}}">{{$country->title}}</option>
+                      @endforeach
+                  </select>
+                  <div class="form-control-position">
+                      <i class="bx bxs-flag-alt"></i>
+                  </div>
+              </fieldset>
+          </div>
+          <div class="col-md-6">
+              <h6>Country</h6>
+              <fieldset class="form-group position-relative has-icon-left">
+                  <select class="select2 form-control" id="billing_country" name="billing_country" disabled>
+                      <option value="">- Country -</option>
+                      @foreach($countries as $country)
+                      <option value="{{$country->id}}">{{$country->title}}</option>
+                      @endforeach
+                  </select>
+                  <div class="form-control-position">
+                      <i class="bx bxs-flag-alt"></i>
+                  </div>
+              </fieldset>
+          </div>
+
+          <div class="col-md-6">
+              <h6>City</h6>
+              <fieldset class="form-group position-relative has-icon-left">
+                  <select class="select2 form-control" id="main_city" name="main_city" >
+                      <option value="">- City -</option>
+                      @foreach($cities as $city)
+                      <option value="{{$city->id}}">{{$city->title}}</option>
+                      @endforeach
+                  </select>
+                  <div class="form-control-position">
+                      <i class="bx bxs-city"></i>
+                  </div>
+              </fieldset>
+          </div>
+          <div class="col-md-6">
+              <h6>City</h6>
+              <fieldset class="form-group position-relative has-icon-left">
+                  <select class="select2 form-control" id="billing_city" name="billing_city" disabled>
+                      <option value="">- City -</option>
+                      @foreach($cities as $city)
+                      <option value="{{$city->id}}">{{$city->title}}</option>
+                      @endforeach
+                  </select>
+                  <div class="form-control-position">
+                      <i class="bx bxs-city"></i>
+                  </div>
+              </fieldset>
+          </div>
+
+          <div class="col-md-6">
+              <h6>Street Address</h6>
+              <fieldset class="form-group position-relative has-icon-left">
+                  <div class="controls">
+                      <input type="text" class="form-control" id="main_street_address" name="main_street_address"
+                          placeholder="Street Address">
+                  </div>
+                  <div class="form-control-position">
+                      <i class="bx bx-street-view"></i>
+                  </div>
+              </fieldset>
+          </div>
+          <div class="col-md-6">
+              <h6>Street Address</h6>
+              <fieldset class="form-group position-relative has-icon-left">
+                  <div class="controls">
+                      <input type="text" class="form-control" id="billing_street_address" name="billing_street_address"
+                          placeholder="Street Address" disabled>
+                  </div>
+                  <div class="form-control-position">
+                      <i class="bx bx-street-view"></i>
+                  </div>
+              </fieldset>
+          </div>
+
+          <div class="col-md-6">
+              <h6>Office Phone</h6>
+              <fieldset class="form-group position-relative has-icon-left">
+                  <div class="controls">
+                      <input type="text" class="form-control" id="main_office_phone" name="main_office_phone"
+                          placeholder="Office Phone" >
+                  </div>
+                  <div class="form-control-position">
+                      <i class="bx bx-mobile"></i>
+                  </div>
+              </fieldset>
+          </div>
+          <div class="col-md-6">
+              <h6>Office Phone</h6>
+              <fieldset class="form-group position-relative has-icon-left">
+                  <div class="controls">
+                      <input type="text" class="form-control" id="billing_office_phone" name="billing_office_phone"
+                          placeholder="Office Phone" disabled>
+                  </div>
+                  <div class="form-control-position">
+                      <i class="bx bx-mobile"></i>
+                  </div>
+              </fieldset>
+          </div>
+
+          <div class="col-md-6">
+              <h6>Main Email</h6>
+              <fieldset class="form-group position-relative has-icon-left">
+                  <div class="controls">
+                      <input type="email" class="form-control" id="main_email" name="main_email"
+                          placeholder="Main Email" data-validation-required-message="This name field is required" required>
+                  </div>
+                  <div class="form-control-position">
+                      <i class="bx bx-mail-send"></i>
+                  </div>
+              </fieldset>
+          </div>
+          <div class="col-md-6">
+              <h6>Billing Email</h6>
+              <fieldset class="form-group position-relative has-icon-left">
+                  <div class="controls">
+                      <input type="email" class="form-control" id="billing_email" name="billing_email"
+                          placeholder="Billing Email" disabled>
+                  </div>
+                  <div class="form-control-position">
+                      <i class="bx bx-mail-send"></i>
+                  </div>
+              </fieldset>
+          </div>
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="customer_add_save" class="btn btn-primary ml-1">
+          <i class="bx bx-check d-block d-sm-none"></i>
+          <span class="d-none d-sm-block">ADD</span>
+        </button>
+        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+          <i class="bx bx-x d-block d-sm-none"></i>
+          <span class="d-none d-sm-block">Close</span>
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
 <!-- Dashboard Analytics Start -->
 <section id="dashboard-analytics">
     <!-- @if($errors->any())
@@ -59,7 +315,7 @@
                         <div class="col-md-6">
                             <div style="display: flex;">
                                 <h6>Customer Name</h6>&nbsp;&nbsp;&nbsp;
-                                <a href="../customer_create"><i class="bx bx-user"></i></a>
+                                <a href="javascript:void(0)" class="add_customer_btn"><i class="bx bx-user"></i></a>
                             </div>
                             <div class="form-group">
                                 <div class="controls">

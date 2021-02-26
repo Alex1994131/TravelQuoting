@@ -30,6 +30,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/crm', 'CrmController@index')->name('crm_index');
     Route::get('/customer_create', 'CrmController@customer_create');
     Route::post('/add_account', 'CrmController@add_account');
+    Route::post('/add_account_enquiry', 'CrmController@add_account_enquiry');
     Route::get('/edit_customer/{account_id}',['as' => 'edit_customer', 'uses' => 'CrmController@edit_customer']);
     Route::get('/edit_account/{account_id}',['as' => 'edit_account', 'uses' => 'CrmController@edit_account']);
     Route::post('/update_account',['as' => 'update_account', 'uses' => 'CrmController@update_account']);

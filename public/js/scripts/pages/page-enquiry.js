@@ -116,3 +116,40 @@ $('#is_assigned').change(function(){
     else $('#assigned_user').prop('disabled', 'disabled');
 });
 
+$('.add_customer_btn').click(function(){
+  var customer_modal = $('#customer_modal');
+  customer_modal.modal()
+});
+$('#customer_add_save').click(function(){
+  var customer_add_form = $('#customer_add_form');
+  var form_url = customer_add_form.attr('action');
+  $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+
+  $.ajax({
+      url: form_url,
+      method: 'post',
+      dataType: 'json',
+      data: customer_add_form.serialize(),
+      success: function(data) {
+          if (data.result == "success") {
+            toastr.success('Successfully Saved', 'Success', { "closeButton": true });
+
+            $('#customer_modal').modal('hide');
+
+          } else {
+            toastr.warning('please check the form!', 'Warning', { "closeButton": true });
+
+          }
+      },
+      error: function(error) {
+        toastr.error(error, 'Error', { "closeButton": true });
+
+      }
+  });
+
+
+});

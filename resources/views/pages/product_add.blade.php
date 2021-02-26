@@ -422,29 +422,6 @@
 
                   <div class="col-md-12" id="blackoutdatelist_1">
                     <h6>Blackout Date</h6>
-                    <div class="row" id="blackoutdaterecord_1_1">
-                      <div class="col-md-3 form-group">
-                        <fieldset class="form-group position-relative has-icon-left">
-                          <input type="text" class="form-control daterange" placeholder="Select BlackOut Date" id="blackoutdate_1_1" name="blackoutdate[0][]" value="">
-                          <div class="form-control-position">
-                            <i class='bx bx-calendar-check'></i>
-                          </div>
-                        </fieldset>
-                      </div>
-                      <div class="col-md-6">
-                        <fieldset class="form-group position-relative has-icon-left">
-                          <input type="text" class="form-control" id="blackoutmsg_1_1" name="blackoutmsg[0][]" value="Unavailable date!">
-                          <div class="form-control-position">
-                            <i class='bx bx-info-circle'></i>
-                          </div>
-                        </fieldset>
-                      </div>
-                      <div class="col-md-3 form-group">
-                        <button type="button" class="btn btn-icon rounded-circle btn-outline-danger mr-1 mb-1" id="deleteblackoutdate_1_1" onclick="deleteblackoutdate(1, 1)">
-                          <i class="bx bx-trash"></i>
-                        </button>
-                      </div>
-                    </div>
                   </div>
                   <div class="col-md-6 form-group">
                     <button type="button" id="addblackoutdate_1" class="btn btn-outline-primary mr-1 mb-1" onclick="addblackoutdate(1)">

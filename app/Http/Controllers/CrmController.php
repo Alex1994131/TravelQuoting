@@ -18,7 +18,7 @@ class CrmController extends Controller
 {
     public function index(){
         $pageConfigs = ['pageHeader' => true];
-        $breadcrumbs = [ 
+        $breadcrumbs = [
             ["link" => "/", "name" => "Home"],["name" => "CRM"]
         ];
 
@@ -40,7 +40,7 @@ class CrmController extends Controller
         $countries = Country::all();
         $regions = Region::all();
         $cities = City::all();
-        
+
         return view('pages.customer_edit',compact('customer', 'countries', 'regions', 'cities'));
     }
 
@@ -52,7 +52,7 @@ class CrmController extends Controller
         return view('pages.account_create', compact('regions', 'countries', 'cities'));
     }
 
-    
+
 
     public function edit_account(Request $request){
         $account = Account::where('id', $request->account_id)->first();
@@ -164,6 +164,112 @@ class CrmController extends Controller
         return redirect()->route('crm_index')->with('msg', $msg_result);
     }
 
+    public function add_account_enquiry(Request $request){
+      $msg_result = "";
+      if($request->account_type == 1)
+      {
+          $account = new Account;
+          $account->first_name = $request->first_name;
+          $account->last_name = $request->last_name;
+          $account->account_type = $request->account_type;
+          $account->main_street_address = $request->main_street_address;
+          $account->main_city = $request->main_city;
+          $account->main_region_state = $request->main_region_state;
+          $account->main_country = $request->main_country;
+          $account->main_email = $request->main_email;
+          $account->main_office_phone = $request->main_office_phone;
+          $account->status = 0;
+          $account->user_id = 0;
+          $account->save();
+          $msg_result = "customer add success";
+          $data['result']="success";
+      }
+      else if($request->account_type == 2){
+          $account = new Account;
+          $account->first_name = $request->first_name;
+          $account->last_name = $request->last_name;
+          $account->account_type = $request->account_type;
+          $account->main_street_address = $request->main_street_address;
+          $account->main_city = $request->main_city;
+          $account->main_region_state = $request->main_region_state;
+          $account->main_country = $request->main_country;
+          $account->main_email = $request->main_email;
+          $account->main_office_phone = $request->main_office_phone;
+          $account->billing_street_address = $request->billing_street_address;
+          $account->billing_city = $request->billing_city;
+          $account->billing_state_region = $request->billing_region_state;
+          $account->billing_country = $request->billing_country;
+          $account->billing_email = $request->billing_email;
+          $account->billing_office_phone = $request->billing_office_phone;
+          $account->status = 0;
+          $account->user_id = 0;
+          $account->save();
+          $msg_result = "customer add success";
+          $data['result']="success";
+      }
+      else if($request->account_type == 3){
+
+          $account = new Account;
+          $account->first_name = $request->first_name;
+          $account->last_name = $request->last_name;
+          $account->account_type = $request->account_type;
+          $account->avatar_path = $request->avatar_path;
+          $account->main_street_address = $request->main_street_address;
+          $account->main_city = $request->main_city;
+          $account->main_region_state = $request->main_region_state;
+          $account->main_country = $request->main_country;
+          $account->main_email = $request->main_email;
+          $account->main_office_phone = $request->main_office_phone;
+          $account->billing_company_name = $request->comapny_name;
+          $account->billing_street_address = $request->billing_street_address;
+          $account->billing_city = $request->billing_city;
+          $account->billing_state_region = $request->billing_region_state;
+          $account->billing_country = $request->billing_country;
+          $account->billing_email = $request->billing_email;
+          $account->billing_office_phone = $request->billing_office_phone;
+          $account->status = 0;
+          $user = User::create([
+              'name' => $request->username,
+              'email' => $request->main_email,
+              'password' => Hash::make($request->password),
+              'role' => 0,
+              'permission' => 0
+          ]);
+          $account->user_id = $user->id;
+          $account->save();
+          $msg_result = "account add success";
+          $data['result']="success";
+      }
+      else if($request->account_type == 4)
+      {
+          $account = new Account;
+          $account->first_name = $request->first_name;
+          $account->last_name = $request->last_name;
+          $account->account_type = $request->account_type;
+          $account->avatar_path = $request->avatar_path;
+          $account->main_street_address = $request->main_street_address;
+          $account->main_city = $request->main_city;
+          $account->main_region_state = $request->main_region_state;
+          $account->main_country = $request->main_country;
+          $account->main_email = $request->main_email;
+          $account->main_office_phone = $request->main_office_phone;
+          $account->status = 0;
+
+          $user = User::create([
+              'name' => $request->username,
+              'email' => $request->main_email,
+              'password' => Hash::make($request->password),
+              'role' => 0,
+              'permission' => 0
+          ]);
+          $account->user_id = $user->id;
+          $account->save();
+          $msg_result = "account add success";
+          $data['result']="success";
+      }
+      return json_encode($data);
+  }
+
     public function update_account(Request $request){
         $account = Account::where('id', $request->account_id)->first();
         $msg_result = '';
@@ -255,7 +361,7 @@ class CrmController extends Controller
         return redirect()->route('crm_index')->with('msg', $msg_result);
     }
 
-    
+
     public function saveAvatarUpload(Request $request)
     {
 
@@ -264,7 +370,7 @@ class CrmController extends Controller
         ]);
 
         if ($validator->fails()) {
-            
+
             return $validator->errors();
         }
 
@@ -272,18 +378,18 @@ class CrmController extends Controller
         $data = array(
             'flag' => '',
             'file_path' => ''
-        );    
+        );
 
         if ($request->hasFile('profile_picture')) {
             $image = $request->file('profile_picture');
             // Rename image
             $filename = time().'.'.$image->guessExtension();
             $destinationPath = public_path('assets/avatar');
-            
+
             // $path = $request->file('profile_picture')->storeAs(
             //      'profile_pictures', $filename
             // );
-            
+
             $upload_success = $image->move($destinationPath, $filename);
             $avatar_path = 'assets/avatar/'.$filename;
 
@@ -293,9 +399,9 @@ class CrmController extends Controller
             );
 
         }
-        
+
         echo json_encode($data);
-    
+
     }
 
     public function update_password(Request $request){
@@ -323,7 +429,7 @@ class CrmController extends Controller
         $countries = Country::all();
         $regions = Region::all();
         $cities = City::all();
-        
+
         return view('pages.user_profile',compact('countries', 'regions', 'cities'));
     }
 

@@ -6,14 +6,20 @@ use Illuminate\Http\Request;
 use App\Models\Account;
 use App\Models\AccountType;
 use App\Models\Enquiry;
+use App\Models\City;
+use App\Models\Country;
+use App\Models\Region;
 use Illuminate\Support\Facades\Auth;
 
 class EnquiryController extends Controller
 {
     public function create_enquiry(){
+        $countries = Country::all();
+        $regions = Region::all();
+        $cities = City::all();
         $account = Account::all();
 
-        return view('pages.enquiry_create',compact('account'));
+        return view('pages.enquiry_create',compact('account', 'countries', 'regions', 'cities'));
     }
     //ecommerce
     // public function dashboardEcommerce(){
@@ -65,7 +71,7 @@ class EnquiryController extends Controller
         $new_enquiry->is_created_itinerary = 0;
         $new_enquiry->note = $request->note;
         $new_enquiry->created_id = Auth::user()->id;
-        
+
         $all = Enquiry::all();
         if(count($all) == 0)
         {
@@ -94,7 +100,10 @@ class EnquiryController extends Controller
     {
         $custom_enquiry = Enquiry::where('id', $request->enquiry_id)->first();
         $account = Account::all();
-        return view('pages.enquiry_edit',compact('custom_enquiry', 'account'));
+        $countries = Country::all();
+        $regions = Region::all();
+        $cities = City::all();
+        return view('pages.enquiry_edit',compact('custom_enquiry', 'account', 'countries', 'regions', 'cities'));
     }
 
     public function save_change(Request $request)
@@ -138,12 +147,12 @@ class EnquiryController extends Controller
             $update_enquiry->assigned_user = 0;
         $update_enquiry->is_created_itinerary = 0;
         $update_enquiry->note = $request->note;
-        
+
         $custom_enquiry = Enquiry::where('id', $request->enquiry_id)->first();
         $ref_str = $custom_enquiry->reference_number;
         $ref_nums = explode('-', $ref_str);
         $ref_num = $ref_nums[1];
-        
+
         $all_enquiry = Enquiry::all();
         $cnt = 0;
         for($i = 0; $i < count($all_enquiry);$i ++)
@@ -180,7 +189,7 @@ class EnquiryController extends Controller
             $update_enquiry->updated_id = Auth::user()->id;
             $update_enquiry->created_id = $custom_enquiry->created_id;
             $update_enquiry->save();
-        }        
+        }
         return redirect()->route('index')->with('msg', 'enquiry updated');
     }
 
