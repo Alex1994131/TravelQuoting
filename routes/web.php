@@ -63,13 +63,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/save_basic_info', ['uses' => 'ItineraryController@save_basic_info'])->name('save_basic_info'); /* edit itinerary basic info*/
 
 
-    Route::get('/itinerary_add_basic/with_enquiry_id/{enquiry_id}', 'ItineraryController@add_basic');
-    Route::post('/itinerary_create_basic/with_enquiry_id', ['as' => 'itinerary_create_basic.with_enquiry_id', 'uses' => 'ItineraryController@create_basic']);
     Route::get('/itinerary_add_daily/{itinerary_id}', ['as' => 'itinerary_add_daily', 'uses' => 'ItineraryController@add_daily']);
     Route::get('/itinerary_add_daily_search',['as' => 'itinerary_add_daily_search', 'uses' => 'ItineraryController@product_search']);
     Route::get('/itinerary_template_search',['as' => 'itinerary_template_search', 'uses' => 'ItineraryController@template_search']);
     Route::get('/itinerary_add_daily_filter',['as' => 'itinerary_add_daily_filter', 'uses' => 'ItineraryController@filter']);
-    Route::get('/itinerary_edit/{itinerary_id}',['uses' => 'ItineraryController@edit_itinerary'])->name('edit_itinerary');
     Route::post('/del_itinerary',['uses' => 'ItineraryController@delete_itinerary']);
     Route::get('/itinerary_send/{itinerary_id}',['uses' => 'ItineraryController@send_itinerary'])->name('send_itinerary');
     Route::post('/itinerary_send',['uses' => 'ItineraryController@send_email_itinerary'])->name('itinerary_send');
