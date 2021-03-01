@@ -78,9 +78,7 @@
                                         {{$account->main_office_phone}}
                                     </td>
                                     <td style="text-align: center;">
-                                        @if(isset($account->get_country->title))
-                                            {{$account->get_country->title}}
-                                        @endif
+                                        {{$account->main_country}}
                                     </td>
                                     <td style="text-align: center;">
                                         {{$account->get_account_type->title}}
@@ -157,9 +155,7 @@
                                             {{$account->main_office_phone}}
                                         </td>
                                         <td style="text-align: center;">
-                                            @if(isset($account->get_country->title))
-                                                {{$account->get_country->title}}
-                                            @endif
+                                            {{$account->main_country}}
                                         </td>
                                         <td style="text-align: center;">
                                             @if(isset($account->get_account_type->title))
@@ -253,5 +249,5 @@
 <script>
     var msg = <?php if(json_encode(session()->get('msg'))) echo json_encode(session()->get('msg'));  ?>;
 </script>
-<script src="{{asset('js/scripts/pages/crm_customer.js')}}"></script>
+<script src="{{asset('js/scripts/pages/crm.js')}}"></script>
 @endsection

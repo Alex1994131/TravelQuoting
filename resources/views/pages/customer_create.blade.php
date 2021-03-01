@@ -79,16 +79,49 @@
                         <div class="col-md-6" style="padding-bottom: 20px; padding-top: 20px;">
                             <h6 style="font-weight: 500">Company Information</h6>
                         </div>
-                        
+
+                        <div class="col-md-6">
+                            <h6>Location</h6>
+                            <fieldset class="form-group position-relative has-icon-left">
+                                <input type="text" class="form-control" id="main_location" placeholder="- Location -">
+                                <div class="form-control-position">
+                                    <i class="bx bxs-map"></i>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Location</h6>
+                            <fieldset class="form-group position-relative has-icon-left">
+                                <input type="text" class="form-control" id="billing_location" placeholder="- Location -" disabled>
+                                <div class="form-control-position">
+                                    <i class="bx bxs-map"></i>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6>Postal Code(ZIP)</h6>
+                            <fieldset class="form-group position-relative has-icon-left">
+                                <input type="text" class="form-control" id="main_postal_code" name="main_postal_code" placeholder="- Postal Code -" readonly>
+                                <div class="form-control-position">
+                                    <i class="bx bxs-map"></i>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Postal Code(ZIP)</h6>
+                            <fieldset class="form-group position-relative has-icon-left">
+                                <input type="text" class="form-control" id="billing_postal_code" name="billing_postal_code" placeholder="- Postal Code -" readonly disabled>
+                                <div class="form-control-position">
+                                    <i class="bx bxs-map"></i>
+                                </div>
+                            </fieldset>
+                        </div>
+
                         <div class="col-md-6">
                             <h6>State/Region</h6>
                             <fieldset class="form-group position-relative has-icon-left">
-                                <select class="select2 form-control" id="main_region_state" name="main_region_state" >
-                                    <option value="">- Region/State -</option>
-                                    @foreach($regions as $region)
-                                    <option value="{{$region->id}}">{{$region->title}}</option>
-                                    @endforeach
-                                </select>
+                                <input type="text" class="form-control" id="main_region_state" name="main_region_state" placeholder="- Region/State -" readonly>
                                 <div class="form-control-position">
                                     <i class="bx bxs-map"></i>
                                 </div>
@@ -97,12 +130,7 @@
                         <div class="col-md-6">
                             <h6>State/Region</h6>
                             <fieldset class="form-group position-relative has-icon-left">
-                                <select class="select2 form-control" id="billing_region_state" name="billing_region_state" disabled>
-                                    <option value="">- Region/State -</option>
-                                    @foreach($regions as $region)
-                                    <option value="{{$region->id}}">{{$region->title}}</option>
-                                    @endforeach
-                                </select>
+                                <input type="text" class="form-control" id="billing_region_state" name="billing_region_state" placeholder="- Region/State -" readonly disabled>
                                 <div class="form-control-position">
                                     <i class="bx bxs-map"></i>
                                 </div>
@@ -112,12 +140,7 @@
                         <div class="col-md-6">
                             <h6>Country</h6>
                             <fieldset class="form-group position-relative has-icon-left">
-                                <select class="select2 form-control" id="main_country" name="main_country" >
-                                    <option value="">- Country -</option>
-                                    @foreach($countries as $country)
-                                    <option value="{{$country->id}}">{{$country->title}}</option>
-                                    @endforeach
-                                </select>
+                                <input type="text" class="form-control" id="main_country" name="main_country" placeholder="- Country -" readonly>
                                 <div class="form-control-position">
                                     <i class="bx bxs-flag-alt"></i>
                                 </div>
@@ -126,12 +149,7 @@
                         <div class="col-md-6">
                             <h6>Country</h6>
                             <fieldset class="form-group position-relative has-icon-left">
-                                <select class="select2 form-control" id="billing_country" name="billing_country" disabled>
-                                    <option value="">- Country -</option>
-                                    @foreach($countries as $country)
-                                    <option value="{{$country->id}}">{{$country->title}}</option>
-                                    @endforeach
-                                </select>
+                                <input type="text" class="form-control" id="billing_country" name="billing_country" placeholder="- Country -" disabled readonly>
                                 <div class="form-control-position">
                                     <i class="bx bxs-flag-alt"></i>
                                 </div>
@@ -141,12 +159,7 @@
                         <div class="col-md-6">
                             <h6>City</h6>
                             <fieldset class="form-group position-relative has-icon-left">
-                                <select class="select2 form-control" id="main_city" name="main_city" >
-                                    <option value="">- City -</option>
-                                    @foreach($cities as $city)
-                                    <option value="{{$city->id}}">{{$city->title}}</option>
-                                    @endforeach
-                                </select>
+                                <input type="text" class="form-control" id="main_city" name="main_city" placeholder="- City -" readonly>
                                 <div class="form-control-position">
                                     <i class="bx bxs-city"></i>
                                 </div>
@@ -155,12 +168,7 @@
                         <div class="col-md-6">
                             <h6>City</h6>
                             <fieldset class="form-group position-relative has-icon-left">
-                                <select class="select2 form-control" id="billing_city" name="billing_city" disabled>
-                                    <option value="">- City -</option>
-                                    @foreach($cities as $city)
-                                    <option value="{{$city->id}}">{{$city->title}}</option>
-                                    @endforeach
-                                </select>
+                                <input type="text" class="form-control" id="billing_city" name="billing_city" placeholder="- City -" disabled readonly>
                                 <div class="form-control-position">
                                     <i class="bx bxs-city"></i>
                                 </div>
@@ -168,11 +176,33 @@
                         </div>
                         
                         <div class="col-md-6">
+                            <h6>Street Number</h6>
+                            <fieldset class="form-group position-relative has-icon-left">
+                                <div class="controls">
+                                    <input type="text" class="form-control" id="main_street_number" name="main_street_number" placeholder="Street Number" readonly>
+                                </div>
+                                <div class="form-control-position">
+                                    <i class="bx bx-street-view"></i>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Street Number</h6>
+                            <fieldset class="form-group position-relative has-icon-left">
+                                <div class="controls">
+                                    <input type="text" class="form-control" id="billing_street_number" name="billing_street_number" placeholder="Street Number" disabled readonly>
+                                </div>
+                                <div class="form-control-position">
+                                    <i class="bx bx-street-view"></i>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-md-6">
                             <h6>Street Address</h6>
                             <fieldset class="form-group position-relative has-icon-left">
                                 <div class="controls">
-                                    <input type="text" class="form-control" id="main_street_address" name="main_street_address"
-                                        placeholder="Street Address">
+                                    <input type="text" class="form-control" id="main_street_address" name="main_street_address" placeholder="Street Address" readonly>
                                 </div>
                                 <div class="form-control-position">
                                     <i class="bx bx-street-view"></i>
@@ -183,8 +213,7 @@
                             <h6>Street Address</h6>
                             <fieldset class="form-group position-relative has-icon-left">
                                 <div class="controls">
-                                    <input type="text" class="form-control" id="billing_street_address" name="billing_street_address"
-                                        placeholder="Street Address" disabled>
+                                    <input type="text" class="form-control" id="billing_street_address" name="billing_street_address" placeholder="Street Address" disabled readonly>
                                 </div>
                                 <div class="form-control-position">
                                     <i class="bx bx-street-view"></i>
@@ -259,6 +288,7 @@
 <script src="{{asset('vendors/js/forms/select/select2.full.min.js')}}"></script>
 <script src="{{asset('vendors/js/tables/datatable/datatables.min.js')}}"></script>
 <script src="{{asset('vendors/js/forms/validation/jqBootstrapValidation.js')}}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1jKOFLhfQoZD3xJISSPnSW9-4SyYPpjY&callback=initAutocomplete&libraries=places&v=weekly" defer></script>
 @endsection
 
 @section('page-scripts')

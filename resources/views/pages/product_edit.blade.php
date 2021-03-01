@@ -218,7 +218,7 @@
                     <input type="hidden" id="route" name="street_address" required=""/>
 
                     <fieldset class="form-group position-relative has-icon-left @error('location') error @enderror">
-                      <input type="text" id="autocomplete" name="autocomplete" class="form-control" data-validation-required-message="This field is required" placeholder="Select Location">
+                      <input type="text" id="autocomplete" name="autocomplete" class="form-control" data-validation-required-message="This field is required" placeholder="Select Location" value="{{ $product->city }} {{ $product->street_address }}">
                       <div class="form-control-position">
                           <i class='bx bx-info-circle'></i>
                       </div>

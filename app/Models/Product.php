@@ -11,7 +11,7 @@ class Product extends Model
     protected $table = 'product';
     protected $primaryKey = 'id';
 
-    protected $fillable = ['id', 'title', 'category', 'zip', 'country', 'city', 'state', 'position', 'street_number', 'street_address', 'start_time', 'end_time', 'supplier'];
+    protected $fillable = ['id', 'title', 'category', 'zip', 'country', 'city', 'state', 'position', 'street_address', 'start_time', 'end_time', 'supplier'];
 
 
     function get_supplier(){

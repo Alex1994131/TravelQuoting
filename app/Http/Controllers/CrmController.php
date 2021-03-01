@@ -52,8 +52,6 @@ class CrmController extends Controller
         return view('pages.account_create', compact('regions', 'countries', 'cities'));
     }
 
-
-
     public function edit_account(Request $request){
         $account = Account::where('id', $request->account_id)->first();
         $countries = Country::all();
@@ -70,12 +68,16 @@ class CrmController extends Controller
             $account->first_name = $request->first_name;
             $account->last_name = $request->last_name;
             $account->account_type = $request->account_type;
-            $account->main_street_address = $request->main_street_address;
-            $account->main_city = $request->main_city;
+
             $account->main_region_state = $request->main_region_state;
+            $account->main_postal_code = $request->main_postal_code;
             $account->main_country = $request->main_country;
+            $account->main_city = $request->main_city;
+            $account->main_street_address = $request->main_street_address;
+            $account->main_street_number = $request->main_street_number;
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
+
             $account->status = 0;
             $account->user_id = 0;
             $account->save();
@@ -86,18 +88,25 @@ class CrmController extends Controller
             $account->first_name = $request->first_name;
             $account->last_name = $request->last_name;
             $account->account_type = $request->account_type;
-            $account->main_street_address = $request->main_street_address;
-            $account->main_city = $request->main_city;
+
             $account->main_region_state = $request->main_region_state;
+            $account->main_postal_code = $request->main_postal_code;
             $account->main_country = $request->main_country;
+            $account->main_city = $request->main_city;
+            $account->main_street_address = $request->main_street_address;
+            $account->main_street_number = $request->main_street_number;
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
-            $account->billing_street_address = $request->billing_street_address;
-            $account->billing_city = $request->billing_city;
+
+            $account->billing_postal_code = $request->billing_postal_code;
             $account->billing_state_region = $request->billing_region_state;
             $account->billing_country = $request->billing_country;
+            $account->billing_city = $request->billing_city;
+            $account->billing_street_number = $request->billing_street_number;
+            $account->billing_street_address = $request->billing_street_address;
             $account->billing_email = $request->billing_email;
             $account->billing_office_phone = $request->billing_office_phone;
+
             $account->status = 0;
             $account->user_id = 0;
             $account->save();
@@ -110,19 +119,25 @@ class CrmController extends Controller
             $account->last_name = $request->last_name;
             $account->account_type = $request->account_type;
             $account->avatar_path = $request->avatar_path;
-            $account->main_street_address = $request->main_street_address;
-            $account->main_city = $request->main_city;
+
             $account->main_region_state = $request->main_region_state;
+            $account->main_postal_code = $request->main_postal_code;
             $account->main_country = $request->main_country;
+            $account->main_city = $request->main_city;
+            $account->main_street_address = $request->main_street_address;
+            $account->main_street_number = $request->main_street_number;
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
-            $account->billing_company_name = $request->comapny_name;
-            $account->billing_street_address = $request->billing_street_address;
-            $account->billing_city = $request->billing_city;
+
+            $account->billing_postal_code = $request->billing_postal_code;
             $account->billing_state_region = $request->billing_region_state;
             $account->billing_country = $request->billing_country;
+            $account->billing_city = $request->billing_city;
+            $account->billing_street_number = $request->billing_street_number;
+            $account->billing_street_address = $request->billing_street_address;
             $account->billing_email = $request->billing_email;
             $account->billing_office_phone = $request->billing_office_phone;
+            
             $account->status = 0;
             $user = User::create([
                 'name' => $request->username,
@@ -142,12 +157,16 @@ class CrmController extends Controller
             $account->last_name = $request->last_name;
             $account->account_type = $request->account_type;
             $account->avatar_path = $request->avatar_path;
-            $account->main_street_address = $request->main_street_address;
-            $account->main_city = $request->main_city;
+
             $account->main_region_state = $request->main_region_state;
+            $account->main_postal_code = $request->main_postal_code;
             $account->main_country = $request->main_country;
+            $account->main_city = $request->main_city;
+            $account->main_street_address = $request->main_street_address;
+            $account->main_street_number = $request->main_street_number;
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
+            
             $account->status = 0;
 
             $user = User::create([
@@ -165,110 +184,131 @@ class CrmController extends Controller
     }
 
     public function add_account_enquiry(Request $request){
-      $msg_result = "";
-      if($request->account_type == 1)
-      {
-          $account = new Account;
-          $account->first_name = $request->first_name;
-          $account->last_name = $request->last_name;
-          $account->account_type = $request->account_type;
-          $account->main_street_address = $request->main_street_address;
-          $account->main_city = $request->main_city;
-          $account->main_region_state = $request->main_region_state;
-          $account->main_country = $request->main_country;
-          $account->main_email = $request->main_email;
-          $account->main_office_phone = $request->main_office_phone;
-          $account->status = 0;
-          $account->user_id = 0;
-          $account->save();
-          $msg_result = "customer add success";
-          $data['result']="success";
-      }
-      else if($request->account_type == 2){
-          $account = new Account;
-          $account->first_name = $request->first_name;
-          $account->last_name = $request->last_name;
-          $account->account_type = $request->account_type;
-          $account->main_street_address = $request->main_street_address;
-          $account->main_city = $request->main_city;
-          $account->main_region_state = $request->main_region_state;
-          $account->main_country = $request->main_country;
-          $account->main_email = $request->main_email;
-          $account->main_office_phone = $request->main_office_phone;
-          $account->billing_street_address = $request->billing_street_address;
-          $account->billing_city = $request->billing_city;
-          $account->billing_state_region = $request->billing_region_state;
-          $account->billing_country = $request->billing_country;
-          $account->billing_email = $request->billing_email;
-          $account->billing_office_phone = $request->billing_office_phone;
-          $account->status = 0;
-          $account->user_id = 0;
-          $account->save();
-          $msg_result = "customer add success";
-          $data['result']="success";
-      }
-      else if($request->account_type == 3){
+        $msg_result = "";
+        if($request->account_type == 1)
+        {
+            $account = new Account;
+            $account->first_name = $request->first_name;
+            $account->last_name = $request->last_name;
+            $account->account_type = $request->account_type;
 
-          $account = new Account;
-          $account->first_name = $request->first_name;
-          $account->last_name = $request->last_name;
-          $account->account_type = $request->account_type;
-          $account->avatar_path = $request->avatar_path;
-          $account->main_street_address = $request->main_street_address;
-          $account->main_city = $request->main_city;
-          $account->main_region_state = $request->main_region_state;
-          $account->main_country = $request->main_country;
-          $account->main_email = $request->main_email;
-          $account->main_office_phone = $request->main_office_phone;
-          $account->billing_company_name = $request->comapny_name;
-          $account->billing_street_address = $request->billing_street_address;
-          $account->billing_city = $request->billing_city;
-          $account->billing_state_region = $request->billing_region_state;
-          $account->billing_country = $request->billing_country;
-          $account->billing_email = $request->billing_email;
-          $account->billing_office_phone = $request->billing_office_phone;
-          $account->status = 0;
-          $user = User::create([
-              'name' => $request->username,
-              'email' => $request->main_email,
-              'password' => Hash::make($request->password),
-              'role' => 0,
-              'permission' => 0
-          ]);
-          $account->user_id = $user->id;
-          $account->save();
-          $msg_result = "account add success";
-          $data['result']="success";
-      }
-      else if($request->account_type == 4)
-      {
-          $account = new Account;
-          $account->first_name = $request->first_name;
-          $account->last_name = $request->last_name;
-          $account->account_type = $request->account_type;
-          $account->avatar_path = $request->avatar_path;
-          $account->main_street_address = $request->main_street_address;
-          $account->main_city = $request->main_city;
-          $account->main_region_state = $request->main_region_state;
-          $account->main_country = $request->main_country;
-          $account->main_email = $request->main_email;
-          $account->main_office_phone = $request->main_office_phone;
-          $account->status = 0;
+            $account->main_region_state = $request->main_region_state;
+            $account->main_postal_code = $request->main_postal_code;
+            $account->main_country = $request->main_country;
+            $account->main_city = $request->main_city;
+            $account->main_street_address = $request->main_street_address;
+            $account->main_street_number = $request->main_street_number;
+            $account->main_email = $request->main_email;
+            $account->main_office_phone = $request->main_office_phone;
 
-          $user = User::create([
-              'name' => $request->username,
-              'email' => $request->main_email,
-              'password' => Hash::make($request->password),
-              'role' => 0,
-              'permission' => 0
-          ]);
-          $account->user_id = $user->id;
-          $account->save();
-          $msg_result = "account add success";
-          $data['result']="success";
-      }
-      return json_encode($data);
-  }
+            $account->status = 0;
+            $account->user_id = 0;
+            $account->save();
+            $msg_result = "customer add success";
+            $data['result']="success";
+        }
+        else if($request->account_type == 2){
+            $account = new Account;
+            $account->first_name = $request->first_name;
+            $account->last_name = $request->last_name;
+            $account->account_type = $request->account_type;
+
+            $account->main_region_state = $request->main_region_state;
+            $account->main_postal_code = $request->main_postal_code;
+            $account->main_country = $request->main_country;
+            $account->main_city = $request->main_city;
+            $account->main_street_address = $request->main_street_address;
+            $account->main_street_number = $request->main_street_number;
+            $account->main_email = $request->main_email;
+            $account->main_office_phone = $request->main_office_phone;
+
+            $account->billing_postal_code = $request->billing_postal_code;
+            $account->billing_state_region = $request->billing_region_state;
+            $account->billing_country = $request->billing_country;
+            $account->billing_city = $request->billing_city;
+            $account->billing_street_number = $request->billing_street_number;
+            $account->billing_street_address = $request->billing_street_address;
+            $account->billing_email = $request->billing_email;
+            $account->billing_office_phone = $request->billing_office_phone;
+
+            $account->status = 0;
+            $account->user_id = 0;
+            $account->save();
+            $msg_result = "customer add success";
+            $data['result']="success";
+        }
+        else if($request->account_type == 3){
+
+            $account = new Account;
+            $account->first_name = $request->first_name;
+            $account->last_name = $request->last_name;
+            $account->account_type = $request->account_type;
+            $account->avatar_path = $request->avatar_path;
+
+            $account->main_region_state = $request->main_region_state;
+            $account->main_postal_code = $request->main_postal_code;
+            $account->main_country = $request->main_country;
+            $account->main_city = $request->main_city;
+            $account->main_street_address = $request->main_street_address;
+            $account->main_street_number = $request->main_street_number;
+            $account->main_email = $request->main_email;
+            $account->main_office_phone = $request->main_office_phone;
+
+            $account->billing_postal_code = $request->billing_postal_code;
+            $account->billing_state_region = $request->billing_region_state;
+            $account->billing_country = $request->billing_country;
+            $account->billing_city = $request->billing_city;
+            $account->billing_street_number = $request->billing_street_number;
+            $account->billing_street_address = $request->billing_street_address;
+            $account->billing_email = $request->billing_email;
+            $account->billing_office_phone = $request->billing_office_phone;
+            
+            $account->status = 0;
+            $user = User::create([
+                'name' => $request->username,
+                'email' => $request->main_email,
+                'password' => Hash::make($request->password),
+                'role' => 0,
+                'permission' => 0
+            ]);
+            $account->user_id = $user->id;
+            $account->save();
+            $msg_result = "account add success";
+            $data['result']="success";
+        }
+        else if($request->account_type == 4)
+        {
+            $account = new Account;
+            $account->first_name = $request->first_name;
+            $account->last_name = $request->last_name;
+            $account->account_type = $request->account_type;
+            $account->avatar_path = $request->avatar_path;
+
+            $account->main_region_state = $request->main_region_state;
+            $account->main_postal_code = $request->main_postal_code;
+            $account->main_country = $request->main_country;
+            $account->main_city = $request->main_city;
+            $account->main_street_address = $request->main_street_address;
+            $account->main_street_number = $request->main_street_number;
+            $account->main_email = $request->main_email;
+            $account->main_office_phone = $request->main_office_phone;
+            
+            $account->status = 0;
+
+            $user = User::create([
+                'name' => $request->username,
+                'email' => $request->main_email,
+                'password' => Hash::make($request->password),
+                'role' => 0,
+                'permission' => 0
+            ]);
+            $account->user_id = $user->id;
+            $account->save();
+            $msg_result = "account add success";
+            $data['result']="success";
+        }
+        return json_encode($data);
+    }
 
     public function update_account(Request $request){
         $account = Account::where('id', $request->account_id)->first();
@@ -277,12 +317,16 @@ class CrmController extends Controller
             $account->first_name = $request->first_name;
             $account->last_name = $request->last_name;
             $account->account_type = $request->account_type;
-            $account->main_street_address = $request->main_street_address;
-            $account->main_city = $request->main_city;
+
             $account->main_region_state = $request->main_region_state;
+            $account->main_postal_code = $request->main_postal_code;
             $account->main_country = $request->main_country;
+            $account->main_city = $request->main_city;
+            $account->main_street_address = $request->main_street_address;
+            $account->main_street_number = $request->main_street_number;
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
+            
             $account->status = 0;
             $account->user_id = 0;
             $account->save();
@@ -292,18 +336,25 @@ class CrmController extends Controller
             $account->first_name = $request->first_name;
             $account->last_name = $request->last_name;
             $account->account_type = $request->account_type;
-            $account->main_street_address = $request->main_street_address;
-            $account->main_city = $request->main_city;
+
             $account->main_region_state = $request->main_region_state;
+            $account->main_postal_code = $request->main_postal_code;
             $account->main_country = $request->main_country;
+            $account->main_city = $request->main_city;
+            $account->main_street_address = $request->main_street_address;
+            $account->main_street_number = $request->main_street_number;
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
-            $account->billing_street_address = $request->billing_street_address;
-            $account->billing_city = $request->billing_city;
+
+            $account->billing_postal_code = $request->billing_postal_code;
             $account->billing_state_region = $request->billing_region_state;
             $account->billing_country = $request->billing_country;
+            $account->billing_city = $request->billing_city;
+            $account->billing_street_number = $request->billing_street_number;
+            $account->billing_street_address = $request->billing_street_address;
             $account->billing_email = $request->billing_email;
             $account->billing_office_phone = $request->billing_office_phone;
+
             $account->status = 0;
             $account->user_id = 0;
             $account->save();
@@ -314,20 +365,28 @@ class CrmController extends Controller
             $account->first_name = $request->first_name;
             $account->last_name = $request->last_name;
             $account->account_type = $request->account_type;
-            $account->avatar_path = $request->avatar_path;
-            $account->main_street_address = $request->main_street_address;
-            $account->main_city = $request->main_city;
+            if($request->avatar_path != "") {
+                $account->avatar_path = $request->avatar_path;
+            }
+            
             $account->main_region_state = $request->main_region_state;
+            $account->main_postal_code = $request->main_postal_code;
             $account->main_country = $request->main_country;
+            $account->main_city = $request->main_city;
+            $account->main_street_address = $request->main_street_address;
+            $account->main_street_number = $request->main_street_number;
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
-            $account->billing_company_name = $request->comapny_name;
-            $account->billing_street_address = $request->billing_street_address;
-            $account->billing_city = $request->billing_city;
+
+            $account->billing_postal_code = $request->billing_postal_code;
             $account->billing_state_region = $request->billing_region_state;
             $account->billing_country = $request->billing_country;
+            $account->billing_city = $request->billing_city;
+            $account->billing_street_number = $request->billing_street_number;
+            $account->billing_street_address = $request->billing_street_address;
             $account->billing_email = $request->billing_email;
             $account->billing_office_phone = $request->billing_office_phone;
+
             $account->status = 0;
 
             $user = User::where('id', $account->user_id)->first();
@@ -342,13 +401,19 @@ class CrmController extends Controller
             $account->first_name = $request->first_name;
             $account->last_name = $request->last_name;
             $account->account_type = $request->account_type;
-            $account->avatar_path = $request->avatar_path;
-            $account->main_street_address = $request->main_street_address;
-            $account->main_city = $request->main_city;
+            if($request->avatar_path != "") {
+                $account->avatar_path = $request->avatar_path;
+            }
+
             $account->main_region_state = $request->main_region_state;
+            $account->main_postal_code = $request->main_postal_code;
             $account->main_country = $request->main_country;
+            $account->main_city = $request->main_city;
+            $account->main_street_address = $request->main_street_address;
+            $account->main_street_number = $request->main_street_number;
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
+            
             $account->status = 0;
 
             $user = User::where('id', $account->user_id)->first();

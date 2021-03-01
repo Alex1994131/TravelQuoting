@@ -1208,7 +1208,6 @@ function set_day_title() {
 }
 
 function edit_product_time(obj_id, list_id) {
-    //alert(`product_time_${obj_id}_${list_id}`);
     $('#product-time-id').val(`product_time_${obj_id}_${list_id}`);
     $('#product-time-modal').modal();
     $('.pickatime').pickatime();
@@ -1378,8 +1377,8 @@ function save_task(){
 }
 
 function set_product_time() {
-    var start_time = $('#start_time').val();
-    var end_time = $('#end_time').val();
+    var start_time = $('#start_schedule_time').val();
+    var end_time = $('#end_schedule_time').val();
     var start_time_str;
     var end_time_str;
     var str_opt = start_time.substring(start_time.length - 2, start_time.length);

@@ -344,8 +344,7 @@ class ProductController extends Controller
                     'city' => $request->city,
                     'position' => $request->position,
                     'state' => $request->state,
-                    'street_number' => $request->street_number,
-                    'street_address' => $request->street_address,
+                    'street_address' => $request->street_number .' '. $request->street_address,
                     'start_time' => $request->start_time,
                     'end_time' => $request->end_time,
                     'supplier' => $request->supplier

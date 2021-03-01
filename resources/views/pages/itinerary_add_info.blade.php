@@ -626,7 +626,7 @@ label{
             <div class="col-md-6">
               <h6>Start Time</h6>
               <fieldset class="form-group position-relative has-icon-left">
-                <input type="text" class="form-control pickatime" id="start_time" placeholder="Select Start Time">
+                <input type="text" class="form-control pickatime" id="start_schedule_time" placeholder="Select Start Time">
                 <div class="form-control-position">
                     <i class='bx bx-history'></i>
                 </div>
@@ -635,7 +635,7 @@ label{
             <div class="col-md-6 ">
               <h6>End Time</h6>
               <fieldset class="form-group position-relative has-icon-left">
-                <input type="text" class="form-control pickatime" id="end_time" placeholder="Select End Time">
+                <input type="text" class="form-control pickatime" id="end_schedule_time" placeholder="Select End Time">
                 <div class="form-control-position">
                     <i class='bx bx-history'></i>
                 </div>

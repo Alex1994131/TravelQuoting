@@ -34,6 +34,13 @@ class ItineraryController extends Controller
     //   ["link" => "/", "name" => "Home"],["name" => "Itinerary Create"]
     // ];
 
+    $status = Itinerary::find($id)->status;
+
+    if($status == 2) {
+      $msg = "Already Sent Itinerary!";
+      return redirect()->route('index')->with('msg', $msg);
+    }
+
 
     if ($type == 0) /** create itinerary */
     {
@@ -207,7 +214,6 @@ class ItineraryController extends Controller
   /** getting budget */
       $itinerary_status = Itinerary::find($itinerary_id)->status;
 
-
       if($itinerary_id != null && $itinerary_status == 0)
       {
         $budget = array();
@@ -251,7 +257,7 @@ class ItineraryController extends Controller
           }
       }
       $currency = Currency::all();
-  /** COMPLETE   */
+      /** COMPLETE   */
     }
 
     return view('pages.itinerary_add_info',compact('enquiry', 'itinerary', 'itinerary_status', 'itinerary_id', 'template_itinerary_data', 'product', 'language', 'product_gallery', 'product_description', 'product_pricing' ,'pageConfigs', 'from_date', 'to_date', 'days', 'itinerary_schedule_data', 'currency', 'categoryTag', 'category', 'budget', 'currency',  'pageConfigs'));
