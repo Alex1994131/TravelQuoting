@@ -810,20 +810,19 @@ function product_detail(product_id){
         }
     }
 
-    console.log(custom_gallery);
-
     str_image_carousel += "</ol>";
+
     str_image_carousel += '<div class="carousel-inner" role="listbox">';
     for(i = 0; i < gallery_count; i ++)
     {
         if(i == 0){
             str_image_carousel += '<div class="carousel-item active">' +
-                                       '<img class="img-fluid" src="/'+ custom_gallery[i].path +'" alt="First slide" style="width: 0%; height: 300px; object-fit: cover;">' +
+                                       '<img class="img-fluid" src="/'+ custom_gallery[i].path +'" alt="First slide" style="width: 100%; height: 300px; object-fit: cover;">' +
                                   '</div>';
         }
         else {
             str_image_carousel += '<div class="carousel-item">' +
-                                       '<img class="img-fluid" src="/'+ custom_gallery[i].path +'" alt="Second slide" style="width: 0%; height: 300px; object-fit: cover;">' +
+                                       '<img class="img-fluid" src="/'+ custom_gallery[i].path +'" alt="Second slide" style="width: 100%; height: 300px; object-fit: cover;">' +
                                    '</div>';
         }
     }
