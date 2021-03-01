@@ -28,29 +28,8 @@ use PDF;
 
 class ItineraryController extends Controller
 {
-  public function add_basic($enquiry_id){
-      $pageConfigs = ['pageHeader' => true];
-      // $breadcrumbs = [
-      //   ["link" => "/", "name" => "Home"],["name" => "Itinerary Create"]
-      // ];
-      $enquiry = Enquiry::where('id',$enquiry_id)->get()->first();
-      return view('pages.itinerary_add_basic',compact('enquiry','pageConfigs'));
-  }
 
-  public function edit_itinerary(Request $request) {
-    $pageConfigs = ['pageHeader' => true];
-    // $breadcrumbs = [
-    //   ["link" => "/", "name" => "Home"],["name" => "Itinerary Create"]
-    // ];
-
-    $itinerary_id = $request->itinerary_id;
-    $itinerary = Itinerary::find($itinerary_id);
-    $enquiry_id = $itinerary->enquiry_id;
-    $enquiry = Enquiry::where('id',$enquiry_id)->get()->first();
-    return view('pages.itinerary_edit_basic',compact('enquiry', 'itinerary', 'pageConfigs'));
-  }
-
-  public function add_itinerary_info($id, $type) {
+   public function add_itinerary_info($id, $type) {
     $pageConfigs = ['pageHeader' => true];
     // $breadcrumbs = [
     //   ["link" => "/", "name" => "Home"],["name" => "Itinerary Create"]
@@ -368,85 +347,6 @@ class ItineraryController extends Controller
       echo json_encode($itinerary_id);
     }
 
-  }
-
-  public function create_basic(Request $request){
-
-    $itinerary_id = $request->itinerary_id;
-
-    if(empty($itinerary_id)) {
-      $enquiry = Enquiry::where('id', $request->enquiry_id)->get()->first();
-
-      $itinerary = new Itinerary;
-      $itinerary->title = $request->title;
-
-      $str = "I";
-      for($i = 1; $i < strlen($enquiry->reference_number); $i ++)
-      {
-        $str[$i] = $enquiry->reference_number[$i];
-      }
-      $itinerary->reference_number = $str;
-
-      $itinerary->enquiry_id = $enquiry->id;
-      $itinerary->from_email = "";
-      $itinerary->to_email = "";
-      $itinerary->attach_file = "";
-      $itinerary->email_template = "";
-
-      $itinerary->budget = "";
-      $itinerary->margin_price = 0;
-      $itinerary->currency = "";
-
-      $duration = $request->duration;
-      $duration = explode(' - ', $duration);
-      $start_date = date_create($duration[0]);
-      $end_date = date_create($duration[1]);
-
-      $itinerary->from_date = $start_date;
-      $itinerary->to_date = $end_date;
-
-      $itinerary->adult_number = $request->adults_num;
-      $itinerary->children_number = $request->children_num;
-      $itinerary->single_count = $request->single_room;
-      $itinerary->double_count = $request->double_room;
-      $itinerary->twin_count = $request->twin_room;
-      $itinerary->triple_count = $request->triple_room;
-      $itinerary->family_count = $request->family_room;
-      $itinerary->note = $request->note;
-      $itinerary->status = 0;
-      $itinerary->account_id = $enquiry->account_id;
-      $itinerary->created_id = Auth::user()->id;
-
-      $itinerary->save();
-      $str = 'itinerary_add_daily/'.$itinerary->id;
-      return redirect()->to($str);
-    }
-    else {
-      $duration = $request->duration;
-      $duration = explode(' - ', $duration);
-
-      $start_date = date_create($duration[0]);
-      $end_date = date_create($duration[1]);
-
-      $update_data = array(
-        'title' => $request->title,
-        'updated_id' => Auth::user()->id,
-        'from_date' => $start_date,
-        'to_date' => $end_date,
-        'adult_number' => $request->adults_num,
-        'children_number' => $request->children_num,
-        'single_count' => $request->single_room,
-        'double_count' => $request->double_room,
-        'twin_count' => $request->twin_room,
-        'triple_count' => $request->triple_room,
-        'family_count' => $request->family_room,
-        'note' => $request->note
-      );
-
-      Itinerary::where('id', $itinerary_id)->update($update_data);
-      $str = 'itinerary_add_daily/'.$itinerary_id;
-      return redirect()->to($str);
-    }
   }
 
   public function add_daily(Request $request){

@@ -549,7 +549,6 @@ label{
                         <div class="dropdown-menu dropdown-menu-right">
                           <a class="dropdown-item" href="../edit_enquiry/{{$enquiry->id}}"><i class="bx bx-edit-alt mr-1"></i> edit</a>
                           <a class="dropdown-item" href="javascript:void(0)" onClick="enquiry_del({{$enquiry->id}})"><i class="bx bx-trash mr-1"></i> delete</a>
-                          <!-- <a class="dropdown-item" href="../itinerary_add_basic/with_enquiry_id/{{$enquiry->id}}"><i class="bx bx-trash mr-1"></i>Itinerary</a> -->
                           <a class="dropdown-item" href="../itinerary_add_info/{{$enquiry->id}}/0"><i class="bx bx-building mr-1"></i>Itinerary</a>
                         </div>
                       </div>
