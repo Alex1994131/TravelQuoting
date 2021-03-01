@@ -161,6 +161,7 @@
 @section('vendor-scripts')
 <script src="{{asset('vendors/js/extensions/bootstrap-treeview.min.js')}}"></script>
 <script src="{{asset('//maps.googleapis.com/maps/api/js?key=AIzaSyBgjNW0WA93qphgZW-joXVR6VC3IiYFjfo')}}"></script>
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1jKOFLhfQoZD3xJISSPnSW9-4SyYPpjY" defer></script> -->
 <script src="{{asset('vendors/js/charts/gmaps.min.js')}}"></script>
 @endsection
 

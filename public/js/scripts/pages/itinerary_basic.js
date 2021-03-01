@@ -87,7 +87,6 @@ $("#duration").change(function () {
             str += "<li class='days-list-each' id='list_"+ i +"'>" + year + '/' + month + '/' + day + "</li>";
         str += "hr";
         start_date.setDate(start_date.getDate() + 1);
-        console.log(start_date);
     }
     $('#days_list').append(str);
 });

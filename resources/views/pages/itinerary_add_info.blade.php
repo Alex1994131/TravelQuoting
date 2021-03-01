@@ -949,35 +949,6 @@ label{
                         </div>
                         <div class="col-12" id="product_list_container">
                           <ul class="product-list" id="product_list">
-                            <!-- @foreach($product as $data)
-                              <li class="product-list-each item">
-                                <div class="product-list-class">
-                                  <input type="hidden" name="product_id" id="product_id" value="{{$data->id}}">
-                                  <div class="product-list-left" onClick="product_detail({{$data->id}})">
-                                    <i class="bx bx-grid-vertical" style="font-size: 25px; margin: auto 0; cursor: move"></i>
-                                    <img class="product-list-img" src="/{{$data->getFirstImage->path}}"/>
-                                    <div class="product-list-explain">
-                                      <div class="product-list-title" id="product-list-title">
-                                        {{$data->title}}
-                                      </div>
-                                      <div class="product-list-detail">
-                                        {{$data->getCity->title}}, {{$data->getCountry->title}}
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="product-list-right">
-                                    <div class="dropdown">
-                                      <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu"></span>
-                                      <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="../edit_enquiry/{{$enquiry->id}}"><i class="bx bx-edit-alt mr-1"></i> edit</a>
-                                        <a class="dropdown-item" href="javascript:void(0)" onClick="enquiry_del({{$enquiry->id}})"><i class="bx bx-trash mr-1"></i> delete</a>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </li>
-                            @endforeach -->
                           </ul>
                           <ul class="pagination custom-pagination" id="product_pagination"></ul>
                         </div>

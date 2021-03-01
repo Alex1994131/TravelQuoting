@@ -12,7 +12,7 @@
             <div class="app-file-recent-details">
                 <div class="app-file-name font-size-small font-weight-bold ml-25">{{ $item->title?$item->title:'' }}</div>
                 <div class="app-file-size font-size-small text-primary mb-25 ml-25">{{ $item->getCategory?$item->getCategory->title:''  }}</div>
-                <div class="app-file-size font-size-small text-muted mb-25 ml-25">{{ $item->getCountry?$item->getCountry->title:'' }} {{  $item->getCity?$item->getCity->title:'' }}</div>
+                <div class="app-file-size font-size-small text-muted mb-25 ml-25">{{ $item->country }} {{  $item->city }}</div>
                 <div class="app-file-last-access font-size-small text-danger ml-25">{{ $item->start_time?$item->start_time: '' }} ~ {{ $item->end_time?$item->end_time: '' }}</div>
             </div>
             </div>
@@ -47,7 +47,7 @@
             <div class="app-file-recent-details">
                 <div class="app-file-name font-size-small font-weight-bold ml-25">{{ $item->title?$item->title:'' }}</div>
                 <div class="app-file-size font-size-small text-primary mb-25 ml-25">{{ $item->category_title?$item->category_title:''  }}</div>
-                <div class="app-file-size font-size-small text-muted mb-25 ml-25">{{ $item->country_title?$item->country_title:'' }} {{  $item->city_title?$item->city_title:'' }}</div>
+                <div class="app-file-size font-size-small text-muted mb-25 ml-25">{{ $item->country }} {{  $item->city }}</div>
                 <div class="app-file-last-access font-size-small text-danger ml-25">{{ $item->start_time?$item->start_time: '' }} ~ {{ $item->end_time?$item->end_time: '' }}</div>
             </div>
             </div>

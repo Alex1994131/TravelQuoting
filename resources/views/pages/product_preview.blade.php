@@ -55,9 +55,9 @@
             </div>
             <div class="d-flex align-items-center">
                 <p style="margin-right: 20px;" class="text-danger">location:</p>
-                <p class="font-weight-bold">{{ $product->getCountry->title }} {{ $product->getCity->title }} ({{ $product->location }})</p>
+                <p class="font-weight-bold">{{ $product->country }} {{ $product->city }} ({{ $product->street_address }})</p>
             </div>
-            <input type="hidden" id="location_info" value="{{ $product->location }}">
+            <input type="hidden" id="location_info" value="{{ $product->position }}">
             <div id="basic-map" class="height-300"></div>
             <div class="d-flex align-items-center mt-75">
                 <p style="margin-right: 20px;" class="text-danger">Serving Time:</p>

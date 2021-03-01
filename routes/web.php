@@ -93,7 +93,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/product/add/{flag?}', 'ProductController@product_add')->name('product_add');
     Route::get('/product/edit/{product_id?}', 'ProductController@product_edit')->name('product_edit');
     Route::get('/product/delete/{product_id?}', 'ProductController@product_delete')->name('product_delete');
-    Route::post('/product/city', 'ProductController@get_city')->name('product.city');
+    // Route::post('/product/city', 'ProductController@get_city')->name('product.city');
     Route::post('/product/tag', 'ProductController@get_tag')->name('product.tag');
     Route::post('/product/save', 'ProductController@product_save')->name('product_save');
 

@@ -18,8 +18,8 @@ use App\Models\Product;
 use App\Models\ProductGallery;
 use App\Models\ProductDescription;
 use App\Models\ProductPricing;
-use App\Models\Country;
-use App\Models\City;
+// use App\Models\Country;
+// use App\Models\City;
 use App\Models\Currency;
 use App\Models\Customer;
 
@@ -40,13 +40,11 @@ class ProductController extends Controller
                     ->groupBy(['product_gallery.product_id']);
 
             $product = DB::table('product')
-                    ->select('product.*', 'category.title as category_title', 'country.title as country_title', 'city.title as city_title')
+                    ->select('product.*', 'category.title as category_title')
                     ->joinSub($firstGallery, 'first_gallery', function ($join) {
                         $join->on('product.id', '=', 'first_gallery.product_id');
                     })
                     ->join('category', 'product.category', '=', 'category.id')
-                    ->join('country', 'product.country', '=', 'country.id')
-                    ->join('city', 'product.city', '=', 'city.id')
                     ->orderBy('product.id');
 
             if($search_flag == 'my') {
@@ -190,12 +188,8 @@ class ProductController extends Controller
 
         $supplier = Account::where('account_type', 3)->get();
         $language = Language::all();
-        $country = Country::all();
         $currency = Currency::all();
         $customer = Customer::all();
-
-        $city = array();
-
 
         if($flag == 'accommodation') {
             $flag = 1;
@@ -229,8 +223,6 @@ class ProductController extends Controller
             'category_tag' => $category_tag,
             'supplier' => $supplier,
             'language' => $language,
-            'country' => $country,
-            'city' => $city,
             'flag' => $flag,
             'currency' => $currency,
             'customer' => $customer
@@ -251,13 +243,8 @@ class ProductController extends Controller
 
         $supplier = Account::where('account_type', 3)->get();
         $language = Language::all();
-        $country = Country::all();
         $currency = Currency::all();
         $customer = Customer::all();
-
-        $country_id = $product->country;
-        $region_id = Country::find($country_id)->region_id;
-        $city = City::where('region_id', $region_id)->where('country_id', $country_id)->get();
 
         $pricing_group_data = DB::table('product_pricing')
                   ->select(DB::raw('count(*) as group_count, duration'))
@@ -295,8 +282,6 @@ class ProductController extends Controller
             'category_tag' => $category_tag,
             'supplier' => $supplier,
             'language' => $language,
-            'country' => $country,
-            'city' => $city,
             'flag' => $flag,
             'product' => $product,
             'currency' => $currency,
@@ -313,11 +298,11 @@ class ProductController extends Controller
         return redirect()->route('product');
     }
 
-    public function get_city(Request $request) {
-        $country = $request->country;
-        $city = City::where('country_id', $country)->get();
-        echo json_encode($city);
-    }
+    // public function get_city(Request $request) {
+    //     $country = $request->country;
+    //     $city = City::where('country_id', $country)->get();
+    //     echo json_encode($city);
+    // }
 
     public function get_tag(Request $request) {
         $category = $request->category;
@@ -331,22 +316,18 @@ class ProductController extends Controller
             'title' => 'required',
             'category' => 'required',
             'supplier' => 'required',
-            'country' => 'required',
-            'city' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
-            'location' => 'required'
+            'autocomplete' => 'required'
         ];
 
         $customMessages = [
             'title.required' => 'Title filed is required',
             'category.required' => 'Category filed is required',
             'supplier.required' => 'Supplier filed is required',
-            'country.required' => 'Country filed is required',
-            'city.required' => 'City filed is required',
             'start_time.required' => 'Start Time filed is required',
             'end_time.required' => 'End Time filed is required',
-            'location.required' => 'Location filed is required'
+            'autocomplete.required' => 'Location filed is required'
         ];
 
         $this->validate($request, $rule, $customMessages);
@@ -358,9 +339,13 @@ class ProductController extends Controller
                 [
                     'title' => $request->title,
                     'category' => $request->category,
+                    'zip' => $request->zip,
                     'country' => $request->country,
                     'city' => $request->city,
-                    'location' => $request->location,
+                    'position' => $request->position,
+                    'state' => $request->state,
+                    'street_number' => $request->street_number,
+                    'street_address' => $request->street_address,
                     'start_time' => $request->start_time,
                     'end_time' => $request->end_time,
                     'supplier' => $request->supplier

@@ -15,6 +15,7 @@ var update_key_index = 0;
 
 $(document).ready(function() {
     $('#filter_option').hide();
+    
     for(index = 0; index < product.length; index ++){
         var str_product_each = "";
         str_product_each = `<li class="product-list-each item">` +
@@ -22,13 +23,13 @@ $(document).ready(function() {
                 `<input type="hidden" name="product_id" id="product_id" value="${product[index].id}">` +
                 `<div class="product-list-left" onClick="product_detail(${product[index].id})">` +
                     `<i class="bx bx-grid-vertical" style="font-size: 25px; margin: auto 0; cursor: move"></i>` +
-                    `<img class="product-list-img" src="/${product[index].get_first_image.path}"/>` +
+                    `<img class="product-list-img" src="/`+ product[index].path +`"/>` +
                     `<div class="product-list-explain">`+
                     `<div class="product-list-title" id="product-list-title">` +
                         product[index].title +
                     `</div>` +
                     `<div class="product-list-detail">` +
-                        `${product[index].get_city.title}, ${product[index].get_country.title}` +
+                        `${product[index].city}, ${product[index].country}` +
                     `</div>` +
                     `</div>` +
                 `</div>` +
@@ -182,7 +183,7 @@ $(document).ready(function() {
                                             '<img class="daily-products-img" src="/'+ daily_schedule_data[dd][i].path +'"/>'+
                                             '<div class="daily-products-explain">'+
                                             '<div class="daily-products-title">'+
-                                                daily_schedule_data[dd][i].product_title + '<span class="daily-products-detail">('+ daily_schedule_data[dd][i].city_title +', ' +daily_schedule_data[dd][i].country_title +')</span>'+
+                                                daily_schedule_data[dd][i].product_title + '<span class="daily-products-detail">('+ daily_schedule_data[dd][i].city +', ' +daily_schedule_data[dd][i].country +')</span>'+
                                             '</div>'+
                                             '<div class="daily-proudcts-option">'+
                                                 `<i class="bx bx-info-circle" style="color: rgb(210, 77, 83);padding-top: 2px;"></i> <span id="itinerary_price_margin_${schedule_index}_${k[schedule_index]}">Price Margin: ${daily_schedule_data[dd][i].itinerary_margin_price}(%)</span>`+
@@ -392,7 +393,7 @@ $('#search_product').keypress(function(event){
                                             temp_product[index].title +
                                             `</div>` +
                                             `<div class="product-list-detail">` +
-                                                `${country[index].title}, ${city[index].title}` +
+                                                `${temp_product[index].country}, ${temp_product[index].city}` +
                                             `</div>` +
                                             `</div>` +
                                         `</div>` +
@@ -528,8 +529,6 @@ function filter_change(){
         success: function(result){
             var temp_product = result.product;
             var images = result.images;
-            var country = result.country;
-            var city = result.city;
             var str_product_each = "";
 
             $('#product_list').empty();
@@ -547,7 +546,7 @@ function filter_change(){
                                         temp_product[index].title +
                                         `</div>` +
                                         `<div class="product-list-detail">` +
-                                            `${country[index].title}, ${city[index].title}` +
+                                            `${temp_product[index].country}, ${temp_product[index].city}` +
                                         `</div>` +
                                         `</div>` +
                                     `</div>` +
@@ -763,8 +762,8 @@ function product_detail(product_id){
 
     //location
     $('#location').empty();
-    $('#location').append(custom_product.get_country.title + ' ' + custom_product.get_city.title + ' (' + custom_product.location + ')');
-    $('#location_info').val(custom_product.location);
+    $('#location').append(custom_product.country + ' ' + custom_product.city + ' (' + custom_product.street_address + ')');
+    $('#location_info').val(custom_product.position);
     //end location
 
     //set time
@@ -810,6 +809,9 @@ function product_detail(product_id){
             str_image_carousel += '<li data-target="#carousel-example-generic" data-slide-to="' + i +'"></li>'
         }
     }
+
+    console.log(custom_gallery);
+
     str_image_carousel += "</ol>";
     str_image_carousel += '<div class="carousel-inner" role="listbox">';
     for(i = 0; i < gallery_count; i ++)
@@ -1213,6 +1215,7 @@ function edit_product_time(obj_id, list_id) {
     $('.pickatime').pickatime();
     $('.picker__holder').css({'position' : "fixed"});
 }
+
 function add_task(daily_id) {
   console.log(daily_id);
   var str_assign_by = '<option value="">--- Please select ---</option>'
@@ -1716,7 +1719,7 @@ function set_all_product_price() {
                                     '<img class="daily-products-img" src="/'+ global_custom_product.get_first_image.path +'"/>'+
                                     '<div class="daily-products-explain">'+
                                     '<div class="daily-products-title">'+
-                                        global_custom_product.title + '<span class="daily-products-detail">('+ global_custom_product.get_city.title +', ' +global_custom_product.get_country.title +')</span>'+
+                                        global_custom_product.title + '<span class="daily-products-detail">('+ global_custom_product.city +', ' +global_custom_product.country +')</span>'+
                                     '</div>'+
                                     '<div class="daily-proudcts-option">'+
                                         `<i class="bx bx-info-circle" style="color: rgb(210, 77, 83);padding-top: 2px;"></i> <span id="itinerary_price_margin_${global_obj_id}_${k[global_obj_id]}">Price Margin: 0(%)</span>`+
@@ -1768,7 +1771,7 @@ function set_all_product_price() {
                                     '<img class="daily-products-img" src="/'+ global_custom_product.get_first_image.path +'"/>'+
                                     '<div class="daily-products-explain">'+
                                     '<div class="daily-products-title">'+
-                                        global_custom_product.title + '<span class="daily-products-detail">('+ global_custom_product.get_city.title +', ' +global_custom_product.get_country.title +')</span>'+
+                                        global_custom_product.title + '<span class="daily-products-detail">('+ global_custom_product.city +', ' +global_custom_product.country +')</span>'+
                                     '</div>'+
                                     '<div class="daily-proudcts-option">'+
                                         `<i class="bx bx-info-circle" style="color: rgb(210, 77, 83);padding-top: 2px;"></i> <span id="itinerary_price_margin_${global_obj_id}_${k[global_obj_id]}">Price Margin: ${global_margin_price}(%)</span>`+

@@ -792,6 +792,51 @@ function todate_trigger(obj, index) {
 let map;
 let marker;
 
+const componentForm = {
+  street_number: "short_name",
+  route: "long_name",
+  locality: "long_name",
+  administrative_area_level_1: "short_name",
+  country: "long_name",
+  postal_code: "short_name",
+};
+
+function initAutocomplete() {
+  autocomplete = new google.maps.places.Autocomplete(
+      document.getElementById("autocomplete"),
+      {types: ["geocode"]}
+  );
+  autocomplete.setFields(["address_component", "geometry"]);
+  autocomplete.addListener("place_changed", fillInAddress);
+}
+
+function fillInAddress() {
+  const place = autocomplete.getPlace();
+
+  var location = JSON.parse(JSON.stringify(place.geometry.location));
+
+  var position = location.lat + ", " + location.lng;
+  $("#position").val(position);
+
+  deleteMarkers();
+  map.panTo(location);
+  addMarker(location)
+  
+  for (const component in componentForm) {
+      document.getElementById(component).value = "";
+      // document.getElementById(component).disabled = false;
+  }
+
+  for (const component of place.address_components) {
+      const addressType = component.types[0];
+
+      if (componentForm[addressType]) {
+          const val = component[componentForm[addressType]];
+          document.getElementById(addressType).value = val;
+      }
+  }
+}
+
 function addMarker(location) {
 	marker = new google.maps.Marker({
 	  position: location,
@@ -923,58 +968,16 @@ jQuery(document).ready(function () {
 		center: myLatlng,
 	});
 
-	var location = product.location;
-	location_latlng = location.split(', ');
+	var position = product.position;
+  console.log(position);
+	location_latlng = position.split(', ');
 	var mark_latlng = {
 		lat: parseFloat(location_latlng[0]),
 		lng: parseFloat(location_latlng[1])
 	};
 
+  map.panTo(mark_latlng);
 	addMarker(mark_latlng);
-
-	//Configure the click listener.
-	map.addListener("click", (mapsMouseEvent) => {
-		var position = mapsMouseEvent.latLng.toJSON()
-		var position_text = position.lat + ', ' + position.lng;
-		$("#location").val(position_text);
-
-		deleteMarkers();
-		addMarker(position)
-	});
-
-	// let map;
-	// let service;
-	// let infowindow;
-
-	// const sydney = new google.maps.LatLng(-33.867, 151.195);
-	// infowindow = new google.maps.InfoWindow();
-	// map = new google.maps.Map(document.getElementById("basic-map"), {
-	// 	center: sydney,
-	// 	zoom: 15,
-	// });
-
-	// const request = {
-	// 	query: "Museum of Contemporary Art Australia",
-	// 	fields: ["name", "geometry"],
-	// 	};
-	// 	service = new google.maps.places.PlacesService(map);
-	// 	service.findPlaceFromQuery(request, (results, status) => {
-	// 	if (status === google.maps.places.PlacesServiceStatus.OK) {
-	// 		for (let i = 0; i < results.length; i++) {
-	// 		createMarker(results[i]);
-	// 		}
-	// 		map.setCenter(results[0].geometry.location);
-	// 	}
-	// });
-
-	// const marker = new google.maps.Marker({
-	// 	map,
-	// 	position: place.geometry.location,
-	//   });
-	//   google.maps.event.addListener(marker, "click", () => {
-	// 	infowindow.setContent(place.name);
-	// 	infowindow.open(map);
-	// });
 
 	$(".select2").select2({
 		dropdownAutoWidth: true,

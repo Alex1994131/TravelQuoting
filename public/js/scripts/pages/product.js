@@ -86,6 +86,7 @@ function get_detail(product_id) {
 
         var location = $("#location_info").val();
         location_latlng = location.split(', ');
+        
         var product_latlng = {
           lat: parseFloat(location_latlng[0]),
           lng: parseFloat(location_latlng[1])

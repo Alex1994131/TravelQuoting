@@ -204,37 +204,24 @@
                         </div>
                     </fieldset>
                   </div>
+                  <div class="col-md-12">
+                    <h6>Location</h6>
 
-                  <div class="col-md-6">
-                    <h6>Country</h6>
-                    <fieldset class="form-group position-relative has-icon-left @error('country') error @enderror">
-                        <select class="select2 form-control" id="country" name="country" required data-validation-required-message="This field is required">
-                            <option value="">Country</option>
-                            @foreach($country as $item)
-                            <option value="{{$item->id}}" {{old('country')==$item->id?'selected':''}}>{{ $item->title }}</option>
-                            @endforeach
-                        </select>
-                        <div class="form-control-position">
-                          <i class='bx bx-search'></i>
-                        </div>
-                    </fieldset>
-                  </div>
+                    <input type="hidden" id="postal_code" name="zip" required=""/>
+                    <input type="hidden" id="country" name="country" required=""/>
+                    <input type="hidden" id="locality" name="city" required="">
+                    <input type="hidden" id="administrative_area_level_1" name="state" required=""/>
+                    <input type="hidden" name="position" id="position">
+                    <input type="hidden" id="street_number" name="street_number" required=""/>
+                    <input type="hidden" id="route" name="street_address" required=""/>
 
-                  <div class="col-md-6">
-                    <h6>City</h6>
-                    <fieldset class="form-group position-relative has-icon-left @error('city') error @enderror">
-                      <select class="select2 form-control" id="city" name="city" required data-validation-required-message="This field is required">
-                          <option value="">City</option>
-                          @foreach($city as $item)
-                            <option value="{{$item->id}}" {{old('city')==$item->id?'selected':''}}>{{ $item->title }}</option>
-                          @endforeach
-                      </select>
+                    <fieldset class="form-group position-relative has-icon-left @error('location') error @enderror">
+                      <input type="text" id="autocomplete" name="autocomplete" class="form-control" data-validation-required-message="This field is required" placeholder="Select Location">
                       <div class="form-control-position">
-                        <i class='bx bx-search'></i>
+                          <i class='bx bx-info-circle'></i>
                       </div>
                     </fieldset>
                   </div>
-
                   <div class="col-md-6">
                     <h6>Start Time</h6>
                     <fieldset class="form-group position-relative has-icon-left @error('start_time') error @enderror">
@@ -256,14 +243,8 @@
                 </div>
               </div>
               <div class="col-md-6">
-                <h6>Location</h6>
-                <fieldset class="form-group position-relative has-icon-left @error('location') error @enderror">
-                  <input type="text" id="location" name="location" value="{{old('location')}}" class="form-control" data-validation-required-message="This field is required" placeholder="Select Location">
-                  <div class="form-control-position">
-                      <i class='bx bx-info-circle'></i>
-                  </div>
-                </fieldset>
-                <div id="basic-map" style="border: 1px solid #eee; height: 300px;"></div>
+                <h6>Map</h6>
+                <div id="basic-map" style="border: 1px solid #eee; height: 350px;"></div>
               </div>
               <div class="col-md-12 d-flex justify-content-end" style="margin-top: 20px;">
                 <button type="submit" id="general_submit" class="btn btn-primary mr-1 mb-1">
@@ -521,7 +502,9 @@
 
   <script src="{{asset('vendors/js/forms/spinner/jquery.bootstrap-touchspin.js')}}"></script>
 
-  <script src="{{asset('//maps.googleapis.com/maps/api/js?key=AIzaSyBgjNW0WA93qphgZW-joXVR6VC3IiYFjfo')}}"></script>
+  <!-- <script src="{{asset('//maps.googleapis.com/maps/api/js?key=AIzaSyBgjNW0WA93qphgZW-joXVR6VC3IiYFjfo')}}"></script> -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1jKOFLhfQoZD3xJISSPnSW9-4SyYPpjY&callback=initAutocomplete&libraries=places&v=weekly" defer></script>
+
   <script src="{{asset('vendors/js/charts/gmaps.min.js')}}"></script>
 
   <script src="{{asset('vendors/js/forms/repeater/jquery.repeater.min.js')}}"></script>

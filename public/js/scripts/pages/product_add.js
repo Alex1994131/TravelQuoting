@@ -789,6 +789,55 @@ function todate_trigger(obj, index) {
 let map;
 let marker;
 
+//////////////////////
+
+const componentForm = {
+  street_number: "short_name",
+  route: "long_name",
+  locality: "long_name",
+  administrative_area_level_1: "short_name",
+  country: "long_name",
+  postal_code: "short_name",
+};
+
+function initAutocomplete() {
+  autocomplete = new google.maps.places.Autocomplete(
+      document.getElementById("autocomplete"),
+      {types: ["geocode"]}
+  );
+  autocomplete.setFields(["address_component", "geometry"]);
+  autocomplete.addListener("place_changed", fillInAddress);
+}
+
+function fillInAddress() {
+  const place = autocomplete.getPlace();
+
+  var location = JSON.parse(JSON.stringify(place.geometry.location));
+
+  var position = location.lat + ", " + location.lng;
+  $("#position").val(position);
+
+  deleteMarkers();
+  map.panTo(location);
+  addMarker(location)
+  
+  for (const component in componentForm) {
+      document.getElementById(component).value = "";
+      // document.getElementById(component).disabled = false;
+  }
+
+  for (const component of place.address_components) {
+      const addressType = component.types[0];
+
+      if (componentForm[addressType]) {
+          const val = component[componentForm[addressType]];
+          document.getElementById(addressType).value = val;
+      }
+  }
+}
+
+////////////////////////
+
 function addMarker(location) {
 	marker = new google.maps.Marker({
 	  position: location,
@@ -920,16 +969,6 @@ jQuery(document).ready(function () {
 	map = new google.maps.Map(document.getElementById("basic-map"), {
 		zoom: 15,
 		center: myLatlng,
-	});
-
-	//Configure the click listener.
-	map.addListener("click", (mapsMouseEvent) => {
-		var position = mapsMouseEvent.latLng.toJSON()
-		var position_text = position.lat + ', ' + position.lng;
-		$("#location").val(position_text);
-
-		deleteMarkers();
-		addMarker(position)
 	});
 
 	$(".select2").select2({

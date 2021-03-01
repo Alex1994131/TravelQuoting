@@ -28,27 +28,27 @@ use PDF;
 
 class ItineraryController extends Controller
 {
-  public function add_basic($enquiry_id){
-      $pageConfigs = ['pageHeader' => true];
-      // $breadcrumbs = [
-      //   ["link" => "/", "name" => "Home"],["name" => "Itinerary Create"]
-      // ];
-      $enquiry = Enquiry::where('id',$enquiry_id)->get()->first();
-      return view('pages.itinerary_add_basic',compact('enquiry','pageConfigs'));
-  }
+  // public function add_basic($enquiry_id){
+  //     $pageConfigs = ['pageHeader' => true];
+  //     // $breadcrumbs = [
+  //     //   ["link" => "/", "name" => "Home"],["name" => "Itinerary Create"]
+  //     // ];
+  //     $enquiry = Enquiry::where('id',$enquiry_id)->get()->first();
+  //     return view('pages.itinerary_add_basic',compact('enquiry','pageConfigs'));
+  // }
 
-  public function edit_itinerary(Request $request) {
-    $pageConfigs = ['pageHeader' => true];
-    // $breadcrumbs = [
-    //   ["link" => "/", "name" => "Home"],["name" => "Itinerary Create"]
-    // ];
+  // public function edit_itinerary(Request $request) {
+  //   $pageConfigs = ['pageHeader' => true];
+  //   // $breadcrumbs = [
+  //   //   ["link" => "/", "name" => "Home"],["name" => "Itinerary Create"]
+  //   // ];
 
-    $itinerary_id = $request->itinerary_id;
-    $itinerary = Itinerary::find($itinerary_id);
-    $enquiry_id = $itinerary->enquiry_id;
-    $enquiry = Enquiry::where('id',$enquiry_id)->get()->first();
-    return view('pages.itinerary_edit_basic',compact('enquiry', 'itinerary', 'pageConfigs'));
-  }
+  //   $itinerary_id = $request->itinerary_id;
+  //   $itinerary = Itinerary::find($itinerary_id);
+  //   $enquiry_id = $itinerary->enquiry_id;
+  //   $enquiry = Enquiry::where('id',$enquiry_id)->get()->first();
+  //   return view('pages.itinerary_edit_basic',compact('enquiry', 'itinerary', 'pageConfigs'));
+  // }
 
   public function add_itinerary_info($id, $type) {
     $pageConfigs = ['pageHeader' => true];
@@ -104,7 +104,6 @@ class ItineraryController extends Controller
     }
     else
     {
-
       $itinerary_id = $id;
       $itinerary = Itinerary::find($itinerary_id);
       $enquiry_id = $itinerary->enquiry_id;
@@ -121,10 +120,12 @@ class ItineraryController extends Controller
 
     $itinerary_id = $itinerary->id;
 
-
-
-
     $product = Product::all();
+
+    for($i=0; $i<count($product); $i++) {
+      $product[$i]->path = $product[$i]->getFirstImage['path'];
+    }
+
     $product_gallery = ProductGallery::all();
     $product_description = ProductDescription::all();
     $product_pricing = ProductPricing::all();
@@ -140,16 +141,12 @@ class ItineraryController extends Controller
 
 
     $itinerary_template = DB::table('itinerary_template')
-    ->select('title', 'group_id', 'created_by')
-    ->where('created_by', Auth::user()->id)
-    ->get()
-    ->groupBy('group_id');
-
+      ->select('title', 'group_id', 'created_by')
+      ->where('created_by', Auth::user()->id)
+      ->get()
+      ->groupBy('group_id');
 
     $template_itinerary_data = array();
-
-
-    //dd($itinerary_template);
 
     foreach($itinerary_template as $key=>$val) {
 
@@ -171,6 +168,7 @@ class ItineraryController extends Controller
 
       array_push($template_itinerary_data, $temp);
     }
+
     $days = $to_date - $from_date;
     $days = intval(round($days / (60 * 60 * 24)));
     $days ++;
@@ -178,6 +176,7 @@ class ItineraryController extends Controller
     $to_date = date("Y-m-d", $to_date);
 
     $budget = array();
+
     if($itinerary_id == null)
     {
       $schedule_date = [];
@@ -196,15 +195,14 @@ class ItineraryController extends Controller
           ->get();
 
       $itinerary_daily = DB::table('product')
-        ->select('product.id', 'itinerary_daily.id as daily_id', 'product.title as product_title', 'itinerary_daily.product_price_id', 'itinerary_daily.itinerary_margin_price', 'itinerary_daily.date', 'itinerary_daily.start_time', 'itinerary_daily.end_time', 'itinerary_daily.adults_num', 'itinerary_daily.children_num', 'country.title as country_title', 'city.title as city_title')
+        ->select('product.id', 'itinerary_daily.id as daily_id', 'product.title as product_title', 'itinerary_daily.product_price_id', 'itinerary_daily.itinerary_margin_price', 'itinerary_daily.date', 'itinerary_daily.start_time', 'itinerary_daily.end_time', 'itinerary_daily.adults_num', 'itinerary_daily.children_num', 'product.country', 'product.city')
         ->join('itinerary_daily', 'product.id', '=', 'itinerary_daily.product_id')
-        ->join('city', 'product.city', '=', 'city.id')
-        ->join('country', 'product.country', '=', 'country.id')
         ->joinSub($latestPosts, 'latest_posts', function ($join) {
           $join->on('product.id', '=', 'latest_posts.product_id');
         })
         ->where('itinerary_daily.itinerary_id', $itinerary_id)
         ->get();
+
       $itinerary_schedule_data = array();
 
       for($i = 0; $i<count($schedule_date); $i++) {
@@ -247,6 +245,7 @@ class ItineraryController extends Controller
           }
         }
       }
+
       if ($itinerary_status == 1)
       {
         $itinerary_daily = ItineraryDaily::where('itinerary_id', $itinerary_id)->get();
@@ -370,197 +369,193 @@ class ItineraryController extends Controller
 
   }
 
-  public function create_basic(Request $request){
+  // public function create_basic(Request $request){
 
-    $itinerary_id = $request->itinerary_id;
+  //   $itinerary_id = $request->itinerary_id;
 
-    if(empty($itinerary_id)) {
-      $enquiry = Enquiry::where('id', $request->enquiry_id)->get()->first();
+  //   if(empty($itinerary_id)) {
+  //     $enquiry = Enquiry::where('id', $request->enquiry_id)->get()->first();
 
-      $itinerary = new Itinerary;
-      $itinerary->title = $request->title;
+  //     $itinerary = new Itinerary;
+  //     $itinerary->title = $request->title;
 
-      $str = "I";
-      for($i = 1; $i < strlen($enquiry->reference_number); $i ++)
-      {
-        $str[$i] = $enquiry->reference_number[$i];
-      }
-      $itinerary->reference_number = $str;
+  //     $str = "I";
+  //     for($i = 1; $i < strlen($enquiry->reference_number); $i ++)
+  //     {
+  //       $str[$i] = $enquiry->reference_number[$i];
+  //     }
+  //     $itinerary->reference_number = $str;
 
-      $itinerary->enquiry_id = $enquiry->id;
-      $itinerary->from_email = "";
-      $itinerary->to_email = "";
-      $itinerary->attach_file = "";
-      $itinerary->email_template = "";
+  //     $itinerary->enquiry_id = $enquiry->id;
+  //     $itinerary->from_email = "";
+  //     $itinerary->to_email = "";
+  //     $itinerary->attach_file = "";
+  //     $itinerary->email_template = "";
 
-      $itinerary->budget = "";
-      $itinerary->margin_price = 0;
-      $itinerary->currency = "";
+  //     $itinerary->budget = "";
+  //     $itinerary->margin_price = 0;
+  //     $itinerary->currency = "";
 
-      $duration = $request->duration;
-      $duration = explode(' - ', $duration);
-      $start_date = date_create($duration[0]);
-      $end_date = date_create($duration[1]);
+  //     $duration = $request->duration;
+  //     $duration = explode(' - ', $duration);
+  //     $start_date = date_create($duration[0]);
+  //     $end_date = date_create($duration[1]);
 
-      $itinerary->from_date = $start_date;
-      $itinerary->to_date = $end_date;
+  //     $itinerary->from_date = $start_date;
+  //     $itinerary->to_date = $end_date;
 
-      $itinerary->adult_number = $request->adults_num;
-      $itinerary->children_number = $request->children_num;
-      $itinerary->single_count = $request->single_room;
-      $itinerary->double_count = $request->double_room;
-      $itinerary->twin_count = $request->twin_room;
-      $itinerary->triple_count = $request->triple_room;
-      $itinerary->family_count = $request->family_room;
-      $itinerary->note = $request->note;
-      $itinerary->status = 0;
-      $itinerary->account_id = $enquiry->account_id;
-      $itinerary->created_id = Auth::user()->id;
+  //     $itinerary->adult_number = $request->adults_num;
+  //     $itinerary->children_number = $request->children_num;
+  //     $itinerary->single_count = $request->single_room;
+  //     $itinerary->double_count = $request->double_room;
+  //     $itinerary->twin_count = $request->twin_room;
+  //     $itinerary->triple_count = $request->triple_room;
+  //     $itinerary->family_count = $request->family_room;
+  //     $itinerary->note = $request->note;
+  //     $itinerary->status = 0;
+  //     $itinerary->account_id = $enquiry->account_id;
+  //     $itinerary->created_id = Auth::user()->id;
 
-      $itinerary->save();
-      $str = 'itinerary_add_daily/'.$itinerary->id;
-      return redirect()->to($str);
-    }
-    else {
-      $duration = $request->duration;
-      $duration = explode(' - ', $duration);
+  //     $itinerary->save();
+  //     $str = 'itinerary_add_daily/'.$itinerary->id;
+  //     return redirect()->to($str);
+  //   }
+  //   else {
+  //     $duration = $request->duration;
+  //     $duration = explode(' - ', $duration);
 
-      $start_date = date_create($duration[0]);
-      $end_date = date_create($duration[1]);
+  //     $start_date = date_create($duration[0]);
+  //     $end_date = date_create($duration[1]);
 
-      $update_data = array(
-        'title' => $request->title,
-        'updated_id' => Auth::user()->id,
-        'from_date' => $start_date,
-        'to_date' => $end_date,
-        'adult_number' => $request->adults_num,
-        'children_number' => $request->children_num,
-        'single_count' => $request->single_room,
-        'double_count' => $request->double_room,
-        'twin_count' => $request->twin_room,
-        'triple_count' => $request->triple_room,
-        'family_count' => $request->family_room,
-        'note' => $request->note
-      );
+  //     $update_data = array(
+  //       'title' => $request->title,
+  //       'updated_id' => Auth::user()->id,
+  //       'from_date' => $start_date,
+  //       'to_date' => $end_date,
+  //       'adult_number' => $request->adults_num,
+  //       'children_number' => $request->children_num,
+  //       'single_count' => $request->single_room,
+  //       'double_count' => $request->double_room,
+  //       'twin_count' => $request->twin_room,
+  //       'triple_count' => $request->triple_room,
+  //       'family_count' => $request->family_room,
+  //       'note' => $request->note
+  //     );
 
-      Itinerary::where('id', $itinerary_id)->update($update_data);
-      $str = 'itinerary_add_daily/'.$itinerary_id;
-      return redirect()->to($str);
-    }
-  }
+  //     Itinerary::where('id', $itinerary_id)->update($update_data);
+  //     $str = 'itinerary_add_daily/'.$itinerary_id;
+  //     return redirect()->to($str);
+  //   }
+  // }
 
-  public function add_daily(Request $request){
-      $pageConfigs = ['pageHeader' => true];
-      $breadcrumbs = [
-      ["link" => "/", "name" => "Home"],["name" => "Itinerary Daily Create"]
-      ];
+  // public function add_daily(Request $request){
+  //     $pageConfigs = ['pageHeader' => true];
+  //     $breadcrumbs = [
+  //     ["link" => "/", "name" => "Home"],["name" => "Itinerary Daily Create"]
+  //     ];
 
-      // $product = Product::paginate(7);
-      $product = Product::all();
-      $product_gallery = ProductGallery::all();
-      $product_description = ProductDescription::all();
-      $product_pricing = ProductPricing::all();
-      $currency = Currency::all();
-      $categoryTag = CategoryTag::all();
-      $category = Category::all();
-      $language = Language::all();
-      $itinerary = Itinerary::where('id', $request->itinerary_id)->first();
-      $from_date = strtotime($itinerary->from_date);
-      $to_date = strtotime($itinerary->to_date);
+  //     // $product = Product::paginate(7);
+  //     $product = Product::all();
+  //     $product_gallery = ProductGallery::all();
+  //     $product_description = ProductDescription::all();
+  //     $product_pricing = ProductPricing::all();
+  //     $currency = Currency::all();
+  //     $categoryTag = CategoryTag::all();
+  //     $category = Category::all();
+  //     $language = Language::all();
+  //     $itinerary = Itinerary::where('id', $request->itinerary_id)->first();
+  //     $from_date = strtotime($itinerary->from_date);
+  //     $to_date = strtotime($itinerary->to_date);
 
-      $schedule_date = DB::table('itinerary_daily')
-          ->select('date')
-          ->where('itinerary_id', $request->itinerary_id)
-          ->groupBy('date')
-          ->get();
+  //     $schedule_date = DB::table('itinerary_daily')
+  //         ->select('date')
+  //         ->where('itinerary_id', $request->itinerary_id)
+  //         ->groupBy('date')
+  //         ->get();
 
-      $latestPosts = DB::table('product_gallery')
-        ->select('product_id')
-        ->groupByRaw('product_id');
+  //     $latestPosts = DB::table('product_gallery')
+  //       ->select('product_id')
+  //       ->groupByRaw('product_id');
 
-      $itinerary_daily = DB::table('product')
-        ->select('product.id', 'itinerary_daily.id as daily_id', 'product.title as product_title', 'itinerary_daily.product_price_id', 'itinerary_daily.itinerary_margin_price', 'itinerary_daily.date', 'itinerary_daily.start_time', 'itinerary_daily.end_time', 'itinerary_daily.adults_num', 'itinerary_daily.children_num', 'country.title as country_title', 'city.title as city_title')
-        ->join('itinerary_daily', 'product.id', '=', 'itinerary_daily.product_id')
-        ->join('city', 'product.city', '=', 'city.id')
-        ->join('country', 'product.country', '=', 'country.id')
-        ->joinSub($latestPosts, 'latest_posts', function ($join) {
-          $join->on('product.id', '=', 'latest_posts.product_id');
-        })
-        ->where('itinerary_daily.itinerary_id', $request->itinerary_id)
-        ->get();
+  //     $itinerary_daily = DB::table('product')
+  //       ->select('product.id', 'itinerary_daily.id as daily_id', 'product.title as product_title', 'itinerary_daily.product_price_id', 'itinerary_daily.itinerary_margin_price', 'itinerary_daily.date', 'itinerary_daily.start_time', 'itinerary_daily.end_time', 'itinerary_daily.adults_num', 'itinerary_daily.children_num', 'country.title as country_title', 'city.title as city_title')
+  //       ->join('itinerary_daily', 'product.id', '=', 'itinerary_daily.product_id')
+  //       ->join('city', 'product.city', '=', 'city.id')
+  //       ->join('country', 'product.country', '=', 'country.id')
+  //       ->joinSub($latestPosts, 'latest_posts', function ($join) {
+  //         $join->on('product.id', '=', 'latest_posts.product_id');
+  //       })
+  //       ->where('itinerary_daily.itinerary_id', $request->itinerary_id)
+  //       ->get();
 
-      $itinerary_schedule_data = array();
+  //     $itinerary_schedule_data = array();
 
-      for($i = 0; $i<count($schedule_date); $i++) {
-        $temp = array();
-        for($j=0; $j<count($itinerary_daily); $j++) {
-          if($schedule_date[$i]->date == $itinerary_daily[$j]->date) {
-            $path = ProductGallery::where('product_id', $itinerary_daily[$j]->id)->orderByDesc('created_at')->first();
-            $path = $path->path;
-            $itinerary_daily[$j]->path = $path;
+  //     for($i = 0; $i<count($schedule_date); $i++) {
+  //       $temp = array();
+  //       for($j=0; $j<count($itinerary_daily); $j++) {
+  //         if($schedule_date[$i]->date == $itinerary_daily[$j]->date) {
+  //           $path = ProductGallery::where('product_id', $itinerary_daily[$j]->id)->orderByDesc('created_at')->first();
+  //           $path = $path->path;
+  //           $itinerary_daily[$j]->path = $path;
 
-            $schedule_record = $itinerary_daily[$j];
-            array_push($temp, $schedule_record);
-          }
-        }
+  //           $schedule_record = $itinerary_daily[$j];
+  //           array_push($temp, $schedule_record);
+  //         }
+  //       }
 
-        $itinerary_schedule_data[$schedule_date[$i]->date] = $temp;
-      }
+  //       $itinerary_schedule_data[$schedule_date[$i]->date] = $temp;
+  //     }
 
-      $itinerary_template = DB::table('itinerary_template')
-          ->select('title', 'group_id', 'created_by')
-          ->where('created_by', Auth::user()->id)
-          ->get()
-          ->groupBy('group_id');
+  //     $itinerary_template = DB::table('itinerary_template')
+  //         ->select('title', 'group_id', 'created_by')
+  //         ->where('created_by', Auth::user()->id)
+  //         ->get()
+  //         ->groupBy('group_id');
 
 
-      $template_itinerary_data = array();
+  //     $template_itinerary_data = array();
 
-      foreach($itinerary_template as $key=>$val) {
+  //     foreach($itinerary_template as $key=>$val) {
 
-        $created_by = $val[$key]->created_by;
-        $path = Account::where('user_id', $created_by)->first()->avatar_path;
+  //       $created_by = $val[$key]->created_by;
+  //       $path = Account::where('user_id', $created_by)->first()->avatar_path;
 
-        $day_count = DB::table('itinerary_template')
-          ->select(DB::raw('count(*) as day_count'))
-          ->where('group_id', $key)
-          ->groupBy('date_num')
-          ->get();
+  //       $day_count = DB::table('itinerary_template')
+  //         ->select(DB::raw('count(*) as day_count'))
+  //         ->where('group_id', $key)
+  //         ->groupBy('date_num')
+  //         ->get();
 
-        $temp = array(
-          'title' => $val[$key]->title,
-          'group_id' => $val[$key]->group_id,
-          'path' => $path,
-          'day_count' => count($day_count)
-        );
+  //       $temp = array(
+  //         'title' => $val[$key]->title,
+  //         'group_id' => $val[$key]->group_id,
+  //         'path' => $path,
+  //         'day_count' => count($day_count)
+  //       );
 
-        array_push($template_itinerary_data, $temp);
-      }
+  //       array_push($template_itinerary_data, $temp);
+  //     }
 
-      $itinerary_id = $request->itinerary_id;
+  //     $itinerary_id = $request->itinerary_id;
 
-      $days = $to_date - $from_date;
-      $days = intval(round($days / (60 * 60 * 24)));
-      $days ++;
-      $from_date = date('Y-m-d', $from_date);
-      $to_date = date("Y-m-d", $to_date);
-      $enquiry = $itinerary->get_enquiry;
+  //     $days = $to_date - $from_date;
+  //     $days = intval(round($days / (60 * 60 * 24)));
+  //     $days ++;
+  //     $from_date = date('Y-m-d', $from_date);
+  //     $to_date = date("Y-m-d", $to_date);
+  //     $enquiry = $itinerary->get_enquiry;
 
-      return view('pages.itinerary_add_daily',compact('itinerary', 'itinerary_id', 'template_itinerary_data', 'enquiry', 'product', 'language', 'product_gallery', 'product_description', 'product_pricing' ,'pageConfigs', 'breadcrumbs', 'from_date', 'to_date', 'days', 'itinerary_schedule_data', 'currency', 'categoryTag', 'category'));
-  }
+  //     return view('pages.itinerary_add_daily',compact('itinerary', 'itinerary_id', 'template_itinerary_data', 'enquiry', 'product', 'language', 'product_gallery', 'product_description', 'product_pricing' ,'pageConfigs', 'breadcrumbs', 'from_date', 'to_date', 'days', 'itinerary_schedule_data', 'currency', 'categoryTag', 'category'));
+  // }
 
   public function product_search(Request $request) {
     $search_string = $request->search_string;
     $images = array();
-    $country = array();
-    $city = array();
     $product = Product::where('title', 'LIKE', '%'.$search_string.'%')->get();
     for($i = 0; $i < count($product); $i ++){
       $images[] = $product[$i]->getFirstImage;
-      $country[] = $product[$i]->getCountry;
-      $city[] = $product[$i]->getCity;
     }
-    return response()->json(['product'=>$product, 'images'=>$images, 'country'=>$country, 'city'=>$city]);
+    return response()->json(['product'=>$product, 'images'=>$images]);
   }
 
   public function template_search(Request $request) {
@@ -602,9 +597,7 @@ class ItineraryController extends Controller
   public function filter(Request $request) {
     $product = array();
     $images = array();
-    $country = array();
-    $city = array();
-
+    
     if($request->flg_accommodation == "true"){
       $sub_category = Category::where('parent_id', '1')->get();
       for($i = 0; $i < count($sub_category); $i ++){
@@ -654,12 +647,11 @@ class ItineraryController extends Controller
     if($request->flg_accommodation == "false" && $request->flg_transport == "false" && $request->flg_activity_attraction == "false" && $request->flg_guide == "false" && $request->flg_other == "false"){
       $product = Product::all();
     }
+
     for($i = 0; $i < count($product); $i ++){
       $images[] = $product[$i]->getFirstImage;
-      $country[] = $product[$i]->getCountry;
-      $city[] = $product[$i]->getCity;
     }
-    return response()->json(['product'=>$product, 'images'=>$images, 'country'=>$country, 'city'=>$city]);
+    return response()->json(['product'=>$product, 'images'=>$images]);
   }
 
   public function saveDailyItinerary(Request $request){
@@ -1013,10 +1005,8 @@ class ItineraryController extends Controller
     $group_id = $request->group_id;
 
     $template_itinerary = DB::table('itinerary_template')
-      ->select('itinerary_template.date_num', 'itinerary_template.title as template_title', 'itinerary_template.product_id', 'itinerary_template.product_price_id', 'itinerary_template.start_time', 'itinerary_template.end_time', 'itinerary_template.adults_num', 'itinerary_template.children_num', 'product.title as product_title', 'country.title as country_title', 'city.title as city_title')
+      ->select('itinerary_template.date_num', 'itinerary_template.title as template_title', 'itinerary_template.product_id', 'itinerary_template.product_price_id', 'itinerary_template.start_time', 'itinerary_template.end_time', 'itinerary_template.adults_num', 'itinerary_template.children_num', 'product.title as product_title', 'product.country as country_title', 'product.city as city_title')
       ->join('product', 'product.id', '=', 'itinerary_template.product_id')
-      ->join('country', 'product.country', '=', 'country.id')
-      ->join('city', 'product.city', '=', 'city.id')
       ->where('itinerary_template.group_id', $group_id)
       ->where('itinerary_template.created_by', Auth::user()->id)
       ->get()
