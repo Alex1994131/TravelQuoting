@@ -187,10 +187,6 @@ $(document).ready(function () {
     $(document).on("change", "#billing_region", function() {
         $('.select2-selection__rendered').css('margin-left', '26px');
     });
-
-    // $(document).on("click", "#change_pwd_btn", function() {
-    //     $('#change_password_modal').modal();
-    // })
 });
 
 function onPasswordBtnClick(user_id){
