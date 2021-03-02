@@ -17,6 +17,7 @@ const billing_componentForm = {
 };
 
 function initAutocomplete() {
+
     main_autocomplete = new google.maps.places.Autocomplete(
         document.getElementById("main_location"),
         {types: ["geocode"]}
@@ -37,8 +38,6 @@ function initAutocomplete() {
 function main_fillInAddress() {
     const place = main_autocomplete.getPlace();
 
-    console.log(place);
-    
     for (const component in main_componentForm) {
         document.getElementById(component).value = "";
     }

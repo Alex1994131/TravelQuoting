@@ -22,17 +22,32 @@
 <link rel="stylesheet" type="text/css" href="{{asset('css/plugins/forms/validation/form-validation.css')}}">
 
 <style>
-@media (min-width: 992px){
-  .modal-lg, .modal-xl {
-      max-width: 1410px;
-  }
-}
-.mr-2, .mx-2 {
-    margin-right: 0.5rem !important;
-}
-label{
-  font-size: 0.86rem;
-}
+    @media (min-width: 992px){
+    .modal-lg, .modal-xl {
+        max-width: 1410px;
+    }
+    }
+    .mr-2, .mx-2 {
+        margin-right: 0.5rem !important;
+    }
+    label{
+        font-size: 0.86rem;
+    }
+
+    .pac-container {
+        background-color: #FFF;
+        z-index: 20;
+        position: fixed;
+        display: inline-block;
+        float: left;
+    }
+    .modal{
+        z-index: 20;
+        top: 15%;   
+    }
+    .modal-backdrop{
+        z-index: 10;        
+    }
 </style>
 @endsection
 
