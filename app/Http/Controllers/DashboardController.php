@@ -9,6 +9,8 @@ use App\Models\Enquiry;
 use App\Models\Itinerary;
 use App\Models\Task;
 
+use Auth;
+
 
 class DashboardController extends Controller
 {
@@ -19,7 +21,10 @@ class DashboardController extends Controller
         ];
         $enquiries = Enquiry::all();
         $itineraries = Itinerary::all();
-        $task_list = Task::all();
+
+        $user_id = Auth::user()->id;
+
+        $task_list = Task::where('assigned_to', $user_id)->get();
 
         $msg = '';
         //dd(compact('enquiries', 'itineraries', 'pageConfigs', 'breadcrumbs', 'msg'));

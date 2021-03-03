@@ -5,6 +5,15 @@ $(document).ready(function () {
   });
   CKEDITOR.replace("note1");
 
+  $(".touchspin").TouchSpin({
+      buttondown_class: "btn btn-primary",
+      buttonup_class: "btn btn-primary",
+  });
+
+  $('.showdropdowns').daterangepicker({
+      showDropdowns: true,
+      drops: "up"
+  });
 
 });
 function confirm_check(id)

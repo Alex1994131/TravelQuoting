@@ -41,8 +41,7 @@ label{
 
 <input type="hidden" name="task_id" id="task_id">
 <input type="hidden" name="task_type" id="task_type">
-<div class="modal fade text-left" id="task_detail_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel17"
-    aria-hidden="true">
+<div class="modal fade text-left" id="task_detail_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel17" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -427,9 +426,7 @@ label{
                   <tr>
                     <td></td>
                     <td>{{$task->reference_number}}</td>
-
                     <td>{{$task->get_product_title()}}</td>
-
                     <td>{{$task->task_name}}</td>
                     <td>{{$task->get_task_type()}}</td>
                     <td>{{$task->get_customer()}}</td>
@@ -442,11 +439,11 @@ label{
 
                     <td>
                       <div class="dropdown">
-                        <span class="bx bx-slider-alt font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
-                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu"></span>
+                        <span class="bx bx-slider-alt font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu"></span>
                         <div class="dropdown-menu dropdown-menu-right">
                           <a class="dropdown-item" href="javascript:void(0)" onClick="task_edit({{$task->id}})"><i class="bx bx-edit-alt mr-1"></i> edit</a>
                           <a class="dropdown-item" href="javascript:void(0)" onClick="task_del({{$task->id}})"><i class="bx bx-trash mr-1"></i> delete</a>
+                          <a class="dropdown-item" href="{{ route('contact_management', $task->id) }}"><i class="bx bx-edit-alt mr-1"></i> contact</a>
                         </div>
                       </div>
                     </td>

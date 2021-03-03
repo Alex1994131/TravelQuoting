@@ -21,6 +21,8 @@
   <link rel="stylesheet" type="text/css" href="{{asset('css/plugins/extensions/ext-component-treeview.css')}}">
   <link rel="stylesheet" type="text/css" href="{{asset('css/plugins/forms/validation/form-validation.css')}}">
   <link rel="stylesheet" type="text/css" href="{{asset('css/plugins/file-uploaders/dropzone.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/pickers/daterange/daterangepicker.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/forms/spinner/jquery.bootstrap-touchspin.css')}}">
   <style>
     .add_product_title {
       margin: 5px 0;
@@ -209,7 +211,7 @@
                       </div>
                       <div class="d-flex align-items-center">
                           <p style="margin-right: 20px;" class="text-danger">location:</p>
-                          <p class="font-weight-bold" id="location">{{ $product->get_country()->title?$product->get_country()->title:'' }} {{  $product->get_city()->title?$product->get_city()->title:'' }}</p>
+                          <p class="font-weight-bold" id="location">{{ $product->country?$product->country:'' }} {{  $product->city?$product->city:'' }}</p>
                       </div>
                     </div>
                     <div class = "col-md-4 mt-75" style="color: green">
@@ -401,6 +403,8 @@
 <script src="{{asset('vendors/js/extensions/dragula.min.js')}}"></script>
 <script src="{{asset('vendors/js/extensions/swiper.min.js')}}"></script>
 <script src="{{asset('vendors/js/extensions/sweetalert2.all.min.js')}}"></script>
+<script src="{{asset('vendors/js/pickers/daterange/daterangepicker.js')}}"></script>
+<script src="{{asset('vendors/js/forms/spinner/jquery.bootstrap-touchspin.js')}}"></script>
 
 
 @endsection
