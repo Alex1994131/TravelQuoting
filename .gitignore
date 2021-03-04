@@ -1,4 +1,5 @@
 /.idea
+/public/assets/
 /.vscode
 /config/database.php
 /storage/*.key
