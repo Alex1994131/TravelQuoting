@@ -990,21 +990,21 @@ $(document).ready(function () {
   // Earnings Swiper
   // ---------------
   var swiperLength = $(".swiper-slide").length;
-  if (swiperLength) {
-    swiperLength = Math.floor(swiperLength / 2)
-  }
 
   // Swiper js for this page
   var mySwiper = new Swiper('.widget-earnings-swiper', {
     slidesPerView: 'auto',
-    initialSlide: swiperLength,
     centeredSlides: true,
     spaceBetween: 30,
-    // active slide on click
     slideToClickedSlide: true,
+    
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    }
   });
 
-  activeSlide(swiperLength);
+  activeSlide(0);
 
   // Active slide change on swipe
   mySwiper.on('slideChange', function () {

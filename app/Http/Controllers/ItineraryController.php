@@ -31,14 +31,6 @@ class ItineraryController extends Controller
     //   ["link" => "/", "name" => "Home"],["name" => "Itinerary Create"]
     // ];
 
-    $status = Itinerary::find($id)->status;
-
-    if($status == 2) {
-      $msg = "Already Sent Itinerary!";
-      return redirect()->route('index')->with('msg', $msg);
-    }
-
-
     if ($type == 0) /** create itinerary */
     {
       $enquiry_id = $id;
@@ -86,6 +78,13 @@ class ItineraryController extends Controller
     }
     else
     {
+      $status = Itinerary::find($id)->status;
+
+      if($status == 2) {
+        $msg = "Already Sent Itinerary!";
+        return redirect()->route('index')->with('msg', $msg);
+      }
+      
       $itinerary_id = $id;
       $itinerary = Itinerary::find($itinerary_id);
       $enquiry_id = $itinerary->enquiry_id;

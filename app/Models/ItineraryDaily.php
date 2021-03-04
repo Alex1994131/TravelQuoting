@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\Confirmation;
 use Illuminate\Database\Eloquent\Model;
 
 class ItineraryDaily extends Model

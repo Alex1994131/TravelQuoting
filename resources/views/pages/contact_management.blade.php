@@ -35,6 +35,11 @@
 @endsection
 @section('content')
 <!-- Widgets Advance start -->
+<input type="hidden" id="auth_id" val="{{ Auth::user()->id }}">
+<input type="hidden" id="auth_name" val="{{ Auth::user()->id }}">
+<input type="hidden" id="auth_avatar" val="{{ Auth::user()->id }}">
+
+
 <section id="widgets-advance">
   <div class="row">
     <div class="col-md-12">
@@ -161,7 +166,7 @@
   </div>
   <div class="row">
     <!-- Services Starts -->
-    <div class="col-xl-5 col-md-5 earnings-card" id="widget-earnings">
+    <div class="col-xl-6 col-md-6 earnings-card" id="widget-earnings">
       <div class="card">
         <div class="card-header border-bottom d-flex justify-content-between align-items-center">
           <h5 class="card-title">Services </h5>
@@ -181,6 +186,8 @@
                 </div>
                 @endforeach
               </div>
+              <div class="swiper-button-prev"></div>
+              <div class="swiper-button-next"></div>
             </div>
             <!-- services swiper ends -->
           </div>
@@ -192,7 +199,6 @@
                   $product_gallery = $product_gallery_model->where('product_id', $itinerary_daily->product_id)->first();
                   $path = $product_gallery?$product_gallery->path:'';
                   $product = $itinerary_daily->get_product();
-
                   $product_prices = $itinerary_daily->get_product_prices();
               @endphp
             <div class="widget-earnings-scroll table-responsive">
@@ -200,30 +206,28 @@
                 <tbody>
                   <tr>
                     <td>
-                    <div class="row">
-                    <div class = "col-md-8">
-                      <div class="d-flex align-items-center mt-75">
-                        <p style="margin-right: 20px;" class="text-danger">Category:</p>
-                        <p class="font-weight-bold" id="category_title">{{ $product->get_category()->title?$product->get_category()->title:''  }}</p>
+                      <div class="row">
+                        <div class = "col-md-8">
+                          <div class="d-flex align-items-center mt-75">
+                            <p style="margin-right: 20px;" class="text-danger">Category:</p>
+                            <p class="font-weight-bold" id="category_title">{{ $product->get_category()->title?$product->get_category()->title:''  }}</p>
+                          </div>
+                          <div class="d-flex align-items-center">
+                              <p style="margin-right: 20px;" class="text-danger">location:</p>
+                              <p class="font-weight-bold" id="location">{{ $product->country?$product->country:'' }} {{  $product->city?$product->city:'' }}</p>
+                          </div>
+                        </div>
+                        <div class = "col-md-4 mt-75" style="color: green">
+                          <button type="button" onClick="confirm_check({{$itinerary_daily->confirm_check()->id}})" class="btn btn-danger confirm_btn" {{$itinerary_daily->confirm_check()->status == 1 ? "disabled" : ""}}> confirm </button>
+                        </div>
                       </div>
-                      <div class="d-flex align-items-center">
-                          <p style="margin-right: 20px;" class="text-danger">location:</p>
-                          <p class="font-weight-bold" id="location">{{ $product->country?$product->country:'' }} {{  $product->city?$product->city:'' }}</p>
-                      </div>
-                    </div>
-                    <div class = "col-md-4 mt-75" style="color: green">
-
-                    <button type="button" onClick="confirm_check({{$itinerary_daily->confirm_check()->id}})" class="btn btn-danger confirm_btn" {{$itinerary_daily->confirm_check()->status == 1 ? "disabled" : ""}}> confirm </button>
-                    </div>
                     </td>
-
                   </tr>
 
                   <tr>
-
                     <td class="col-lg-6 col-md-6 col-sm-6">
-                      <div class="app-file-content-logo card-img-top act-image" style="background: url({{asset($path)}}); width: 100%; height: 300px">
-                      </div>
+                      <!-- <div class="app-file-content-logo card-img-top act-image" style="background: url({{asset($path)}}); width: 100%; height: 300px">
+                      </div> -->
                       <div class="card border shadow-none mb-1 app-file-info p-act">
                         <div class="card-content">
                           <i class="bx bx-dots-vertical-rounded app-file-edit-icon d-block float-right"></i>
@@ -272,7 +276,7 @@
     <!-- Earnings Widget Swiper Ends -->
 
     <!-- chat Widget Starts -->
-    <div class="col-xl-7 col-md-7 widget-chat-card">
+    <div class="col-xl-6 col-md-6 widget-chat-card">
       <div class="widget-chat widget-chat-messages">
         <div class="card">
           <div class="card-header border-bottom p-0">
