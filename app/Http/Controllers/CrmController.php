@@ -6,9 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Account;
 use App\Models\AccountType;
 use App\Models\Enquiry;
-use App\Models\Country;
-use App\Models\Region;
-use App\Models\City;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -28,36 +25,21 @@ class CrmController extends Controller
     }
 
     public function customer_create(){
-
-        $countries = Country::all();
-        $regions = Region::all();
-        $cities = City::all();
-        return view('pages.customer_create', compact('regions', 'countries', 'cities'));
+        return view('pages.customer_create');
     }
 
     public function edit_customer(Request $request){
         $customer = Account::where('id', $request->account_id)->first();
-        $countries = Country::all();
-        $regions = Region::all();
-        $cities = City::all();
-
-        return view('pages.customer_edit',compact('customer', 'countries', 'regions', 'cities'));
+        return view('pages.customer_edit',compact('customer'));
     }
 
     public function account_create(){
-
-        $countries = Country::all();
-        $regions = Region::all();
-        $cities = City::all();
-        return view('pages.account_create', compact('regions', 'countries', 'cities'));
+        return view('pages.account_create');
     }
 
     public function edit_account(Request $request){
         $account = Account::where('id', $request->account_id)->first();
-        $countries = Country::all();
-        $regions = Region::all();
-        $cities = City::all();
-        return view('pages.account_edit',compact('account', 'countries', 'regions', 'cities'));
+        return view('pages.account_edit',compact('account'));
     }
 
     public function add_account(Request $request){
@@ -490,12 +472,7 @@ class CrmController extends Controller
     }
 
     public function user_profile(){
-
-        $countries = Country::all();
-        $regions = Region::all();
-        $cities = City::all();
-
-        return view('pages.user_profile',compact('countries', 'regions', 'cities'));
+        return view('pages.user_profile');
     }
 
     public function update_profile(Request $request){
@@ -507,19 +484,25 @@ class CrmController extends Controller
             $account->last_name = $request->last_name;
             $account->account_type = $request->account_type;
             $account->avatar_path = $request->avatar_path;
-            $account->main_street_address = $request->main_street_address;
-            $account->main_city = $request->main_city;
+
             $account->main_region_state = $request->main_region_state;
+            $account->main_postal_code = $request->main_postal_code;
             $account->main_country = $request->main_country;
+            $account->main_city = $request->main_city;
+            $account->main_street_address = $request->main_street_address;
+            $account->main_street_number = $request->main_street_number;
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
-            $account->billing_company_name = $request->comapny_name;
-            $account->billing_street_address = $request->billing_street_address;
-            $account->billing_city = $request->billing_city;
+
+            $account->billing_postal_code = $request->billing_postal_code;
             $account->billing_state_region = $request->billing_region_state;
             $account->billing_country = $request->billing_country;
+            $account->billing_city = $request->billing_city;
+            $account->billing_street_number = $request->billing_street_number;
+            $account->billing_street_address = $request->billing_street_address;
             $account->billing_email = $request->billing_email;
             $account->billing_office_phone = $request->billing_office_phone;
+            
             $account->status = 0;
 
             $user = User::where('id', $account->user_id)->first();
@@ -535,12 +518,16 @@ class CrmController extends Controller
             $account->last_name = $request->last_name;
             $account->account_type = $request->account_type;
             $account->avatar_path = $request->avatar_path;
-            $account->main_street_address = $request->main_street_address;
-            $account->main_city = $request->main_city;
+
             $account->main_region_state = $request->main_region_state;
+            $account->main_postal_code = $request->main_postal_code;
             $account->main_country = $request->main_country;
+            $account->main_city = $request->main_city;
+            $account->main_street_address = $request->main_street_address;
+            $account->main_street_number = $request->main_street_number;
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
+            
             $account->status = 0;
 
             $user = User::where('id', $account->user_id)->first();
@@ -557,12 +544,25 @@ class CrmController extends Controller
             $account->last_name = $request->last_name;
             $account->account_type = $request->account_type;
             $account->avatar_path = $request->avatar_path;
-            $account->main_street_address = $request->main_street_address;
-            $account->main_city = $request->main_city;
+
             $account->main_region_state = $request->main_region_state;
+            $account->main_postal_code = $request->main_postal_code;
             $account->main_country = $request->main_country;
+            $account->main_city = $request->main_city;
+            $account->main_street_address = $request->main_street_address;
+            $account->main_street_number = $request->main_street_number;
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
+
+            $account->billing_postal_code = $request->billing_postal_code;
+            $account->billing_state_region = $request->billing_region_state;
+            $account->billing_country = $request->billing_country;
+            $account->billing_city = $request->billing_city;
+            $account->billing_street_number = $request->billing_street_number;
+            $account->billing_street_address = $request->billing_street_address;
+            $account->billing_email = $request->billing_email;
+            $account->billing_office_phone = $request->billing_office_phone;
+            
             $account->status = 0;
 
             $user = User::where('id', $account->user_id)->first();

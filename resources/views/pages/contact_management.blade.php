@@ -36,7 +36,6 @@
 @section('content')
 <!-- Widgets Advance start -->
 <section id="widgets-advance">
-
   <div class="row">
     <div class="col-md-12">
     <div class="collapsible collapse-icon accordion-icon-rotate">
@@ -58,8 +57,7 @@
         <div id="collapse6" role="tabpanel" aria-labelledby="headingCollapse6" class="collapse">
           <div class="card-content">
             <div class="card-body">
-
-                <form class="form-horizontal" novalidate>
+              <form class="form-horizontal" novalidate>
                 @csrf
                 <input type="hidden" name="enquiry_id" id = "enquiry_id" value="{{ $itinerary->enquiry_id }}">
 
@@ -162,7 +160,6 @@
     </div>
   </div>
   <div class="row">
-
     <!-- Services Starts -->
     <div class="col-xl-5 col-md-5 earnings-card" id="widget-earnings">
       <div class="card">
@@ -189,15 +186,15 @@
           </div>
         </div>
         <div class="main-wrapper-content">
-        @foreach($itinerary_dailys as $itinerary_daily)
+          @foreach($itinerary_dailys as $itinerary_daily)
           <div class="wrapper-content" data-earnings="service_{{$itinerary_daily->id}}">
-                  @php
-                        $product_gallery = $product_gallery_model->where('product_id', $itinerary_daily->product_id)->first();
-                        $path = $product_gallery?$product_gallery->path:'';
-                        $product = $itinerary_daily->get_product();
+              @php
+                  $product_gallery = $product_gallery_model->where('product_id', $itinerary_daily->product_id)->first();
+                  $path = $product_gallery?$product_gallery->path:'';
+                  $product = $itinerary_daily->get_product();
 
-                        $product_prices = $itinerary_daily->get_product_prices();
-                    @endphp
+                  $product_prices = $itinerary_daily->get_product_prices();
+              @endphp
             <div class="widget-earnings-scroll table-responsive">
               <table class="table table-borderless widget-earnings-width mb-0">
                 <tbody>
@@ -268,7 +265,7 @@
               </table>
             </div>
           </div>
-        @endforeach
+          @endforeach
         </div>
       </div>
     </div>

@@ -14,9 +14,6 @@ use App\Models\ProductPricing;
 use App\Models\Currency;
 use App\Models\CategoryTag;
 use App\Models\Category;
-use App\Models\Region;
-use App\Models\Country;
-use App\Models\City;
 use App\Models\Language;
 use App\Models\ItineraryDaily;
 use App\Models\ItineraryTemplate;
@@ -194,7 +191,7 @@ class ItineraryController extends Controller
         $temp = array();
         for($j=0; $j<count($itinerary_daily); $j++) {
           if($schedule_date[$i]->date == $itinerary_daily[$j]->date) {
-            $path = ProductGallery::where('product_id', $itinerary_daily[$j]->id)->orderByDesc('created_at')->first();
+            $path = ProductGallery::where('product_id', $itinerary_daily[$j]->id)->first();
             $path = $path->path;
             $itinerary_daily[$j]->path = $path;
 
@@ -351,106 +348,6 @@ class ItineraryController extends Controller
       echo json_encode($itinerary_id);
     }
 
-  }
-
-  public function add_daily(Request $request){
-      $pageConfigs = ['pageHeader' => true];
-      $breadcrumbs = [
-      ["link" => "/", "name" => "Home"],["name" => "Itinerary Daily Create"]
-      ];
-
-      // $product = Product::paginate(7);
-      $product = Product::all();
-      $product_gallery = ProductGallery::all();
-      $product_description = ProductDescription::all();
-      $product_pricing = ProductPricing::all();
-      $currency = Currency::all();
-      $categoryTag = CategoryTag::all();
-      $category = Category::all();
-      $language = Language::all();
-      $itinerary = Itinerary::where('id', $request->itinerary_id)->first();
-      $from_date = strtotime($itinerary->from_date);
-      $to_date = strtotime($itinerary->to_date);
-
-      $schedule_date = DB::table('itinerary_daily')
-          ->select('date')
-          ->where('itinerary_id', $request->itinerary_id)
-          ->groupBy('date')
-          ->get();
-
-      $latestPosts = DB::table('product_gallery')
-        ->select('product_id')
-        ->groupByRaw('product_id');
-
-      $itinerary_daily = DB::table('product')
-        ->select('product.id', 'itinerary_daily.id as daily_id', 'product.title as product_title', 'itinerary_daily.product_price_id', 'itinerary_daily.itinerary_margin_price', 'itinerary_daily.date', 'itinerary_daily.start_time', 'itinerary_daily.end_time', 'itinerary_daily.adults_num', 'itinerary_daily.children_num', 'country.title as country_title', 'city.title as city_title')
-        ->join('itinerary_daily', 'product.id', '=', 'itinerary_daily.product_id')
-        ->join('city', 'product.city', '=', 'city.id')
-        ->join('country', 'product.country', '=', 'country.id')
-        ->joinSub($latestPosts, 'latest_posts', function ($join) {
-          $join->on('product.id', '=', 'latest_posts.product_id');
-        })
-        ->where('itinerary_daily.itinerary_id', $request->itinerary_id)
-        ->get();
-
-      $itinerary_schedule_data = array();
-
-      for($i = 0; $i<count($schedule_date); $i++) {
-        $temp = array();
-        for($j=0; $j<count($itinerary_daily); $j++) {
-          if($schedule_date[$i]->date == $itinerary_daily[$j]->date) {
-            $path = ProductGallery::where('product_id', $itinerary_daily[$j]->id)->orderByDesc('created_at')->first();
-            $path = $path->path;
-            $itinerary_daily[$j]->path = $path;
-
-            $schedule_record = $itinerary_daily[$j];
-            array_push($temp, $schedule_record);
-          }
-        }
-
-        $itinerary_schedule_data[$schedule_date[$i]->date] = $temp;
-      }
-
-      $itinerary_template = DB::table('itinerary_template')
-          ->select('title', 'group_id', 'created_by')
-          ->where('created_by', Auth::user()->id)
-          ->get()
-          ->groupBy('group_id');
-
-
-      $template_itinerary_data = array();
-
-      foreach($itinerary_template as $key=>$val) {
-
-        $created_by = $val[$key]->created_by;
-        $path = Account::where('user_id', $created_by)->first()->avatar_path;
-
-        $day_count = DB::table('itinerary_template')
-          ->select(DB::raw('count(*) as day_count'))
-          ->where('group_id', $key)
-          ->groupBy('date_num')
-          ->get();
-
-        $temp = array(
-          'title' => $val[$key]->title,
-          'group_id' => $val[$key]->group_id,
-          'path' => $path,
-          'day_count' => count($day_count)
-        );
-
-        array_push($template_itinerary_data, $temp);
-      }
-
-      $itinerary_id = $request->itinerary_id;
-
-      $days = $to_date - $from_date;
-      $days = intval(round($days / (60 * 60 * 24)));
-      $days ++;
-      $from_date = date('Y-m-d', $from_date);
-      $to_date = date("Y-m-d", $to_date);
-      $enquiry = $itinerary->get_enquiry;
-
-      return view('pages.itinerary_add_daily',compact('itinerary', 'itinerary_id', 'template_itinerary_data', 'enquiry', 'product', 'language', 'product_gallery', 'product_description', 'product_pricing' ,'pageConfigs', 'breadcrumbs', 'from_date', 'to_date', 'days', 'itinerary_schedule_data', 'currency', 'categoryTag', 'category'));
   }
 
   public function product_search(Request $request) {
@@ -687,15 +584,13 @@ class ItineraryController extends Controller
     $product_id = $request->product_id;
     $product_price_id = $request->product_price_id;
     $product_data = DB::table('product')
-      ->select('product.*', 'country.title as country_title', 'city.title as city_title')
-      ->join('country', 'country.id', '=', 'product.country')
-      ->join('city', 'city.id', '=', 'product.city')
+      ->select('product.*', 'product.country as country_title', 'product.city as city_title')
       ->where('product.id', $product_id)
       ->get();
 
     $product_data = $product_data[0];
 
-    $path = ProductGallery::where('product_id', $product_id)->orderByDesc('created_at')->first();
+    $path = ProductGallery::where('product_id', $product_id)->first();
     $product_data->path = $path->path;
 
     $product_category = Product::find($product_id)->category;
@@ -920,7 +815,7 @@ class ItineraryController extends Controller
     foreach($template_itinerary as $key => $value) {
       for($i=0; $i<count($value); $i++) {
         $product_id = $value[$i]->product_id;
-        $product_path = ProductGallery::where('product_id', $product_id)->orderByDesc('created_at')->first()->path;
+        $product_path = ProductGallery::where('product_id', $product_id)->first()->path;
         $value[$i]->product_path = $product_path;
       }
     }
@@ -1006,12 +901,9 @@ class ItineraryController extends Controller
     $website_url = Account::find($created_id)->website_url;
     $street_address = Account::find($created_id)->main_street_address;
     $city = Account::find($created_id)->main_city;
-    $city = City::find($city)->title;
     $postal_code = Account::find($created_id)->main_postal_code;
     $region = Account::find($created_id)->main_region_state;
-    $region = Region::find($region)->title;
     $country = Account::find($created_id)->main_country;
-    $country = Country::find($country)->title;
     $phone = Account::find($created_id)->main_office_phone;
 
 
@@ -1073,12 +965,9 @@ class ItineraryController extends Controller
     $email = Account::find($created_id)->main_email;
     $street_address = Account::find($created_id)->main_street_address;
     $city = Account::find($created_id)->main_city;
-    $city = City::find($city)->title;
     $postal_code = Account::find($created_id)->main_postal_code;
     $region = Account::find($created_id)->main_region_state;
-    $region = Region::find($region)->title;
     $country = Account::find($created_id)->main_country;
-    $country = Country::find($country)->title;
     $phone = Account::find($created_id)->main_office_phone;
 
     $account_info = array(
@@ -1098,10 +987,8 @@ class ItineraryController extends Controller
         ->get();
 
     $itinerary_daily = DB::table('itinerary_daily')
-      ->select('product.id as product_id', 'product.title as product_title', 'category.title as category_title', 'country.title as country_title', 'city.title as city_title', 'itinerary_daily.date', 'itinerary_daily.start_time', 'itinerary_daily.end_time', 'itinerary_daily.adults_num', 'itinerary_daily.children_num')
+      ->select('product.id as product_id', 'product.title as product_title', 'category.title as category_title', 'product.country as country_title', 'product.city as city_title', 'itinerary_daily.date', 'itinerary_daily.start_time', 'itinerary_daily.end_time', 'itinerary_daily.adults_num', 'itinerary_daily.children_num')
       ->join('product', 'product.id', '=', 'itinerary_daily.product_id')
-      ->join('city', 'product.city', '=', 'city.id')
-      ->join('country', 'product.country', '=', 'country.id')
       ->join('category', 'product.category', '=', 'category.id')
       ->where('itinerary_daily.itinerary_id', $itinerary_id)
       ->orderBy('itinerary_daily.start_time')

@@ -142,8 +142,7 @@ class TaskController extends Controller
       $task_id = $request->task_id;
       $data = array();
       $data = $request->task_data;
-
-
+      
       $account_id = Account::where('user_id', Auth::user()->id)->first()->id;
 
       $data['assigned_by'] = $account_id;
@@ -155,7 +154,7 @@ class TaskController extends Controller
         $data['customer'] = $account_id;
       }
 
-
+      
       if($task_id != 0)
       {
         $task = Task::find($task_id);
@@ -171,7 +170,7 @@ class TaskController extends Controller
       }
       else
       {
-        $t = Task::where('itinerary_id', $data['itinerary_id'])->where('service_id', $data['service_id'])->first();
+        $t = Task::where('itinerary_id', $data['itinerary_id'])->first();
         if(empty($t))
         {
           $task = new Task();

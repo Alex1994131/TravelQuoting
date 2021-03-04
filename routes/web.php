@@ -139,16 +139,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/settings/save_category_tag', 'SettingController@save_category_tag')->name('save_category_tag');
     Route::post('/settings/category_tag_del',['uses' => 'SettingController@category_tag_del'])->name('category_tag_del');
 
-    /**city */
-    Route::get('/settings/detail_city/{city_id?}', 'SettingController@detail_city')->name('detail_city');
-    Route::post('/settings/save_city', 'SettingController@save_city')->name('save_city');
-    Route::post('/settings/city_del',['uses' => 'SettingController@city_del'])->name('city_del');
-
-     /**country */
-     Route::get('/settings/detail_country/{country_id?}', 'SettingController@detail_country')->name('detail_country');
-     Route::post('/settings/save_country', 'SettingController@save_country')->name('save_country');
-     Route::post('/settings/country_del',['uses' => 'SettingController@country_del'])->name('country_del');
-
      /** default_settings */
      Route::post('/settings/save_default_settings',['uses' => 'SettingController@save_default_settings'])->name('save_default_settings');
 

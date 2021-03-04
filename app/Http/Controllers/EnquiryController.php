@@ -6,29 +6,15 @@ use Illuminate\Http\Request;
 use App\Models\Account;
 use App\Models\AccountType;
 use App\Models\Enquiry;
-use App\Models\City;
-use App\Models\Country;
-use App\Models\Region;
 use Illuminate\Support\Facades\Auth;
 
 class EnquiryController extends Controller
 {
     public function create_enquiry(){
-        $countries = Country::all();
-        $regions = Region::all();
-        $cities = City::all();
         $account = Account::all();
-
-        return view('pages.enquiry_create',compact('account', 'countries', 'regions', 'cities'));
+        return view('pages.enquiry_create',compact('account'));
     }
-    //ecommerce
-    // public function dashboardEcommerce(){
-    //     return view('pages.dashboard-ecommerce');
-    // }
-    // // analystic
-    // public function dashboardAnalytics(){
-    //     return view('pages.dashboard-analytics');
-    // }
+    
     public function create(Request $request){
 
         $pageConfigs = ['pageHeader' => true];
@@ -100,10 +86,7 @@ class EnquiryController extends Controller
     {
         $custom_enquiry = Enquiry::where('id', $request->enquiry_id)->first();
         $account = Account::all();
-        $countries = Country::all();
-        $regions = Region::all();
-        $cities = City::all();
-        return view('pages.enquiry_edit',compact('custom_enquiry', 'account', 'countries', 'regions', 'cities'));
+        return view('pages.enquiry_edit',compact('custom_enquiry', 'account'));
     }
 
     public function save_change(Request $request)

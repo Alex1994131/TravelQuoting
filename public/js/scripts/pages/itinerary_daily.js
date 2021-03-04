@@ -1963,13 +1963,9 @@ function edit_product_price(obj_id, key_id, product_price_id, margin_price) {
 
             global_custom_product = product_data;
             global_custom_product.get_first_image = {};
-            global_custom_product.get_city = {};
-            global_custom_product.get_country = {};
-
+        
             global_custom_product.get_first_image.path = product_data.path;
-            global_custom_product.get_country.title = product_data.country_title;
-            global_custom_product.get_city.title = product_data.city_title;
-
+            
             global_obj_id = obj_id;
 
             update_key_index = key_id;

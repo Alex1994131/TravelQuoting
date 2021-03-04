@@ -18,9 +18,6 @@ use App\Models\Product;
 use App\Models\ProductGallery;
 use App\Models\ProductDescription;
 use App\Models\ProductPricing;
-use App\Models\Region;
-use App\Models\Country;
-use App\Models\City;
 use App\Models\Currency;
 use App\Models\Customer;
 use App\Models\Task_Type;
@@ -41,13 +38,10 @@ class SettingController extends Controller
         $languages = Language::all();
         $categorys = Category::all();
         $category_tags = CategoryTag::all();
-        $citys = City::all();
-        $countrys = Country::all();
-
         // ---------------------------
 
         return view('pages.settings_general',compact(
-            'pageConfigs', 'breadcrumbs', 'account_types', 'task_types', 'currencys', 'customers', 'languages', 'categorys', 'category_tags', 'citys', 'countrys',
+            'pageConfigs', 'breadcrumbs', 'account_types', 'task_types', 'currencys', 'customers', 'languages', 'categorys', 'category_tags',
         ));
     }
     /** account_type */
@@ -528,6 +522,7 @@ class SettingController extends Controller
       $data['result'] = "success";
       return json_encode($data);
     }
+    
     public function save_city(Request $request)
     {
       $id = $request->city_id;

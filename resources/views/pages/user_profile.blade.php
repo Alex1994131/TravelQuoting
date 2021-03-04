@@ -178,162 +178,149 @@
                                 <div class="col-12 col-sm-6">
                                     <h6 style="font-weight: 500; padding-bottom: 20px; padding-top: 20px;">Company Information</h6>
                                 </div>
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        <div class="controls">
-                                            <label>State/Region</label>
-                                            <fieldset class="form-group position-relative has-icon-left">
-                                                <select class="select2 form-control" id="main_region_state" name="main_region_state" >
-                                                    <option value="">- Region/State -</option>
-                                                    @foreach($regions as $region)
-                                                        @if($region->id == Auth::user()->get_account_info->main_region_state)
-                                                            <option value="{{$region->id}}" selected>{{$region->title}}</option>
-                                                        @else
-                                                            <option value="{{$region->id}}">{{$region->title}}</option>
-                                                        @endif
-                                                    @endforeach
-                                                </select>
-                                                <div class="form-control-position">
-                                                    <i class="bx bxs-map"></i>
-                                                </div>
-                                            </fieldset>
+
+                                <div class="col-md-6">
+                                    <h6>Location</h6>
+                                    <fieldset class="form-group position-relative has-icon-left">
+                                        <input type="text" class="form-control" id="main_location" placeholder="- Location -">
+                                        <div class="form-control-position">
+                                            <i class="bx bxs-map"></i>
                                         </div>
-                                    </div>
+                                    </fieldset>
                                 </div>
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        <label>State/Region</label>
-                                        <fieldset class="form-group position-relative has-icon-left">
-                                            <select class="select2 form-control" id="billing_region_state" name="billing_region_state">
-                                                <option value="">- Region/State -</option>
-                                                @foreach($regions as $region)
-                                                    @if($region->id == Auth::user()->get_account_info->billing_state_region)
-                                                        <option value="{{$region->id}}" selected>{{$region->title}}</option>
-                                                    @else
-                                                        <option value="{{$region->id}}">{{$region->title}}</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-                                            <div class="form-control-position">
-                                                <i class="bx bxs-map"></i>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        <div class="controls">
-                                            <label>Country</label>
-                                            <fieldset class="form-group position-relative has-icon-left">
-                                                <select class="select2 form-control" id="main_country" name="main_country" >
-                                                    <option value="">- Country -</option>
-                                                    @foreach($countries as $country)
-                                                        @if($country->id == Auth::user()->get_account_info->main_country)
-                                                            <option value="{{$country->id}}" selected>{{$country->title}}</option>
-                                                        @else
-                                                            <option value="{{$country->id}}">{{$country->title}}</option>
-                                                        @endif
-                                                    @endforeach
-                                                </select>
-                                                <div class="form-control-position">
-                                                    <i class="bx bxs-flag-alt"></i>
-                                                </div>
-                                            </fieldset>
+                                <div class="col-md-6">
+                                    <h6>Location</h6>
+                                    <fieldset class="form-group position-relative has-icon-left">
+                                        <input type="text" class="form-control" id="billing_location" placeholder="- Location -">
+                                        <div class="form-control-position">
+                                            <i class="bx bxs-map"></i>
                                         </div>
-                                    </div>
+                                    </fieldset>
                                 </div>
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Country</label>
-                                        <fieldset class="form-group position-relative has-icon-left">
-                                            <select class="select2 form-control" id="billing_country" name="billing_country">
-                                                <option value="">- Country -</option>
-                                                @foreach($countries as $country)
-                                                    @if($country->id == Auth::user()->get_account_info->billing_country)
-                                                        <option value="{{$country->id}}" selected>{{$country->title}}</option>
-                                                    @else
-                                                        <option value="{{$country->id}}">{{$country->title}}</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-                                            <div class="form-control-position">
-                                                <i class="bx bxs-flag-alt"></i>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        <div class="controls">
-                                            <label>City</label>
-                                            <fieldset class="form-group position-relative has-icon-left">
-                                                <select class="select2 form-control" id="main_city" name="main_city" >
-                                                    <option value="">- City -</option>
-                                                    @foreach($cities as $city)
-                                                        @if($city->id == Auth::user()->get_account_info->main_city)
-                                                            <option value="{{$city->id}}" selected>{{$city->title}}</option>
-                                                        @else
-                                                            <option value="{{$city->id}}">{{$city->title}}</option>
-                                                        @endif
-                                                    @endforeach
-                                                </select>
-                                                <div class="form-control-position">
-                                                    <i class="bx bxs-city"></i>
-                                                </div>
-                                            </fieldset>
+
+                                
+                                <div class="col-md-6">
+                                    <h6>Postal Code(ZIP)</h6>
+                                    <fieldset class="form-group position-relative has-icon-left">
+                                        <input type="text" class="form-control" id="main_postal_code" name="main_postal_code" placeholder="- Postal Code -" value="{{Auth::user()->get_account_info->main_postal_code}}">
+                                        <div class="form-control-position">
+                                            <i class="bx bxs-map"></i>
                                         </div>
-                                    </div>
+                                    </fieldset>
                                 </div>
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        <label>City</label>
-                                        <fieldset class="form-group position-relative has-icon-left">
-                                            <select class="select2 form-control" id="billing_city" name="billing_city">
-                                                <option value="">- City -</option>
-                                                @foreach($cities as $city)
-                                                    @if($city->id == Auth::user()->get_account_info->billing_city)
-                                                        <option value="{{$city->id}}" selected>{{$city->title}}</option>
-                                                    @else
-                                                        <option value="{{$city->id}}">{{$city->title}}</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-                                            <div class="form-control-position">
-                                                <i class="bx bxs-city"></i>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        <div class="controls">
-                                            <label>Street Address</label>
-                                            <fieldset class="form-group position-relative has-icon-left">
-                                                <div class="controls">
-                                                    <input type="text" class="form-control" id="main_street_address" name="main_street_address"
-                                                        placeholder="Street Address" value="{{Auth::user()->get_account_info->main_street_address}}">
-                                                </div>
-                                                <div class="form-control-position">
-                                                    <i class="bx bx-street-view"></i>
-                                                </div>
-                                            </fieldset>
+                                <div class="col-md-6">
+                                    <h6>Postal Code(ZIP)</h6>
+                                    <fieldset class="form-group position-relative has-icon-left">
+                                        <input type="text" class="form-control" id="billing_postal_code" name="billing_postal_code" placeholder="- Postal Code -" value="{{Auth::user()->get_account_info->billing_postal_code}}">
+                                        <div class="form-control-position">
+                                            <i class="bx bxs-map"></i>
                                         </div>
-                                    </div>
+                                    </fieldset>
                                 </div>
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Street Address</label>
-                                        <fieldset class="form-group position-relative has-icon-left">
-                                            <div class="controls">
-                                                <input type="text" class="form-control" id="billing_street_address" name="billing_street_address" value="{{Auth::user()->get_account_info->billing_street_address}}"
-                                                    placeholder="Street Address">
-                                            </div>
-                                            <div class="form-control-position">
-                                                <i class="bx bx-street-view"></i>
-                                            </div>
-                                        </fieldset>
-                                    </div>
+                                
+                                <div class="col-md-6">
+                                    <h6>State/Region</h6>
+                                    <fieldset class="form-group position-relative has-icon-left">
+                                        <input type="text" class="form-control" id="main_region_state" name="main_region_state" placeholder="- Region/State -" value="{{Auth::user()->get_account_info->main_region_state}}">
+                                        <div class="form-control-position">
+                                            <i class="bx bxs-map"></i>
+                                        </div>
+                                    </fieldset>
                                 </div>
+                                <div class="col-md-6">
+                                    <h6>State/Region</h6>
+                                    <fieldset class="form-group position-relative has-icon-left">
+                                        <input type="text" class="form-control" id="billing_region_state" name="billing_region_state" placeholder="- Region/State -" value="{{Auth::user()->get_account_info->billing_state_region}}">
+                                        <div class="form-control-position">
+                                            <i class="bx bxs-map"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6>Country</h6>
+                                    <fieldset class="form-group position-relative has-icon-left">
+                                        <input type="text" class="form-control" id="main_country" name="main_country" placeholder="- Country -" value="{{Auth::user()->get_account_info->main_country}}">
+                                        <div class="form-control-position">
+                                            <i class="bx bxs-flag-alt"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Country</h6>
+                                    <fieldset class="form-group position-relative has-icon-left">
+                                        <input type="text" class="form-control" id="billing_country" name="billing_country" placeholder="- Country -" value="{{Auth::user()->get_account_info->billing_country}}">
+                                        <div class="form-control-position">
+                                            <i class="bx bxs-flag-alt"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <h6>City</h6>
+                                    <fieldset class="form-group position-relative has-icon-left">
+                                        <input type="text" class="form-control" id="main_city" name="main_city" placeholder="- City -" value="{{Auth::user()->get_account_info->main_city}}">
+                                        <div class="form-control-position">
+                                            <i class="bx bxs-city"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>City</h6>
+                                    <fieldset class="form-group position-relative has-icon-left">
+                                        <input type="text" class="form-control" id="billing_city" name="billing_city" placeholder="- City -" value="{{Auth::user()->get_account_info->billing_city}}">
+                                        <div class="form-control-position">
+                                            <i class="bx bxs-city"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6>Street Number</h6>
+                                    <fieldset class="form-group position-relative has-icon-left">
+                                        <div class="controls">
+                                            <input type="text" class="form-control" id="main_street_number" name="main_street_number" placeholder="Street Number" value="{{Auth::user()->get_account_info->main_street_number}}">
+                                        </div>
+                                        <div class="form-control-position">
+                                            <i class="bx bx-street-view"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Street Number</h6>
+                                    <fieldset class="form-group position-relative has-icon-left">
+                                        <div class="controls">
+                                            <input type="text" class="form-control" id="billing_street_number" name="billing_street_number" placeholder="Street Number" value="{{Auth::user()->get_account_info->billing_street_number}}">
+                                        </div>
+                                        <div class="form-control-position">
+                                            <i class="bx bx-street-view"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <h6>Street Address</h6>
+                                    <fieldset class="form-group position-relative has-icon-left">
+                                        <div class="controls">
+                                            <input type="text" class="form-control" id="main_street_address" name="main_street_address" value="{{Auth::user()->get_account_info->main_street_address}}" placeholder="Street Address">
+                                        </div>
+                                        <div class="form-control-position">
+                                            <i class="bx bx-street-view"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Street Address</h6>
+                                    <fieldset class="form-group position-relative has-icon-left">
+                                        <div class="controls">
+                                            <input type="text" class="form-control" id="billing_street_address" name="billing_street_address" value="{{Auth::user()->get_account_info->billing_street_address}}" placeholder="Street Address">
+                                        </div>
+                                        <div class="form-control-position">
+                                            <i class="bx bx-street-view"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <div class="controls">
@@ -461,6 +448,9 @@
 <!-- Boostrap 4 -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.js"></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1jKOFLhfQoZD3xJISSPnSW9-4SyYPpjY&callback=initAutocomplete&libraries=places&v=weekly" defer></script>
+
 @endsection
 
 @section('page-scripts')

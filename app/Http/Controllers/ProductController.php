@@ -18,8 +18,6 @@ use App\Models\Product;
 use App\Models\ProductGallery;
 use App\Models\ProductDescription;
 use App\Models\ProductPricing;
-// use App\Models\Country;
-// use App\Models\City;
 use App\Models\Currency;
 use App\Models\Customer;
 
@@ -297,12 +295,6 @@ class ProductController extends Controller
         $request->session()->flash('alert', 'Deleted Successfully');
         return redirect()->route('product');
     }
-
-    // public function get_city(Request $request) {
-    //     $country = $request->country;
-    //     $city = City::where('country_id', $country)->get();
-    //     echo json_encode($city);
-    // }
 
     public function get_tag(Request $request) {
         $category = $request->category;
