@@ -270,15 +270,24 @@ function addblackoutdate(index) {
     var from_date = new Date(pricing_data[index-1].from_date).getTime();
     var to_date = new Date(pricing_data[index-1].to_date).getTime();
 
+    console.log(black_from_date_time);
+    console.log(black_to_date_time);
+
+    console.log(from_date);
+    console.log(to_date);
+
     if(from_date > black_from_date_time || to_date < black_to_date_time) {
       toastr.warning('Please enter the exact blackout date', 'Warning', { "closeButton": true });
+      console.log('here');
       $(this).val('');
       return;
     }
 
     var flag = 0;
 
-    var blackout_date_iteration
+    var blackout_date_iteration;
+
+    console.log(pricing_data);
 
     for(blackout_date_iteration of pricing_data[index-1].blackout_date) {
 
@@ -624,6 +633,12 @@ function copypriceset(copy_index) {
 
     var from_date = new Date(pricing_data[index-1].from_date).getTime();
     var to_date = new Date(pricing_data[index-1].to_date).getTime();
+
+    console.log(black_from_date_time);
+    console.log(black_to_date_time);
+
+    console.log(from_date);
+    console.log(to_date);
 
     if(from_date > black_from_date_time || to_date < black_to_date_time) {
       toastr.warning('Please enter the exact blackout date', 'Warning', { "closeButton": true });
@@ -1151,6 +1166,12 @@ jQuery(document).ready(function () {
     var from_date = new Date(pricing_data[index-1].from_date).getTime();
     var to_date = new Date(pricing_data[index-1].to_date).getTime();
 
+    console.log(black_from_date_time);
+    console.log(black_to_date_time);
+
+    console.log(from_date);
+    console.log(to_date);
+
     if(from_date > black_from_date_time || to_date < black_to_date_time) {
       toastr.warning('Please enter the exact blackout date', 'Warning', { "closeButton": true });
       $(this).val('');
@@ -1483,6 +1504,12 @@ jQuery(document).ready(function () {
 
       var from_date = new Date(pricing_data[index-1].from_date).getTime();
       var to_date = new Date(pricing_data[index-1].to_date).getTime();
+
+      console.log(black_from_date_time);
+      console.log(black_to_date_time);
+
+      console.log(from_date);
+      console.log(to_date);
 
       if(from_date > black_from_date_time || to_date < black_to_date_time) {
         toastr.warning('Please enter the exact blackout date', 'Warning', { "closeButton": true });

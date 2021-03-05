@@ -253,7 +253,8 @@ class ProductController extends Controller
         $pricing_data = array();
 
         for($i=0; $i<count($pricing_group_data); $i++) {
-            $pricing_group = ProductPricing::where('duration', $pricing_group_data[$i]->duration)->get();
+            $pricing_group = ProductPricing::where('duration', $pricing_group_data[$i]->duration)->where('product_id', $product_id)->get();
+            
             $temp  = array(
               'duration' => $pricing_group_data[$i]->duration,
               'currency' => $pricing_group[0]->currency,
@@ -486,34 +487,87 @@ class ProductController extends Controller
         $todate = $request->todate;
         $currency = $request->currency;
 
-        $blackoutdate = $request->blackoutdate;
-        $blackoutmsg = $request->blackoutmsg;
+        // $fromdate = array();
+        // $todate = array();
+        // $currency = array();
+
+        // $ff = 0;
+        // for($f=count($fdate)-1; $f>=0; $f--) {
+        //     $fromdate[$ff] = $fdate[$f];
+        //     $todate[$ff] = $tdate[$f];
+        //     $currency[$ff] = $cur[$f];
+        //     $ff++;
+        // }
 
         $tag = $request->tag;
         $price = $request->price;
         $description = $request->description;
 
-        $kk=0;
-        $tag_temp = array();
-        $price_temp = array();
-        $description_temp = array();
+        // $kk = 0;
+        // $tag_temp = array();
+        // $price_temp = array();
+        // $description_temp = array();
 
-        for($k=count($tag)-1; $k>=0; $k--) {
-          $tag_temp[$kk] = $tag[$k];
-          $price_temp[$kk] = $price[$k];
-          $description_temp[$kk] = $description[$k];
-          $kk++;
+        // while($kk < count($tag)) {
+        //     $tag_temp[$kk] = $tag[$kk];
+        //     $price_temp[$kk] = $price[$kk];
+        //     $description_temp[$kk] = $description[$kk];
+        //     $kk++;
+        // }
+
+        $kk = 0;
+        $tag_temp = array();
+        foreach($tag as $tg) {
+            $tag_temp[$kk] = $tg;
+            $kk++;
         }
 
+        $kk = 0;
+        $price_temp = array();
+        foreach($price as $pr) {
+            $price_temp[$kk] = $pr;
+            $kk++;
+        }
+
+        $kk = 0;
+        $description_temp = array();
+        foreach($description as $dr) {
+            $description_temp[$kk] = $dr;
+            $kk++;
+        }
+
+        $blackoutdate = $request->blackoutdate;
+        
         $kk=0;
         $blackoutdate_arr = array();
-        $blackoutmsg_arr = array();
-        for($k=count($blackoutdate)-1; $k>=0; $k--) {
-          $blackoutdate_arr[$kk] = $blackoutdate[$k];
-          $blackoutmsg_arr[$kk] = $blackoutmsg[$k];
 
-          $kk++;
+        foreach($blackoutdate as $bkdate) {
+            $blackoutdate_arr[$kk] = $bkdate;
+            $kk++;
         }
+
+        $blackoutmsg = $request->blackoutmsg;
+
+        $kk = 0;
+        $blackoutmsg_arr = array();
+
+        foreach($blackoutmsg as $bkmsg) {
+            $blackoutmsg_arr[$kk] = $bkmsg;
+            $kk++;
+        }
+
+    
+        // $kk = 0;
+        // $blackoutdate = $request->blackoutdate;
+        // $blackoutmsg = $request->blackoutmsg;
+
+        // $blackoutdate_arr = array();
+        // $blackoutmsg_arr = array();
+        // while($kk < count($blackoutdate)) {
+        //     $blackoutdate_arr[$kk] = $blackoutdate[$kk];
+        //     $blackoutmsg_arr[$kk] = $blackoutmsg[$kk];
+        //     $kk++;
+        // }
 
         $blackout_d = array();
         $blackout_m = array();
@@ -539,23 +593,21 @@ class ProductController extends Controller
           array_push($blackout_m, $blackoutmsg_temp);
         }
 
-      //dd($tag_temp);
-
         for($i=0; $i<count($fromdate); $i++) {
             for($j=0; $j<count($tag_temp[$i]); $j++) {
-              $product_pricing = ProductPricing::create(
-                [
-                  'product_id' => $product_id,
-                  'tag' => $tag_temp[$i][$j],
-                  'description' => $description_temp[$i][$j],
-                  'price' => $price_temp[$i][$j],
-                  'currency' => $currency[$i],
-                  'duration' => $fromdate[$i].' ~ '.$todate[$i],
-                  'blackout' => $blackout_d[$i],
-                  'blackout_msg' => $blackout_m[$i]
-                ]
-              );
-              $flag = 1;
+                $product_pricing = ProductPricing::create(
+                    [
+                    'product_id' => $product_id,
+                    'tag' => $tag_temp[$i][$j],
+                    'description' => $description_temp[$i][$j],
+                    'price' => $price_temp[$i][$j],
+                    'currency' => $currency[$i],
+                    'duration' => $fromdate[$i].' ~ '.$todate[$i],
+                    'blackout' => $blackout_d[$i],
+                    'blackout_msg' => $blackout_m[$i]
+                    ]
+                );
+                $flag = 1;
             }
         }
 

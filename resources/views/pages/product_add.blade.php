@@ -223,7 +223,7 @@
                     </fieldset>
                   </div>
                   <div class="col-md-6">
-                    <h6>Start Time</h6>
+                    <h6>Check In</h6>
                     <fieldset class="form-group position-relative has-icon-left @error('start_time') error @enderror">
                         <input type="text" id="start_time" name="start_time" value="{{old('start_time')}}" required data-validation-required-message="This field is required" class="form-control pickatime-format" placeholder="Select Start Time">
                         <div class="form-control-position">
@@ -232,7 +232,7 @@
                     </fieldset>
                   </div>
                   <div class="col-md-6 ">
-                    <h6>End Time</h6>
+                    <h6>Check Out</h6>
                     <fieldset class="form-group position-relative has-icon-left @error('end_time') error @enderror">
                         <input type="text" id="end_time" name="end_time" value="{{old('end_time')}}" required data-validation-required-message="This field is required" class="form-control pickatime-format" placeholder="Select End Time">
                         <div class="form-control-position">
