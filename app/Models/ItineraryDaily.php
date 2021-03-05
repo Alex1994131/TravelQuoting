@@ -14,6 +14,7 @@ class ItineraryDaily extends Model
       $product = Product::find($this->product_id);
       return  $product;
     }
+    
     public function get_time(){
       $time = $this->date . ' ' . $this->start_time . ' ~ ' . $this->end_time;
       return $time;

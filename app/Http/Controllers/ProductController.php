@@ -461,6 +461,8 @@ class ProductController extends Controller
 
         $product_id = $request->price_product_id;
 
+        dd($request);
+
         $rule = [
             'fromdate.*' => 'required',
             'todate.*' => 'required',
