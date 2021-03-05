@@ -80,6 +80,8 @@ class CrmController extends Controller
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
 
+            $account->status = 0;
+
             $account->billing_postal_code = $request->billing_postal_code;
             $account->billing_state_region = $request->billing_region_state;
             $account->billing_country = $request->billing_country;
@@ -89,7 +91,9 @@ class CrmController extends Controller
             $account->billing_email = $request->billing_email;
             $account->billing_office_phone = $request->billing_office_phone;
 
-            $account->status = 0;
+            $account->billing_company_name = $request->company_name;
+            $account->billing_status = 0;
+
             $account->user_id = 0;
             $account->save();
             $msg_result = "customer add success";
@@ -111,6 +115,8 @@ class CrmController extends Controller
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
 
+            $account->status = 0;
+
             $account->billing_postal_code = $request->billing_postal_code;
             $account->billing_state_region = $request->billing_region_state;
             $account->billing_country = $request->billing_country;
@@ -119,8 +125,12 @@ class CrmController extends Controller
             $account->billing_street_address = $request->billing_street_address;
             $account->billing_email = $request->billing_email;
             $account->billing_office_phone = $request->billing_office_phone;
+
+            $account->billing_company_name = $request->company_name;
+            $account->billing_status = 0;
+
+            $account->category = $request->category;
             
-            $account->status = 0;
             $user = User::create([
                 'name' => $request->username,
                 'email' => $request->main_email,
@@ -185,6 +195,7 @@ class CrmController extends Controller
 
             $account->status = 0;
             $account->user_id = 0;
+
             $account->save();
             $msg_result = "customer add success";
             $data['result']="success";
@@ -203,7 +214,9 @@ class CrmController extends Controller
             $account->main_street_number = $request->main_street_number;
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
-
+            
+            $account->status = 0;
+            
             $account->billing_postal_code = $request->billing_postal_code;
             $account->billing_state_region = $request->billing_region_state;
             $account->billing_country = $request->billing_country;
@@ -213,7 +226,9 @@ class CrmController extends Controller
             $account->billing_email = $request->billing_email;
             $account->billing_office_phone = $request->billing_office_phone;
 
-            $account->status = 0;
+            $account->billing_company_name = $request->company_name;
+            $account->billing_status = 0;
+
             $account->user_id = 0;
             $account->save();
             $msg_result = "customer add success";
@@ -236,6 +251,8 @@ class CrmController extends Controller
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
 
+            $account->status = 0;
+
             $account->billing_postal_code = $request->billing_postal_code;
             $account->billing_state_region = $request->billing_region_state;
             $account->billing_country = $request->billing_country;
@@ -244,8 +261,12 @@ class CrmController extends Controller
             $account->billing_street_address = $request->billing_street_address;
             $account->billing_email = $request->billing_email;
             $account->billing_office_phone = $request->billing_office_phone;
+
+            $account->billing_company_name = $request->company_name;
+            $account->billing_status = 0;
+
+            $account->category = $request->category;
             
-            $account->status = 0;
             $user = User::create([
                 'name' => $request->username,
                 'email' => $request->main_email,
@@ -328,6 +349,8 @@ class CrmController extends Controller
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
 
+            $account->status = 0;
+
             $account->billing_postal_code = $request->billing_postal_code;
             $account->billing_state_region = $request->billing_region_state;
             $account->billing_country = $request->billing_country;
@@ -337,7 +360,9 @@ class CrmController extends Controller
             $account->billing_email = $request->billing_email;
             $account->billing_office_phone = $request->billing_office_phone;
 
-            $account->status = 0;
+            $account->billing_company_name = $request->company_name;
+            $account->billing_status = 0;
+
             $account->user_id = 0;
             $account->save();
             $msg_result = "customer update success";
@@ -360,6 +385,8 @@ class CrmController extends Controller
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
 
+            $account->status = 0;
+
             $account->billing_postal_code = $request->billing_postal_code;
             $account->billing_state_region = $request->billing_region_state;
             $account->billing_country = $request->billing_country;
@@ -369,7 +396,10 @@ class CrmController extends Controller
             $account->billing_email = $request->billing_email;
             $account->billing_office_phone = $request->billing_office_phone;
 
-            $account->status = 0;
+            $account->billing_company_name = $request->company_name;
+            $account->billing_status = 0;
+
+            $account->category = $request->category;
 
             $user = User::where('id', $account->user_id)->first();
             $user->name = $request->username;
@@ -494,6 +524,8 @@ class CrmController extends Controller
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
 
+            $account->status = 0;
+
             $account->billing_postal_code = $request->billing_postal_code;
             $account->billing_state_region = $request->billing_region_state;
             $account->billing_country = $request->billing_country;
@@ -503,8 +535,11 @@ class CrmController extends Controller
             $account->billing_email = $request->billing_email;
             $account->billing_office_phone = $request->billing_office_phone;
             
-            $account->status = 0;
+            $account->billing_company_name = $request->company_name;
+            $account->billing_status = 0;
 
+            $account->category = $request->category;
+            
             $user = User::where('id', $account->user_id)->first();
             $user->name = $request->username;
             $user->email = $request->main_email;
@@ -554,15 +589,6 @@ class CrmController extends Controller
             $account->main_email = $request->main_email;
             $account->main_office_phone = $request->main_office_phone;
 
-            $account->billing_postal_code = $request->billing_postal_code;
-            $account->billing_state_region = $request->billing_region_state;
-            $account->billing_country = $request->billing_country;
-            $account->billing_city = $request->billing_city;
-            $account->billing_street_number = $request->billing_street_number;
-            $account->billing_street_address = $request->billing_street_address;
-            $account->billing_email = $request->billing_email;
-            $account->billing_office_phone = $request->billing_office_phone;
-            
             $account->status = 0;
 
             $user = User::where('id', $account->user_id)->first();

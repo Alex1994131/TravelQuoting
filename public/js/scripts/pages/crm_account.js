@@ -234,7 +234,11 @@ $(document).ready(function () {
     $('.select2-selection__rendered').css('font-weight', 400);
 
     if(typeof(account) != 'undefined'){
-        if(account.account_type == 4){
+        if(account.account_type == 3){
+            $("#company_div").removeClass("col-sm-6").addClass("col-sm-3");
+            $("#category_div").show();
+        }
+        else {
             $('#company_name').prop("disabled", true);
 
             $('#billing_location').prop("disabled", true);
@@ -246,12 +250,15 @@ $(document).ready(function () {
             $('#billing_country').prop("disabled", true);
             $('#billing_office_phone').prop("disabled", true);
             $('#billing_email').prop("disabled", true);
+
+            $("#category_div").hide();
+            $("#company_div").removeClass("col-sm-3").addClass("col-sm-6");
         }
     }
     
     $(document).on("change", "#account_type", function () {
         if($('#account_type').val() == 4)
-        {
+        {            
             $('#company_name').prop("disabled", true);
 
             $('#billing_location').prop("disabled", true);
@@ -263,6 +270,9 @@ $(document).ready(function () {
             $('#billing_country').prop("disabled", true);
             $('#billing_office_phone').prop("disabled", true);
             $('#billing_email').prop("disabled", true);
+
+            $("#category_div").hide();
+            $("#company_div").removeClass("col-sm-3").addClass("col-sm-6");
         }
         else if($('#account_type').val() == 3)
         {
@@ -277,6 +287,9 @@ $(document).ready(function () {
             $('#billing_country').prop("disabled", false);
             $('#billing_office_phone').prop("disabled", false);
             $('#billing_email').prop("disabled", false);
+
+            $("#company_div").removeClass("col-sm-6").addClass("col-sm-3");
+            $("#category_div").show();
         }
     });
 

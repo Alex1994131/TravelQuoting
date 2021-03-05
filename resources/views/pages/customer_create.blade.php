@@ -226,7 +226,7 @@
                             <fieldset class="form-group position-relative has-icon-left">
                                 <div class="controls">
                                     <input type="text" class="form-control" id="main_office_phone" name="main_office_phone"
-                                        placeholder="Office Phone" >
+                                    required data-validation-required-message="This Phone field is required" placeholder="Office Phone" >
                                 </div>
                                 <div class="form-control-position">
                                     <i class="bx bx-mobile"></i>
@@ -251,7 +251,7 @@
                             <fieldset class="form-group position-relative has-icon-left">
                                 <div class="controls">
                                     <input type="email" class="form-control" id="main_email" name="main_email"
-                                        placeholder="Main Email" data-validation-required-message="This name field is required" required>
+                                        placeholder="Main Email" data-validation-required-message="This Email is required" required>
                                 </div>
                                 <div class="form-control-position">
                                     <i class="bx bx-mail-send"></i>

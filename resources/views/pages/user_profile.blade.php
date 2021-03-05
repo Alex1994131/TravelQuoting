@@ -166,10 +166,22 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-sm-6">
+                                <div class="col-12 col-sm-3" id="company_div">
                                     <div class="form-group">
                                         <label>Company</label>
                                         <input type="text" class="form-control" placeholder="Company name" name="comapny_name" id="company_name" value="{{Auth::user()->get_account_info->billing_company_name}}">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-3" id="category_div">
+                                    <div class="form-group">
+                                        <label>Company</label>
+                                        <select class="form-control" name="category" id="category" required>
+                                            <option value="1">Accommodation</option>
+                                            <option value="2">Transport</option>
+                                            <option value="3">Activites and Attraction</option>
+                                            <option value="4">Guide</option>
+                                            <option value="5">Transport</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6">
@@ -324,10 +336,11 @@
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <div class="controls">
-                                            <label>Office Phone</label>
+                                            <label>Person Phone</label>
                                             <fieldset class="form-group position-relative has-icon-left">
                                                 <div class="controls">
-                                                    <input type="text" class="form-control" id="main_office_phone" name="main_office_phone"
+                                                    <input type="text" class="form-control" id="main_office_phone" name="main_office_phone" required 
+                                                    data-validation-required-message="This Phone field is required"
                                                         placeholder="Office Phone" value="{{Auth::user()->get_account_info->main_office_phone}}">
                                                 </div>
                                                 <div class="form-control-position">
@@ -358,7 +371,7 @@
                                             <fieldset class="form-group position-relative has-icon-left">
                                                 <div class="controls">
                                                     <input type="email" class="form-control" id="main_email" name="main_email" value="{{Auth::user()->get_account_info->main_email}}"
-                                                        placeholder="Main Email" data-validation-required-message="This name field is required" required>
+                                                        placeholder="Main Email" data-validation-required-message="This Email is required" required>
                                                 </div>
                                                 <div class="form-control-position">
                                                     <i class="bx bx-mail-send"></i>

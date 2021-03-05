@@ -31,7 +31,6 @@
     border-color: #7c4dff !important;
 }
 .btn-dark .file-upload {
-    width: 100%;
     padding: 10px 0px;
     position: absolute;
     left: 0;
@@ -110,7 +109,7 @@
                             <div class="col-12 col-sm-6">
                                 <div class="form-group">
                                     <label>Account Type</label>
-                                    <select class="form-control" name="account_type" id="account_type">
+                                    <select class="form-control" name="account_type" id="account_type" required>
                                         @if($account->account_type == 3)
                                             <option value="3" selected>Supplier</option>
                                             <option value="4">Staff</option>
@@ -141,10 +140,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-3" id="company_div">
                                 <div class="form-group">
                                     <label>Company</label>
-                                    <input type="text" class="form-control" placeholder="Company name" name="comapny_name" id="company_name" value="{{$account->billing_company_name}}">
+                                    <input type="text" class="form-control" placeholder="Company name" name="company_name" id="company_name" required
+                                        data-validation-required-message="The password field is required" id="company_name" value="{{$account->billing_company_name}}">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-3" id="category_div">
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <select class="form-control" name="category" id="category" required>
+                                        <option value="1" {{ $account->category==1? 'selected': ''}}>Accommodation</option>
+                                        <option value="2" {{ $account->category==2? 'selected': ''}}>Transport</option>
+                                        <option value="3" {{ $account->category==3? 'selected': ''}}>Activites and Attraction</option>
+                                        <option value="4" {{ $account->category==4? 'selected': ''}}>Guide</option>
+                                        <option value="5" {{ $account->category==5? 'selected': ''}}>Transport</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6">
@@ -302,8 +314,8 @@
                                         <label>Office Phone</label>
                                         <fieldset class="form-group position-relative has-icon-left">
                                             <div class="controls">
-                                                <input type="text" class="form-control" id="main_office_phone" name="main_office_phone"
-                                                    placeholder="Office Phone" value="{{$account->main_office_phone}}">
+                                                <input type="text" class="form-control" id="main_office_phone" name="main_office_phone" required 
+                                            data-validation-required-message="This Phone field is required" placeholder="Office Phone" value="{{$account->main_office_phone}}">
                                             </div>
                                             <div class="form-control-position">
                                                 <i class="bx bx-mobile"></i>
@@ -332,8 +344,8 @@
                                         <label>Main Email</label>
                                         <fieldset class="form-group position-relative has-icon-left">
                                             <div class="controls">
-                                                <input type="email" class="form-control" id="main_email" name="main_email" value="{{$account->main_email}}"
-                                                    placeholder="Main Email" data-validation-required-message="This name field is required" required>
+                                                <input type="email" class="form-control" id="main_email" name="main_email" required 
+                                            data-validation-required-message="This Email field is required" value="{{$account->main_email}}" placeholder="Main Email">
                                             </div>
                                             <div class="form-control-position">
                                                 <i class="bx bx-mail-send"></i>
@@ -347,8 +359,7 @@
                                     <label>Billing Email</label>
                                     <fieldset class="form-group position-relative has-icon-left">
                                         <div class="controls">
-                                            <input type="email" class="form-control" id="billing_email" name="billing_email" value="{{$account->billing_email}}"
-                                                placeholder="Billing Email">
+                                            <input type="email" class="form-control" id="billing_email" name="billing_email" value="{{$account->billing_email}}" placeholder="Billing Email">
                                         </div>
                                         <div class="form-control-position">
                                             <i class="bx bx-mail-send"></i>

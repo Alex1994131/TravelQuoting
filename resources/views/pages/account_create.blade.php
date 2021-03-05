@@ -31,7 +31,6 @@
     border-color: #7c4dff !important;
 }
 .btn-dark .file-upload {
-    width: 100%;
     padding: 10px 0px;
     position: absolute;
     left: 0;
@@ -134,10 +133,22 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-3" id="company_div">
                                 <div class="form-group">
                                     <label>Company</label>
-                                    <input type="text" class="form-control" placeholder="Company name" name="comapny_name" id="company_name">
+                                    <input type="text" class="form-control"data-validation-required-message="This first name field is required" required placeholder="Company name" name="company_name" id="company_name">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-3" id="category_div">
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <select class="form-control" name="category" id="category" required>
+                                        <option value="1">Accommodation</option>
+                                        <option value="2">Transport</option>
+                                        <option value="3">Activites and Attraction</option>
+                                        <option value="4">Guide</option>
+                                        <option value="5">Transport</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6">
@@ -178,7 +189,7 @@
                             <div class="col-md-6">
                                 <h6>Location</h6>
                                 <fieldset class="form-group position-relative has-icon-left">
-                                    <input type="text" class="form-control" id="billing_location" placeholder="- Location -" disabled>
+                                    <input type="text" class="form-control" id="billing_location" placeholder="- Location -">
                                     <div class="form-control-position">
                                         <i class="bx bxs-map"></i>
                                     </div>
@@ -197,7 +208,7 @@
                             <div class="col-md-6">
                                 <h6>Postal Code(ZIP)</h6>
                                 <fieldset class="form-group position-relative has-icon-left">
-                                    <input type="text" class="form-control" id="billing_postal_code" name="billing_postal_code" placeholder="- Postal Code -" readonly disabled>
+                                    <input type="text" class="form-control" id="billing_postal_code" name="billing_postal_code" placeholder="- Postal Code -" readonly>
                                     <div class="form-control-position">
                                         <i class="bx bxs-map"></i>
                                     </div>
@@ -216,7 +227,7 @@
                             <div class="col-md-6">
                                 <h6>State/Region</h6>
                                 <fieldset class="form-group position-relative has-icon-left">
-                                    <input type="text" class="form-control" id="billing_region_state" name="billing_region_state" placeholder="- Region/State -" readonly disabled>
+                                    <input type="text" class="form-control" id="billing_region_state" name="billing_region_state" placeholder="- Region/State -" readonly>
                                     <div class="form-control-position">
                                         <i class="bx bxs-map"></i>
                                     </div>
@@ -235,7 +246,7 @@
                             <div class="col-md-6">
                                 <h6>Country</h6>
                                 <fieldset class="form-group position-relative has-icon-left">
-                                    <input type="text" class="form-control" id="billing_country" name="billing_country" placeholder="- Country -" disabled readonly>
+                                    <input type="text" class="form-control" id="billing_country" name="billing_country" placeholder="- Country -" readonly>
                                     <div class="form-control-position">
                                         <i class="bx bxs-flag-alt"></i>
                                     </div>
@@ -254,7 +265,7 @@
                             <div class="col-md-6">
                                 <h6>City</h6>
                                 <fieldset class="form-group position-relative has-icon-left">
-                                    <input type="text" class="form-control" id="billing_city" name="billing_city" placeholder="- City -" disabled readonly>
+                                    <input type="text" class="form-control" id="billing_city" name="billing_city" placeholder="- City -" readonly>
                                     <div class="form-control-position">
                                         <i class="bx bxs-city"></i>
                                     </div>
@@ -276,7 +287,7 @@
                                 <h6>Street Number</h6>
                                 <fieldset class="form-group position-relative has-icon-left">
                                     <div class="controls">
-                                        <input type="text" class="form-control" id="billing_street_number" name="billing_street_number" placeholder="Street Number" disabled readonly>
+                                        <input type="text" class="form-control" id="billing_street_number" name="billing_street_number" placeholder="Street Number" readonly>
                                     </div>
                                     <div class="form-control-position">
                                         <i class="bx bx-street-view"></i>
@@ -284,62 +295,49 @@
                                 </fieldset>
                             </div>
                             <div class="col-12 col-sm-6">
-                                <div class="form-group">
+                                <h6>Street Address</h6>
+                                <fieldset class="form-group position-relative has-icon-left">
                                     <div class="controls">
-                                        <label>Street Address</label>
-                                        <fieldset class="form-group position-relative has-icon-left">
-                                            <div class="controls">
-                                                <input type="text" class="form-control" id="main_street_address" name="main_street_address" placeholder="Street Address" readonly>
-                                            </div>
-                                            <div class="form-control-position">
-                                                <i class="bx bx-street-view"></i>
-                                            </div>
-                                        </fieldset>
+                                        <input type="text" class="form-control" id="main_street_address" name="main_street_address" placeholder="Street Address" readonly>
                                     </div>
-                                </div>
+                                    <div class="form-control-position">
+                                        <i class="bx bx-street-view"></i>
+                                    </div>
+                                </fieldset>
                             </div>  
                             <div class="col-12 col-sm-6">
-                                <div class="form-group">
-                                    <label>Street Address</label>
-                                    <fieldset class="form-group position-relative has-icon-left">
-                                        <div class="controls">
-                                            <input type="text" class="form-control" id="billing_street_address" name="billing_street_address" placeholder="Street Address" readonly disabled>
-                                        </div>
-                                        <div class="form-control-position">
-                                            <i class="bx bx-street-view"></i>
-                                        </div>
-                                    </fieldset>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-6">
-                                <div class="form-group">
+                                <h6>Street Address</h6>
+                                <fieldset class="form-group position-relative has-icon-left">
                                     <div class="controls">
-                                        <label>Office Phone</label>
-                                        <fieldset class="form-group position-relative has-icon-left">
-                                            <div class="controls">
-                                                <input type="text" class="form-control" id="main_office_phone" name="main_office_phone"
-                                                    placeholder="Office Phone" >
-                                            </div>
-                                            <div class="form-control-position">
-                                                <i class="bx bx-mobile"></i>
-                                            </div>
-                                        </fieldset>
+                                        <input type="text" class="form-control" id="billing_street_address" name="billing_street_address" placeholder="Street Address" readonly>
                                     </div>
-                                </div>
+                                    <div class="form-control-position">
+                                        <i class="bx bx-street-view"></i>
+                                    </div>
+                                </fieldset>
                             </div>
                             <div class="col-12 col-sm-6">
-                                <div class="form-group">
-                                    <label>Office Phone</label>
-                                    <fieldset class="form-group position-relative has-icon-left">
-                                        <div class="controls">
-                                            <input type="text" class="form-control" id="billing_office_phone" name="billing_office_phone"
-                                                placeholder="Office Phone">
-                                        </div>
-                                        <div class="form-control-position">
-                                            <i class="bx bx-mobile"></i>
-                                        </div>
-                                    </fieldset>
-                                </div>
+                                <h6>Office Phone</h6>
+                                <fieldset class="form-group position-relative has-icon-left">
+                                    <div class="controls">
+                                        <input type="text" class="form-control" id="main_office_phone" name="main_office_phone" required 
+                                            data-validation-required-message="This Phone field is required" placeholder="Office Phone" required>
+                                    </div>
+                                    <div class="form-control-position">
+                                        <i class="bx bx-mobile"></i>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <h6>Office Phone</h6>
+                                <fieldset class="form-group position-relative has-icon-left">
+                                    <div class="controls">
+                                        <input type="text" class="form-control" id="billing_office_phone" name="billing_office_phone" placeholder="Office Phone">
+                                    </div>
+                                    <div class="form-control-position">
+                                        <i class="bx bx-mobile"></i>
+                                    </div>
+                                </fieldset>
                             </div>
                             <div class="col-12 col-sm-6">
                                 <div class="form-group">
@@ -348,7 +346,7 @@
                                         <fieldset class="form-group position-relative has-icon-left">
                                             <div class="controls">
                                                 <input type="email" class="form-control" id="main_email" name="main_email"
-                                                    placeholder="Main Email" data-validation-required-message="This name field is required" required>
+                                                    placeholder="Main Email" data-validation-required-message="This Mail is required" required>
                                             </div>
                                             <div class="form-control-position">
                                                 <i class="bx bx-mail-send"></i>

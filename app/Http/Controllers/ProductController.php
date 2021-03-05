@@ -184,7 +184,6 @@ class ProductController extends Controller
         $flag = $request->flag;
         $pageConfigs = ['isContentSidebar' => true, 'bodyCustomClass' => 'file-manager-application'];
 
-        $supplier = Account::where('account_type', 3)->get();
         $language = Language::all();
         $currency = Currency::all();
         $customer = Customer::all();
@@ -193,26 +192,31 @@ class ProductController extends Controller
             $flag = 1;
             $category = Category::where('parent_id', 1)->get();
             $category_tag = CategoryTag::where('parent_id', 1)->get();
+            $supplier = Account::where('account_type', 3)->where('category', 1)->get();
         }
         else if($flag == 'transport') {
             $flag = 2;
             $category = Category::where('parent_id', 2)->get();
             $category_tag = CategoryTag::where('parent_id', 2)->get();
+            $supplier = Account::where('account_type', 3)->where('category', 2)->get();
         }
         else if($flag == 'activities') {
             $flag = 3;
             $category = Category::where('parent_id', 3)->get();
             $category_tag = CategoryTag::where('parent_id', 3)->get();
+            $supplier = Account::where('account_type', 3)->where('category', 3)->get();
         }
         else if($flag == 'guide') {
             $flag = 4;
             $category = Category::where('parent_id', 4)->get();
             $category_tag = CategoryTag::where('parent_id', 4)->get();
+            $supplier = Account::where('account_type', 3)->where('category', 4)->get();
         }
         else if($flag == 'other') {
             $flag = 5;
             $category = Category::where('parent_id', 5)->get();
             $category_tag = CategoryTag::where('parent_id', 5)->get();
+            $supplier = Account::where('account_type', 3)->where('category', 5)->get();
         }
 
         return view('pages.product_add', array(
@@ -239,7 +243,7 @@ class ProductController extends Controller
         $category = Category::where('parent_id', $flag)->get();
         $category_tag = CategoryTag::where('parent_id', $flag)->get();
 
-        $supplier = Account::where('account_type', 3)->get();
+        $supplier = Account::where('account_type', 3)->where('category', $flag)->get();
         $language = Language::all();
         $currency = Currency::all();
         $customer = Customer::all();

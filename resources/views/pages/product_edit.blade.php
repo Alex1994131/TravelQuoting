@@ -178,7 +178,18 @@
                   </div>
 
                   <div class="col-md-12">
-                    <h6>Supplier</h6>
+                    @if($flag == 1)
+                      <h6>Accommodation Supplier</h6>
+                    @elseif($flag == 2)
+                      <h6>Transport Supplier</h6>
+                    @elseif($flag == 3)
+                      <h6>Activity&Attraction Supplier</h6>
+                    @elseif($flag == 4)
+                      <h6>Guider</h6>
+                    @else
+                      <h6>Other Supplier</h6>
+                    @endif
+
                     <fieldset class="form-group position-relative has-icon-left">
                       <select class="select2 form-control" id="supplier" name="supplier" required data-validation-required-message="This field is required">
                           <option value="">Supplier</option>
@@ -193,7 +204,17 @@
                   </div>
 
                   <div class="col-md-12">
-                    <h6>Category</h6>
+                    @if($flag == 1)
+                      <h6>Accommodation Category</h6>
+                    @elseif($flag == 2)
+                      <h6>Transport Category</h6>
+                    @elseif($flag == 3)
+                      <h6>Activity&Attraction Category</h6>
+                    @elseif($flag == 4)
+                      <h6>Guide Category</h6>
+                    @else
+                      <h6>Other Category</h6>
+                    @endif
                     <fieldset class="form-group position-relative has-icon-left">
                         <select class="select2 form-control" id="category" name="category" required data-validation-required-message="This field is required">
                             @foreach($category as $item)
