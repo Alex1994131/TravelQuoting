@@ -23,6 +23,8 @@ use DB;
 use Mail;
 use PDF;
 
+use Config;
+
 class ItineraryController extends Controller
 {
   public function add_itinerary_info($id, $type) {
@@ -908,7 +910,7 @@ class ItineraryController extends Controller
     $pdf_check = $request->pdf_check;
     $created_id = Itinerary::find($itinerary_id)->created_id;
 
-    $email = Account::find($created_id)->main_email;
+    // $email = Account::find($created_id)->main_email;
     $website_url = Account::find($created_id)->website_url;
     $street_address = Account::find($created_id)->main_street_address;
     $city = Account::find($created_id)->main_city;
@@ -926,7 +928,7 @@ class ItineraryController extends Controller
     $body = str_replace('{address}', $street_address, $body);
     $body = str_replace('{phone_number}', $phone, $body);
     $body = str_replace('{postcode}', $postal_code, $body);
-    $body = str_replace('{email_address}', $email, $body);
+    $body = str_replace('{email_address}', $to_email, $body);
     $body = str_replace('{city}', $city, $body);
     $body = str_replace('{country}', $country, $body);
     $body = str_replace('{website_url}', $website_url, $body);
@@ -945,16 +947,41 @@ class ItineraryController extends Controller
 
       $file_path = Storage::disk('public')->path($file_name);
 
-      Mail::send('pages.itinerary_mail', $data, function($message) use ($from_email, $to_email, $file_path) {
-        $message->to($to_email, 'Travel Quoting')->subject('Travel Itinerary for your trips');
-        $message->attach($file_path);
-        $message->from($from_email,'Virat Gandhi');
+      $data = [
+        'body' => $body,
+        'email' => $from_email
+      ];
+
+      $objDemo = new \stdClass();
+      $objDemo->to = $to_email;
+      $objDemo->from = Config::get('mail.from.address');
+      $objDemo->title = Config::get('mail.from.name');;
+      $objDemo->file_path = $file_path;
+      $objDemo->subject = 'Travel Quoting Itinerary Send';
+
+      Mail::send('pages.itinerary_mail', $data, function($message) use ($objDemo) {
+        $message->from($objDemo->from, $objDemo->title);
+        $message->to($objDemo->to);
+        $message->attach($objDemo->file_path);
+        $message->subject($objDemo->subject);
       });
     }
     else {
-      Mail::send('pages.itinerary_mail', $data, function($message) use ($from_email, $to_email) {
-        $message->to($to_email, 'Travel Quoting')->subject('Travel Itinerary for your trips');
-        $message->from($from_email,'Virat Gandhi');
+      $data = [
+        'body' => $body,
+        'email' => $from_email
+      ];
+
+      $objDemo = new \stdClass();
+      $objDemo->to = $to_email;
+      $objDemo->from = Config::get('mail.from.address');
+      $objDemo->title = Config::get('mail.from.name');;
+      $objDemo->subject = 'Travel Quoting Itinerary Send';
+
+      Mail::send('pages.itinerary_mail', $data, function($message) use ($objDemo) {
+        $message->from($objDemo->from, $objDemo->title);
+        $message->to($objDemo->to);
+        $message->subject($objDemo->subject);
       });
     }
 
