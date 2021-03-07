@@ -1252,9 +1252,7 @@ jQuery(document).ready(function () {
         toastr.warning('Please fill the season price!', 'Warning', { "closeButton": true });
       }
       else{
-
         pricing_form.submit();
-
       }
 
   });

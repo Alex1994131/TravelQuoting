@@ -10,6 +10,8 @@ class ItineraryDaily extends Model
     protected $table = 'itinerary_daily';
     protected $primaryKey = 'id';
 
+    protected $fillable = ["id", "itinerary_id", "product_id", "product_price_tag", "product_price_season", "product_price_currency", "product_price_id", "itinerary_margin_price", "date", "start_time", "end_time", "adults_num", "children_num"];
+
     public function get_product() {
       $product = Product::find($this->product_id);
       return  $product;
@@ -20,6 +22,7 @@ class ItineraryDaily extends Model
       return $time;
 
     }
+    
     public function get_product_prices(){
       $price_ids = explode(':', $this->product_price_id);
       $product_prices = collect([]);

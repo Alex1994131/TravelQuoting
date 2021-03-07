@@ -176,7 +176,7 @@ class ItineraryController extends Controller
           ->get();
 
       $itinerary_daily = DB::table('product')
-        ->select('product.id', 'itinerary_daily.id as daily_id', 'product.title as product_title', 'itinerary_daily.product_price_id', 'itinerary_daily.itinerary_margin_price', 'itinerary_daily.date', 'itinerary_daily.start_time', 'itinerary_daily.end_time', 'itinerary_daily.adults_num', 'itinerary_daily.children_num', 'product.country', 'product.city')
+        ->select('product.id', 'itinerary_daily.id as daily_id', 'product.title as product_title', 'itinerary_daily.product_price_tag', 'itinerary_daily.product_price_season', 'itinerary_daily.product_price_currency', 'itinerary_daily.product_price_id', 'itinerary_daily.itinerary_margin_price', 'itinerary_daily.date', 'itinerary_daily.start_time', 'itinerary_daily.end_time', 'itinerary_daily.adults_num', 'itinerary_daily.children_num', 'product.country', 'product.city')
         ->join('itinerary_daily', 'product.id', '=', 'itinerary_daily.product_id')
         ->joinSub($latestPosts, 'latest_posts', function ($join) {
           $join->on('product.id', '=', 'latest_posts.product_id');
@@ -202,12 +202,9 @@ class ItineraryController extends Controller
         $itinerary_schedule_data[$schedule_date[$i]->date] = $temp;
       }
 
-
       $enquiry = $itinerary->get_enquiry;
 
-      // return view('pages.itinerary_add_daily',compact('itinerary', 'itinerary_id', 'template_itinerary_data', 'enquiry', 'product', 'language', 'product_gallery', 'product_description', 'product_pricing' ,'pageConfigs', 'breadcrumbs', 'from_date', 'to_date', 'days', 'itinerary_schedule_data', 'currency', 'categoryTag', 'category'));
-
-  /** getting budget */
+      /** getting budget */
       $itinerary_status = Itinerary::find($itinerary_id)->status;
 
       if($itinerary_id != null && $itinerary_status == 0)
@@ -233,24 +230,26 @@ class ItineraryController extends Controller
         $budget = array();
         if(!empty($itinerary_daily)) {
           for($i = 0; $i < count($itinerary_daily); $i ++){
-              // dd($itinerary_daily[$i]);
 
-              $price_data = ProductPricing::find($itinerary_daily[$i]->product_price_id);
-              $price_currency = ProductPricing::find($itinerary_daily[$i]->product_price_id)->currency;
-              $price_currency = Currency::find($price_currency)->title;
-              $price_value = $price_data->price + $price_data->price * $itinerary_daily[$i]->itinerary_margin_price / 100;
+            $product_price_currency = explode(':', $itinerary_daily[$i]->product_price_currency);
+            $product_price_id = explode(':', $itinerary_daily[$i]->product_price_id);
 
-              $price_value = number_format($price_value, '2', '.', '');
+            for($j=0; $j<count($product_price_id); $j++) {
+              $price_currency = Currency::find($product_price_currency[$j])->title;
+              $price_amount = $product_price_id[$j] + $product_price_id[$j] * $itinerary_daily[$i]->itinerary_margin_price / 100;
+
+              $price_amount = number_format($price_amount, '2', '.', '');
 
               if(isset($budget[$price_currency]) && !empty($budget[$price_currency])) {
-                $temp_price = $budget[$price_currency] + $price_value;
+                $temp_price = $budget[$price_currency] + $price_amount;
                 $budget[$price_currency] = $temp_price;
               }
               else {
-                $budget[$price_currency] = $price_value;
+                $budget[$price_currency] = $price_amount;
               }
             }
           }
+        }
       }
       $currency = Currency::all();
       /** COMPLETE   */
@@ -274,9 +273,7 @@ class ItineraryController extends Controller
   public function save_basic_info(Request $request)
   {
     $basic_info = $request->all();
-    //$basic_info['result'] = 'success';
     $enquiry = Enquiry::find($basic_info['enquiry_id']);
-    //$itinerary = Itinerary::find($basic_info['itinerary_id']);
     $itinerary_id = $basic_info['itinerary_id'];
 
     $duration = $basic_info['duration'];
@@ -458,35 +455,62 @@ class ItineraryController extends Controller
   public function saveDailyItinerary(Request $request){
 
     $itinerary_id = $request->itinerary_id;
-    if(ItineraryDaily::where('itinerary_id', $itinerary_id)->get()) {
-      ItineraryDaily::where('itinerary_id', $itinerary_id)->delete();
-    }
+    // if(ItineraryDaily::where('itinerary_id', $itinerary_id)->get()) {
+    //   ItineraryDaily::where('itinerary_id', $itinerary_id)->delete();
+    // }
 
     $data = $request->daily_itinerary;
 
     $budget = array();
+
+    $origin_daily_arr = ItineraryDaily::where('itinerary_id', $itinerary_id)->pluck('id')->toArray();
+    $new_daily_arr = array();
+
     if(!empty($data)) {
       for($i = 0; $i < count($data); $i ++){
         for($j = 0; $j < count($data[$i]); $j ++){
-          $itinerary_daily = new ItineraryDaily;
-          $itinerary_daily->itinerary_id = intval($data[$i][$j]['itinerary_id']);
-          $itinerary_daily->start_time = $data[$i][$j]['start_time'];
-          $itinerary_daily->end_time = $data[$i][$j]['end_time'];
-          $itinerary_daily->product_id = intval($data[$i][$j]['product_id']);
-          $itinerary_daily->product_price_id = $data[$i][$j]['product_price_id'];
-          $itinerary_daily->itinerary_margin_price = $data[$i][$j]['itinerary_margin_price'];
-          $itinerary_daily->date = $data[$i][$j]['mydate'];
-          $itinerary_daily->adults_num = intval($data[$i][$j]['adults_num']);
-          $itinerary_daily->children_num = intval($data[$i][$j]['children_num']);
-          $itinerary_daily->save();
+
+          if($data[$i][$j]['itinerary_daily_id'] != 0) {
+            array_push($new_daily_arr, $data[$i][$j]['itinerary_daily_id']);
+
+            $itinerary_daily = ItineraryDaily::find($data[$i][$j]['itinerary_daily_id'])->update([
+              'itinerary_id' => intval($data[$i][$j]['itinerary_id']),
+              'product_id' => intval($data[$i][$j]['product_id']),
+              'product_price_tag' => $data[$i][$j]['product_price_tag'],
+              'product_price_season' => $data[$i][$j]['product_price_season'],
+              'product_price_currency' => $data[$i][$j]['product_price_currency'],
+              'product_price_id' => $data[$i][$j]['product_price_id'],
+              'itinerary_margin_price' => $data[$i][$j]['itinerary_margin_price'],
+              'date' => $data[$i][$j]['mydate'],
+              'start_time' => $data[$i][$j]['start_time'],
+              'end_time' => $data[$i][$j]['end_time'],
+              'adults_num' => intval($data[$i][$j]['adults_num']),
+              'children_num' => intval($data[$i][$j]['children_num'])
+            ]);
+          } 
+          else {
+            $itinerary_daily = ItineraryDaily::create([
+              'itinerary_id' => intval($data[$i][$j]['itinerary_id']),
+              'product_id' => intval($data[$i][$j]['product_id']),
+              'product_price_tag' => $data[$i][$j]['product_price_tag'],
+              'product_price_season' => $data[$i][$j]['product_price_season'],
+              'product_price_currency' => $data[$i][$j]['product_price_currency'],
+              'product_price_id' => $data[$i][$j]['product_price_id'],
+              'itinerary_margin_price' => $data[$i][$j]['itinerary_margin_price'],
+              'date' => $data[$i][$j]['mydate'],
+              'start_time' => $data[$i][$j]['start_time'],
+              'end_time' => $data[$i][$j]['end_time'],
+              'adults_num' => intval($data[$i][$j]['adults_num']),
+              'children_num' => intval($data[$i][$j]['children_num'])
+            ]);
+          }
 
           $price_id_arr = explode(':', $data[$i][$j]['product_price_id']);
+          $price_currency_arr = explode(':', $data[$i][$j]['product_price_currency']);
 
           for($k=0; $k<count($price_id_arr); $k++) {
-            $price_data = ProductPricing::find($price_id_arr[$k]);
-            $price_currency = $price_data->currency;
-            $price_currency = Currency::find($price_currency)->title;
-            $price_value = $price_data->price + $price_data->price * $data[$i][$j]['itinerary_margin_price'] / 100;
+            $price_currency = Currency::find($price_currency_arr[$k])->title;
+            $price_value = $price_id_arr[$k] + $price_id_arr[$k] * $data[$i][$j]['itinerary_margin_price'] / 100;
 
             $price_value = number_format($price_value, '2', '.', '');
 
@@ -502,11 +526,15 @@ class ItineraryController extends Controller
       }
     }
 
+    $diff_arr = array_diff($origin_daily_arr, $new_daily_arr);
+    foreach($diff_arr as $df) {
+      ItineraryDaily::find($df)->delete();
+    }
+
     $insert_string = '';
 
     $index = 0;
     foreach($budget as $key => $value) {
-
       if($index == 0) {
         $insert_string .= $key.'-'.$value;
       }
@@ -554,7 +582,7 @@ class ItineraryController extends Controller
           $itinerary_template->group_id = $group_id;
           $itinerary_template->title = $template_title;
           $itinerary_template->product_id = intval($data[$i][$j]['product_id']);
-          $itinerary_template->product_price_id = intval($data[$i][$j]['product_price_id']);
+          // $itinerary_template->product_price_id = intval($data[$i][$j]['product_price_id']);
           $itinerary_template->date_num = ($i+1);
           $itinerary_template->start_time = $data[$i][$j]['start_time'];
           $itinerary_template->end_time = $data[$i][$j]['end_time'];
@@ -581,7 +609,6 @@ class ItineraryController extends Controller
 
   public function get_product_pricing_and_tag(Request $request) {
     $product_id = $request->product_id;
-    $product_price_id = $request->product_price_id;
     $product_data = DB::table('product')
       ->select('product.*', 'product.country as country_title', 'product.city as city_title')
       ->where('product.id', $product_id)
@@ -596,24 +623,10 @@ class ItineraryController extends Controller
     $product_kind = Category::find($product_category)->parent_id;
     $product_tag = CategoryTag::where('parent_id', $product_kind)->get();
 
-    $product_price_arr = explode(':', $product_price_id);
-    // dd($product_price_arr);
-
-    $product_price_data = array();
-    for($i=0; $i<count($product_price_arr); $i++) {
-      $temp = DB::table('product_pricing')
-        ->select('product_pricing.*', 'currency.title as currency_title')
-        ->where('product_pricing.id', $product_price_arr[$i])
-        ->join('currency', 'currency.id', '=', 'product_pricing.currency')
-        ->get();
-      $temp = $temp[0];
-      array_push($product_price_data, $temp);
-    }
-
     $result = array(
       'product_data' => $product_data,
       'product_tag' => $product_tag,
-      'product_price_data' => $product_price_data
+      
     );
 
     echo json_encode($result);
@@ -689,7 +702,7 @@ class ItineraryController extends Controller
         $season_flag = 1;
         $price_id = $season_validation[$i]->id;
         $price_season = $season_validation[$i]->duration;
-        $price_product = $season_validation[$i]->price;
+        $price_amount = $season_validation[$i]->price;
         $price_currency = $season_validation[$i]->currency;
       }
     }
@@ -700,14 +713,13 @@ class ItineraryController extends Controller
       );
     }
     else {
-      $currency_label = Currency::find($price_currency)->title;
-
+      
       $result = array(
         'flag' => 'success',
         'price_id' => $price_id,
         'price_season' => $price_season,
-        'price_product' => $price_product,
-        'currency_label' => $currency_label
+        'price_amount' => $price_amount,
+        'price_currency' => $price_currency
       );
     }
 
@@ -804,7 +816,7 @@ class ItineraryController extends Controller
     $group_id = $request->group_id;
 
     $template_itinerary = DB::table('itinerary_template')
-      ->select('itinerary_template.date_num', 'itinerary_template.title as template_title', 'itinerary_template.product_id', 'itinerary_template.product_price_id', 'itinerary_template.start_time', 'itinerary_template.end_time', 'itinerary_template.adults_num', 'itinerary_template.children_num', 'product.title as product_title', 'product.country as country_title', 'product.city as city_title')
+      ->select('itinerary_template.date_num', 'itinerary_template.title as template_title', 'itinerary_template.product_id', 'itinerary_template.start_time', 'itinerary_template.end_time', 'itinerary_template.adults_num', 'itinerary_template.children_num', 'product.title as product_title', 'product.country as country_title', 'product.city as city_title')
       ->join('product', 'product.id', '=', 'itinerary_template.product_id')
       ->where('itinerary_template.group_id', $group_id)
       ->where('itinerary_template.created_by', Auth::user()->id)

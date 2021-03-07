@@ -4,11 +4,20 @@ var k = new Array;
 var index;
 var filter_flg = 0;
 var tag_option_html='';
+
+var currency_option_html = '<option value="0">Currency</option>';
+for(var j=0; j<currency.length; j++) {
+    currency_option_html += '<option value="'+ currency[j].id +'">'+ currency[j].title +'</option>';
+}
+
 var pick_date = 0;
 var pick_product_id = 0;
 var global_obj_id = '';
 var global_custom_product = '';
+
 var global_margin_price = 0;
+var global_itinerary_daily_id = 0;
+var global_time = '';
 
 var update_flag = 0;
 var update_key_index = 0;
@@ -22,7 +31,6 @@ $(document).ready(function() {
                 `<div class="product-list-class">` +
                 `<input type="hidden" name="product_id" id="product_id" value="${product[index].id}">` +
                 `<div class="product-list-left" onClick="product_detail(${product[index].id})">` +
-                    `<i class="bx bx-grid-vertical" style="font-size: 25px; margin: auto 0; cursor: move"></i>` +
                     `<img class="product-list-img" src="/`+ product[index].path +`"/>` +
                     `<div class="product-list-explain">`+
                     `<div class="product-list-title" id="product-list-title">` +
@@ -70,7 +78,6 @@ $(document).ready(function() {
                     `<div class="template-list-class">` +
                     `<input type="hidden" name="group_id" id="group_id" value="${template_itinerary_data[i].group_id}">` +
                     `<div class="template-list-left" onclick="preview_template_itinerary(${template_itinerary_data[i].group_id})">` +
-                        `<i class="bx bx-grid-vertical" style="font-size: 25px; margin: auto 0; cursor: move"></i>` +
                         `<img class="template-list-img" src="/${template_itinerary_data[i].path}"/>` +
                         `<div class="template-list-explain">`+
                         `<div class="template-list-title" id="template-list-title">` +
@@ -176,8 +183,15 @@ $(document).ready(function() {
                     var html_each = '<li class="product-list-each" id="daily-list-' + schedule_index + '-' + k[schedule_index] + '">' +
                                         '<div class="daily-products-class">' +
                                         '<input type="hidden" name="product_id" id="product_id" value="' + daily_schedule_data[dd][i].id +'">' +
+// new
+                                        '<input type="hidden" name="itinerary_daily_id" id="itinerary_daily_id" value="' + daily_schedule_data[dd][i].daily_id +'">' +
+                                        '<input type="hidden" name="product_price_tag" id="product_price_tag" value="' + daily_schedule_data[dd][i].product_price_tag +'">' +
+                                        '<input type="hidden" name="product_price_season" id="product_price_season" value="' + daily_schedule_data[dd][i].product_price_season +'">' +
+                                        '<input type="hidden" name="product_price_currency" id="product_price_currency" value="' + daily_schedule_data[dd][i].product_price_currency +'">' +
                                         '<input type="hidden" name="product_price_id" id="product_price_id" value="' + daily_schedule_data[dd][i].product_price_id +'">' +
+// new
                                         '<input type="hidden" name="product_margin_price" id="product_margin_price" value="' + daily_schedule_data[dd][i].itinerary_margin_price +'">' +
+                                        
                                         '<div class="daily-products-left">'+
                                             '<i class="bx bx-grid-vertical" style="font-size: 25px; margin: auto 0; cursor: move"></i>'+
                                             '<img class="daily-products-img" src="/'+ daily_schedule_data[dd][i].path +'"/>'+
@@ -185,15 +199,16 @@ $(document).ready(function() {
                                             '<div class="daily-products-title">'+
                                                 daily_schedule_data[dd][i].product_title + '<span class="daily-products-detail">('+ daily_schedule_data[dd][i].city +', ' +daily_schedule_data[dd][i].country +')</span>'+
                                             '</div>'+
-                                            '<div class="daily-proudcts-option">'+
+                                            '<div class="daily-products-option">'+
                                                 `<i class="bx bx-info-circle" style="color: rgb(210, 77, 83);padding-top: 2px;"></i> <span id="itinerary_price_margin_${schedule_index}_${k[schedule_index]}">Price Margin: ${daily_schedule_data[dd][i].itinerary_margin_price}(%)</span>`+
                                             '</div>'+
-                                            '<div class="daily-proudcts-option">'+
+                                            '<div class="daily-products-option">'+
                                                 `<i class="bx bx-time" style="color: rgb(210, 77, 83);padding-top: 2px;"></i> <span id="product_time_${schedule_index}_${k[schedule_index]}">${daily_schedule_data[dd][i].start_time}~${daily_schedule_data[dd][i].end_time}</span>&nbsp;&nbsp;`+
                                                 `<i class="bx bx-group" style="color: rgb(210, 77, 83);padding-top: 2px;"></i> <span id="product_travellers_${schedule_index}_${k[schedule_index]}">${daily_schedule_data[dd][i].adults_num}&nbsp;adults-${daily_schedule_data[dd][i].children_num}&nbsp;children</span>`+
                                             '</div>'+
                                             '</div>'+
                                         '</div>'+
+
                                         '<div class="daily-products-right">'+
                                             '<div class="dropdown">'+
                                             '<span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"'+
@@ -202,7 +217,9 @@ $(document).ready(function() {
                                                 `<a class="dropdown-item dropdown-edit-time" href="javascript:void(0)" onClick="add_task(${daily_schedule_data[dd][i].daily_id})"><i class="bx bx-edit-alt mr-1"></i> Add Task </a>`+
                                                 `<a class="dropdown-item dropdown-edit-time" href="javascript:void(0)" onClick="edit_product_time(${schedule_index}, ${k[schedule_index]})"><i class="bx bx-edit-alt mr-1"></i> Edit Time</a>`+
                                                 `<a class="dropdown-item dropdown-edit-travellers" href="javascript:void(0)" onClick="edit_product_travellers(${schedule_index}, ${k[schedule_index]})"><i class="bx bx-edit-alt mr-1"></i> Travellers</a>`+
-                                                `<a class="dropdown-item dropdown-edit-price" href="javascript:void(0)" onClick="edit_product_price(${schedule_index}, ${k[schedule_index]}, '${daily_schedule_data[dd][i].product_price_id}', ${daily_schedule_data[dd][i].itinerary_margin_price})"><i class="bx bx-edit-alt mr-1"></i> Edit Price</a>`+
+// new
+                                                `<a class="dropdown-item dropdown-edit-price" href="javascript:void(0)" onClick="edit_product_price(${schedule_index}, ${k[schedule_index]}, ${daily_schedule_data[dd][i].daily_id}, '${daily_schedule_data[dd][i].product_price_tag}', '${daily_schedule_data[dd][i].product_price_season}', '${daily_schedule_data[dd][i].product_price_currency}', '${daily_schedule_data[dd][i].product_price_id}', ${daily_schedule_data[dd][i].itinerary_margin_price})"><i class="bx bx-edit-alt mr-1"></i> Edit Price</a>`+
+// bew
                                                 `<a class="dropdown-item dropdown-edit-margin" href="javascript:void(0)" onClick="edit_margin_price(${schedule_index}, ${k[schedule_index]}, ${daily_schedule_data[dd][i].itinerary_margin_price})"><i class="bx bx-edit-alt mr-1"></i> Edit Margin</a>`+
                                                 '<a class="dropdown-item dropdown-del-product" href="javascript:void(0)" onClick="daily_product_del(' + schedule_index + ',' + k[schedule_index] +')"><i class="bx bx-trash mr-1"></i> delete</a>'+
                                             '</div>'+
@@ -215,6 +232,7 @@ $(document).ready(function() {
                     str_tmp += html_each;
                 }
             }
+
             str_tmp += '</ul>';
             $("#each-day-products-" + schedule_index).prepend(str_tmp);
             var obj_id = schedule_index;
@@ -270,6 +288,7 @@ $(document).ready(function() {
                     length = `product_time_${obj_id}_`.length;
                     substr = str[obj_id][i].substring(str_index + length, str_index_temp);
                     str[obj_id][i] = str[obj_id][i].replace(`product_time_${obj_id}_${substr}`,`product_time_${obj_id}_${i}`);
+                    /////////////
 
                     str_index = str[obj_id][i].indexOf(`product_travellers_${obj_id}_`);
                     str_index_temp = str_index;
@@ -282,6 +301,7 @@ $(document).ready(function() {
                     length = `product_travellers_${obj_id}_`.length;
                     substr = str[obj_id][i].substring(str_index + length, str_index_temp);
                     str[obj_id][i] = str[obj_id][i].replace(`product_travellers_${obj_id}_${substr}`,`product_travellers_${obj_id}_${i}`);
+                    /////////////
 
                     str_index = str[obj_id][i].indexOf(`edit_product_time(${obj_id}, `);
                     str_index_temp = str_index;
@@ -294,6 +314,7 @@ $(document).ready(function() {
                     length = `edit_product_time(${obj_id}, `.length;
                     substr = str[obj_id][i].substring(str_index + length, str_index_temp);
                     str[obj_id][i] = str[obj_id][i].replace(`edit_product_time(${obj_id}, ${substr})`,`edit_product_time(${obj_id}, ${i})`);
+                    /////////////
 
                     str_index = str[obj_id][i].indexOf(`edit_product_travellers(${obj_id}, `);
                     str_index_temp = str_index;
@@ -306,6 +327,7 @@ $(document).ready(function() {
                     length = `edit_product_travellers(${obj_id}, `.length;
                     substr = str[obj_id][i].substring(str_index + length, str_index_temp);
                     str[obj_id][i] = str[obj_id][i].replace(`edit_product_travellers(${obj_id}, ${substr})`,`edit_product_travellers(${obj_id}, ${i})`);
+                    //////////////
 
 
                     str_index = str[obj_id][i].indexOf(`edit_product_price(${obj_id}, `);
@@ -319,8 +341,10 @@ $(document).ready(function() {
                     length = `edit_product_price(${obj_id}, `.length;
                     substr = str[obj_id][i].substring(str_index + length, str_index_temp);
                     var substr_arr = substr.split(", ");
-                    str[obj_id][i] = str[obj_id][i].replace(`edit_product_price(${obj_id}, ${substr})`, `edit_product_price(${obj_id}, ${i}, ${substr_arr[1]}, ${substr_arr[2]})`);
-
+// new
+                    str[obj_id][i] = str[obj_id][i].replace(`edit_product_price(${obj_id}, ${substr})`, `edit_product_price(${obj_id}, ${i}, ${substr_arr[1]}, ${substr_arr[2]}, ${substr_arr[3]}, ${substr_arr[4]}, ${substr_arr[5]}, ${substr_arr[6]})`);
+// new
+                    ////////////
 
                     str_index = str[obj_id][i].indexOf(`edit_margin_price(${obj_id}, `);
                     str_index_temp = str_index;
@@ -335,7 +359,7 @@ $(document).ready(function() {
                     var substr_arr = substr.split(", ");
                     console.log(substr_arr);
                     str[obj_id][i] = str[obj_id][i].replace(`edit_margin_price(${obj_id}, ${substr})`, `edit_margin_price(${obj_id}, ${i}, ${substr_arr[1]})`);
-
+                    ////////////
 
                     str_index = str[obj_id][i].indexOf(`daily_product_del(${obj_id},`);
                     str_index_temp = str_index;
@@ -348,6 +372,7 @@ $(document).ready(function() {
                     length = `daily_product_del(${obj_id},`.length;
                     substr = str[obj_id][i].substring(str_index + length, str_index_temp);
                     str[obj_id][i] = str[obj_id][i].replace(`daily_product_del(${obj_id},${substr})`,`daily_product_del(${obj_id},${i})`);
+                    /////////////
 
                     temp_string += str[obj_id][i];
                 }
@@ -386,7 +411,6 @@ $('#search_product').keypress(function(event){
                                         `<div class="product-list-class">` +
                                         `<input type="hidden" name="product_id" id="product_id" value="${temp_product[index].id}">` +
                                         `<div class="product-list-left" onClick="product_detail(${temp_product[index].id})">` +
-                                            `<i class="bx bx-grid-vertical" style="font-size: 25px; margin: auto 0; cursor: move"></i>` +
                                             `<img class="product-list-img" src="/${images[index].path}"/>` +
                                             `<div class="product-list-explain">`+
                                             `<div class="product-list-title" id="product-list-title">` +
@@ -457,10 +481,9 @@ $('#search_template_itinerary').keypress(function(event){
                                     `<div class="template-list-class">` +
                                     `<input type="hidden" name="group_id" id="group_id" value="${template_itinerary[i].group_id}">` +
                                     `<div class="template-list-left" onclick="preview_template_itinerary(${template_itinerary[i].group_id})">` +
-                                        `<i class="bx bx-grid-vertical" style="font-size: 25px; margin: auto 0; cursor: move"></i>` +
                                         `<img class="template-list-img" src="/${template_itinerary[i].path}"/>` +
                                         `<div class="template-list-explain">`+
-                                        `<div class="tempalte-list-title" id="template-list-title">` +
+                                        `<div class="template-list-title" id="template-list-title">` +
                                         template_itinerary[i].title +
                                         `</div>` +
                                         `</div>` +
@@ -501,8 +524,6 @@ $('#search_template_itinerary').keypress(function(event){
     }
 });
 
-
-
 function filter_change(){
     var flg_accommodation = $('#check_accommodation').is(':checked');
     var flg_transport = $('#check_transport').is(':checked');
@@ -539,7 +560,6 @@ function filter_change(){
                                     `<div class="product-list-class">` +
                                     `<input type="hidden" name="product_id" id="product_id" value="${temp_product[index].id}">` +
                                     `<div class="product-list-left" onClick="product_detail(${temp_product[index].id})">` +
-                                        `<i class="bx bx-grid-vertical" style="font-size: 25px; margin: auto 0; cursor: move"></i>` +
                                         `<img class="product-list-img" src="/${images[index].path}"/>` +
                                         `<div class="product-list-explain">`+
                                         `<div class="product-list-title" id="product-list-title">` +
@@ -594,6 +614,7 @@ function filter_change(){
         }
     });
 }
+
 $('#filter_button').click(function() {
     filter_flg = filter_flg ? 0 : 1;
     if(filter_flg) {
@@ -612,6 +633,7 @@ $('#filter_button').click(function() {
 
 function daily_product_del(obj_id, list_id){
     var index_i = 0;
+    
     jQuery('.product-list-each').each(function(index, customElement) {
         var str_id = customElement.id;
         var str_id_arr = str_id.split('-');
@@ -622,8 +644,10 @@ function daily_product_del(obj_id, list_id){
             index_i ++;
         }
     });
+
     str[obj_id].splice(list_id, 1);
     k[obj_id] --;
+
     for(index = 0; index < k[obj_id]; index ++){
         var substr_search = `daily-list-${obj_id}-`;
         var substr_index = str[obj_id][index].indexOf(substr_search);
@@ -662,6 +686,7 @@ function daily_product_del(obj_id, list_id){
         }
         substr = str[obj_id][index].substring(substr_index, temp_substr_index);
         str[obj_id][index] = str[obj_id][index].replace(`product_time_${obj_id}_${substr}`, `product_time_${obj_id}_${index}`);
+        /////////////
 
         substr_search = `product_travellers_${obj_id}_`;
         substr_index = str[obj_id][index].indexOf(substr_search);
@@ -674,30 +699,64 @@ function daily_product_del(obj_id, list_id){
         }
         substr = str[obj_id][index].substring(substr_index, temp_substr_index);
         str[obj_id][index] = str[obj_id][index].replace(`product_travellers_${obj_id}_${substr}`, `product_travellers_${obj_id}_${index}`);
+        /////////////
 
         substr_search = `edit_product_time(${obj_id}, `;
         substr_index = str[obj_id][index].indexOf(substr_search);
         substr_index += substr_search.length;
         temp_substr_index = substr_index;
         while(true){
-            if(str[obj_id][index][temp_substr_index] == '"')
+            if(str[obj_id][index][temp_substr_index] == ')')
                 break;
             temp_substr_index ++;
         }
         substr = str[obj_id][index].substring(substr_index, temp_substr_index);
         str[obj_id][index] = str[obj_id][index].replace(`edit_product_time(${obj_id}, ${substr}`, `edit_product_time(${obj_id}, ${index})`);
+        /////////////
 
         substr_search = `edit_product_travellers(${obj_id}, `;
         substr_index = str[obj_id][index].indexOf(substr_search);
         substr_index += substr_search.length;
         temp_substr_index = substr_index;
         while(true){
-            if(str[obj_id][index][temp_substr_index] == '"')
+            if(str[obj_id][index][temp_substr_index] == ')')
                 break;
             temp_substr_index ++;
         }
         substr = str[obj_id][index].substring(substr_index, temp_substr_index);
         str[obj_id][index] = str[obj_id][index].replace(`edit_product_travellers(${obj_id}, ${substr}`, `edit_product_travellers(${obj_id}, ${index})`);
+        /////////////
+        
+        substr_search = `edit_product_price(${obj_id}, `;
+        substr_index = str[obj_id][index].indexOf(substr_search);
+        substr_index += substr_search.length;
+        temp_substr_index = substr_index;
+        while(true)
+        {
+            if(str[obj_id][index][temp_substr_index] == ')')///////////////
+                break;
+            temp_substr_index ++;
+        }
+        substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+        var substr_arr = substr.split(", ");
+// new
+        str[obj_id][index] = str[obj_id][index].replace(`edit_product_price(${obj_id}, ${substr})`, `edit_product_price(${obj_id}, ${index}, ${substr_arr[1]}, ${substr_arr[2]}, ${substr_arr[3]}, ${substr_arr[4]}, ${substr_arr[5]})`);
+// new
+        /////////////
+
+        substr_search = `edit_margin_price(${obj_id}, `;
+        substr_index = str[obj_id][index].indexOf(substr_search);
+        substr_index += substr_search.length;
+        while(true)
+        {
+            if(str[obj_id][index][temp_substr_index] == ')')
+                break;
+            temp_substr_index ++;
+        }
+        substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+        var substr_arr = substr.split(", ");
+        str[obj_id][index] = str[obj_id][index].replace(`edit_margin_price(${obj_id}, ${substr})`, `edit_margin_price(${obj_id}, ${index}, ${substr_arr[1]})`);
+        ///////////////
 
         substr_search = `daily_product_del(${obj_id},`;
         substr_index = str[obj_id][index].indexOf(substr_search);
@@ -710,6 +769,7 @@ function daily_product_del(obj_id, list_id){
         }
         substr = str[obj_id][index].substring(substr_index, temp_substr_index);
         str[obj_id][index] = str[obj_id][index].replace(`daily_product_del(${obj_id},${substr}`, `daily_product_del(${obj_id},${index})`);
+        ////////////////
     }
 
     $(`#daily-schedule-id-${obj_id}`).empty();
@@ -985,6 +1045,59 @@ $('#itinerary_save').click(function(){
             }
             substr = str[i][j].substring(substr_index, temp_substr_index);
             var product_id = substr;
+            ///////////
+
+            var substr_search = `"itinerary_daily_id" value="`;
+            var substr_index = str[i][j].indexOf(substr_search);
+            substr_index += substr_search.length;
+            var temp_substr_index = substr_index;
+            while(true){
+                if(str[i][j][temp_substr_index] == '"')
+                    break;
+                temp_substr_index ++;
+            }
+            substr = str[i][j].substring(substr_index, temp_substr_index);
+            var itinerary_daily_id = substr;
+            ///////////
+
+            var substr_search = `"product_price_tag" value="`;
+            var substr_index = str[i][j].indexOf(substr_search);
+            substr_index += substr_search.length;
+            var temp_substr_index = substr_index;
+            while(true){
+                if(str[i][j][temp_substr_index] == '"')
+                    break;
+                temp_substr_index ++;
+            }
+            substr = str[i][j].substring(substr_index, temp_substr_index);
+            var product_price_tag = substr;
+            ////////////
+
+            var substr_search = `"product_price_season" value="`;
+            var substr_index = str[i][j].indexOf(substr_search);
+            substr_index += substr_search.length;
+            var temp_substr_index = substr_index;
+            while(true){
+                if(str[i][j][temp_substr_index] == '"')
+                    break;
+                temp_substr_index ++;
+            }
+            substr = str[i][j].substring(substr_index, temp_substr_index);
+            var product_price_season = substr;
+            ////////////
+
+            var substr_search = `"product_price_currency" value="`;
+            var substr_index = str[i][j].indexOf(substr_search);
+            substr_index += substr_search.length;
+            var temp_substr_index = substr_index;
+            while(true){
+                if(str[i][j][temp_substr_index] == '"')
+                    break;
+                temp_substr_index ++;
+            }
+            substr = str[i][j].substring(substr_index, temp_substr_index);
+            var product_price_currency = substr;
+            ////////////
 
             var substr_search = `"product_price_id" value="`;
             var substr_index = str[i][j].indexOf(substr_search);
@@ -997,6 +1110,7 @@ $('#itinerary_save').click(function(){
             }
             substr = str[i][j].substring(substr_index, temp_substr_index);
             var product_price_id = substr;
+            ////////////
 
             var substr_search = `"product_margin_price" value="`;
             var substr_index = str[i][j].indexOf(substr_search);
@@ -1009,6 +1123,7 @@ $('#itinerary_save').click(function(){
             }
             substr = str[i][j].substring(substr_index, temp_substr_index);
             var itinerary_margin_price = substr;
+            ////////////
 
             substr_search = `product_time_${i}_${j}">`;
             substr_index = str[i][j].indexOf(substr_search);
@@ -1023,6 +1138,7 @@ $('#itinerary_save').click(function(){
             substr = substr.split("~");
             var start_time = substr[0];
             var end_time = substr[1];
+            /////////////
 
             substr_search = `product_travellers_${i}_${j}">`;
             substr_index = str[i][j].indexOf(substr_search);
@@ -1035,6 +1151,7 @@ $('#itinerary_save').click(function(){
             }
             substr = str[i][j].substring(substr_index, temp_substr_index);
             var adults_num = substr;
+            ////////////
 
             substr_search = `product_travellers_${i}_${j}">${substr}&nbsp;adults-`;
             substr_index = str[i][j].indexOf(substr_search);
@@ -1050,6 +1167,7 @@ $('#itinerary_save').click(function(){
             var year = from_my_date.getFullYear();
             var month = from_my_date.getMonth() + 1;
             var day = from_my_date.getDate();
+            /////////////
 
             if(month.length < 2)
                 month = '0' + month;
@@ -1059,6 +1177,10 @@ $('#itinerary_save').click(function(){
 
             data[i][j] = {
                 product_id: product_id,
+                itinerary_daily_id: itinerary_daily_id,
+                product_price_tag: product_price_tag,
+                product_price_season: product_price_season,
+                product_price_currency: product_price_currency,
                 product_price_id: product_price_id,
                 itinerary_margin_price: itinerary_margin_price,
                 start_time: start_time,
@@ -1083,9 +1205,8 @@ $('#itinerary_save').click(function(){
         },
         success: function(data){
            if(data.result == 'success') {
-              url = "/itinerary_add_info/" + data.itinerary_id + "/" + "1";
-               window.location.href = url;
-              //  document.location.href = base_url + '/complete_itinerary/'+data.itinerary_id;
+                url = "/itinerary_add_info/" + data.itinerary_id + "/" + "1";
+                window.location.href = url;
            }
         }
     });
@@ -1115,18 +1236,6 @@ function save_template_itinerary() {
             substr = str[i][j].substring(substr_index, temp_substr_index);
             var product_id = substr;
 
-            var substr_search = `"product_price_id" value="`;
-            var substr_index = str[i][j].indexOf(substr_search);
-            substr_index += substr_search.length;
-            var temp_substr_index = substr_index;
-            while(true){
-                if(str[i][j][temp_substr_index] == '"')
-                    break;
-                temp_substr_index ++;
-            }
-            substr = str[i][j].substring(substr_index, temp_substr_index);
-            var product_price_id = substr;
-
             substr_search = `product_time_${i}_${j}">`;
             substr_index = str[i][j].indexOf(substr_search);
             substr_index += substr_search.length;
@@ -1167,7 +1276,6 @@ function save_template_itinerary() {
 
             data[i][j] = {
                 product_id: product_id,
-                product_price_id: product_price_id,
                 start_time: start_time,
                 end_time: end_time,
                 adults_num: adults_num,
@@ -1212,168 +1320,6 @@ function edit_product_time(obj_id, list_id) {
     $('#product-time-modal').modal();
     $('.pickatime').pickatime();
     $('.picker__holder').css({'position' : "fixed"});
-}
-
-function add_task(daily_id) {
-  console.log(daily_id);
-  var str_assign_by = '<option value="">--- Please select ---</option>'
-  service_id = daily_id;
-  itinerary_id = $('#itinerary_id').val();
-  $.ajax({
-    url: '/task_product_detail',
-    method: 'get',
-    data: {
-      service_id: service_id,
-      itinerary_id: itinerary_id,
-    },
-    dataType: 'JSON',
-    success: function(data){
-      icon_array = [];
-      icon_array = ['bx bx-phone', 'bx bxs-user-voice', 'bx bx-timer', 'bx bx-mail-send'];
-      if(data['result'] == 'success') {
-
-          $('#service_id').val(service_id);
-          console.log(data);
-          var task_type_str = "";
-          for(var i = 0; i < data.task_type.length; i++)
-          {
-            task_type_str += '<li class="nav-item"><a class=" nav-link" style="text-align: center;" d="category-tab" data-toggle="tab" href="javascript:void(0)" aria-controls="category"  role="tab" aria-selected="true" onclick="select_task(' + data.task_type[i]['id'] + ')"><i class="'+ icon_array[i] + '" ></i><br>' + data.task_type[i]["title"] + '</a></li>'
-
-          }
-          $('#task_type_ul').empty();
-          $('#task_type_ul').append(task_type_str);
-
-
-          current_account_str = data.current_account.first_name + ' ' + data.current_account.last_name + ', ' + data.current_account.main_email + ', ' + data.current_account.title;
-          $('#assign_by').val(current_account_str);
-          $('#assign_to').empty();
-          $('#assign_to').append(str_assign_by);
-          var accounts = data.account;
-          for(index = 0; index < accounts.length; index ++)
-          {
-            str_assign_by= '<option value = "' + accounts[index].user_id + '">' + accounts[index].first_name + ' ' + accounts[index].last_name + ', ' + accounts[index].main_email + ', ' + accounts[index].title + '</option>';
-
-              $('#assign_to').append(str_assign_by);
-          }
-          $('#itinerary_ref_num').val(data.itinerary_ref_num);
-          $('#product_title').val(data.product_title);
-      }
-    }
-  });
-
-  $('#task_detail_modal').modal();
-  $('.pickatime').pickatime();
-  $('.picker__holder').css({'position' : "fixed"});
-}
-function select_task(type_id)
-{
-  console.log(type_id);
-  $('#task_type').val(type_id);
-}
-function save_task(){
-  //task section
-  var service_id = $('#service_id').val();
-  var task_data = {};
-  var itinerary_id = $('#itinerary_id').val();
-  var task_name = $('#task_name').val();
-  var from_date = $('#from_date').val();
-  var start_time =$('#start_time').val();
-  var end_date = $('#end_date').val();
-  var end_time =$('#end_time').val();
-  var priority = $('input[name="radioPriority"]:checked').val();
-  var status = $('input[name="radioStatus"]:checked').val();
-  var assign_to = $('#assign_to').val();
-  var note_value = CKEDITOR.instances.note.getData();
-  var task_type = $('#task_type').val();
-  task_data['itinerary_id'] = itinerary_id;
-  task_data['service_id'] = service_id;
-  task_data['task_name'] = task_name;
-  task_data['start_date'] = from_date;
-  task_data['start_time'] = start_time;
-  task_data['end_date'] = end_date;
-  task_data['end_time'] = end_time;
-  task_data['priority'] = priority;
-  task_data['status'] = status;
-  task_data['assigned_to'] = assign_to;
-  task_data['task_des'] = note_value;
-  task_data['task_type'] = task_type;
-  task_data['reference_number'] = $('#itinerary_ref_num').val();
-  task_data['customer'] = 0;
-  task_data['tags'] = "aa";
-
-  if(task_type=="")
-  {
-    toastr.warning('Please select the Task Type now!', 'warning', {'closeButton': true, timeOut: 2000});
-
-  }
-  else if(task_name=="")
-  {
-    toastr.warning('The Task Name is empty! Please fill that!', 'warning', {'closeButton': true, timeOut: 2000});
-
-  }
-  else if(start_time=="")
-  {
-    toastr.warning('The Start Time is empty! Please fill that!', 'warning', {'closeButton': true, timeOut: 2000});
-
-  }
-  else if(end_time=="")
-  {
-    toastr.warning('The End Time is empty! Please fill that!', 'warning', {'closeButton': true, timeOut: 2000});
-
-  }
-  else if(assign_to=="")
-  {
-    toastr.warning('The Assign To is empty! Please fill that!', 'warning', {'closeButton': true, timeOut: 2000});
-
-  }
-  else if(note_value=="")
-  {
-    toastr.warning('The Description is empty! Please fill that!', 'warning', {'closeButton': true, timeOut: 2000});
-
-  }
-  else
-  {
-    var start_date = from_date.split("/");
-    var date1 = new Date( start_date[2], start_date[0] - 1, start_date[1]);
-
-    end_date = end_date.split("/");
-    var date2 = new Date(end_date[2], end_date[0] - 1, end_date[1]);
-
-    var delta = date2.getTime() - date1.getTime();
-
-    if(delta < 0)
-    {
-      toastr.warning('The end date must be greater than start date!', 'warning', {'closeButton': true, timeOut: 2000});
-    }
-    else {
-      $.ajax({
-        url: base_url + '/save_product_task',
-        method: 'get',
-        data: {
-          _token: $("[name='_token']").val(),
-          task_data: task_data,
-          service_id: service_id,
-        },
-        dataType: "JSON",
-        success: function(data){
-          if(data.result == 'success') {
-            console.log(data);
-
-            toastr.success('Saved New Task Successfully!', 'Success', {'closeButton': true, timeOut: 2000});
-
-            $('#task_detail_modal').modal('hide');
-            //location.reload();
-          }
-          else if(data.result == 'error')
-          {
-            toastr.warning('The task already exist!', 'warning', {'closeButton': true, timeOut: 2000});
-          }
-
-        }
-      });
-    }
-
-  }
 }
 
 function set_product_time() {
@@ -1549,6 +1495,170 @@ function set_price_margin() {
     str[obj_id][list_id] = str_temp;
 }
 
+function add_task(daily_id) {
+    console.log(daily_id);
+    var str_assign_by = '<option value="">--- Please select ---</option>'
+    service_id = daily_id;
+    itinerary_id = $('#itinerary_id').val();
+    $.ajax({
+      url: '/task_product_detail',
+      method: 'get',
+      data: {
+        service_id: service_id,
+        itinerary_id: itinerary_id,
+      },
+      dataType: 'JSON',
+      success: function(data){
+        icon_array = [];
+        icon_array = ['bx bx-phone', 'bx bxs-user-voice', 'bx bx-timer', 'bx bx-mail-send'];
+        if(data['result'] == 'success') {
+  
+            $('#service_id').val(service_id);
+            console.log(data);
+            var task_type_str = "";
+            for(var i = 0; i < data.task_type.length; i++)
+            {
+              task_type_str += '<li class="nav-item"><a class=" nav-link" style="text-align: center;" d="category-tab" data-toggle="tab" href="javascript:void(0)" aria-controls="category"  role="tab" aria-selected="true" onclick="select_task(' + data.task_type[i]['id'] + ')"><i class="'+ icon_array[i] + '" ></i><br>' + data.task_type[i]["title"] + '</a></li>'
+  
+            }
+            $('#task_type_ul').empty();
+            $('#task_type_ul').append(task_type_str);
+  
+  
+            current_account_str = data.current_account.first_name + ' ' + data.current_account.last_name + ', ' + data.current_account.main_email + ', ' + data.current_account.title;
+            $('#assign_by').val(current_account_str);
+            $('#assign_to').empty();
+            $('#assign_to').append(str_assign_by);
+            var accounts = data.account;
+            for(index = 0; index < accounts.length; index ++)
+            {
+              str_assign_by= '<option value = "' + accounts[index].user_id + '">' + accounts[index].first_name + ' ' + accounts[index].last_name + ', ' + accounts[index].main_email + ', ' + accounts[index].title + '</option>';
+  
+                $('#assign_to').append(str_assign_by);
+            }
+            $('#itinerary_ref_num').val(data.itinerary_ref_num);
+            $('#product_title').val(data.product_title);
+        }
+      }
+    });
+  
+    $('#task_detail_modal').modal();
+    $('.pickatime').pickatime();
+    $('.picker__holder').css({'position' : "fixed"});
+}
+
+function select_task(type_id)
+{
+console.log(type_id);
+$('#task_type').val(type_id);
+}
+
+function save_task(){
+//task section
+var service_id = $('#service_id').val();
+var task_data = {};
+var itinerary_id = $('#itinerary_id').val();
+var task_name = $('#task_name').val();
+var from_date = $('#from_date').val();
+var start_time =$('#start_time').val();
+var end_date = $('#end_date').val();
+var end_time =$('#end_time').val();
+var priority = $('input[name="radioPriority"]:checked').val();
+var status = $('input[name="radioStatus"]:checked').val();
+var assign_to = $('#assign_to').val();
+var note_value = CKEDITOR.instances.note.getData();
+var task_type = $('#task_type').val();
+task_data['itinerary_id'] = itinerary_id;
+task_data['service_id'] = service_id;
+task_data['task_name'] = task_name;
+task_data['start_date'] = from_date;
+task_data['start_time'] = start_time;
+task_data['end_date'] = end_date;
+task_data['end_time'] = end_time;
+task_data['priority'] = priority;
+task_data['status'] = status;
+task_data['assigned_to'] = assign_to;
+task_data['task_des'] = note_value;
+task_data['task_type'] = task_type;
+task_data['reference_number'] = $('#itinerary_ref_num').val();
+task_data['customer'] = 0;
+task_data['tags'] = "aa";
+
+if(task_type=="")
+{
+    toastr.warning('Please select the Task Type now!', 'warning', {'closeButton': true, timeOut: 2000});
+
+}
+else if(task_name=="")
+{
+    toastr.warning('The Task Name is empty! Please fill that!', 'warning', {'closeButton': true, timeOut: 2000});
+
+}
+else if(start_time=="")
+{
+    toastr.warning('The Start Time is empty! Please fill that!', 'warning', {'closeButton': true, timeOut: 2000});
+
+}
+else if(end_time=="")
+{
+    toastr.warning('The End Time is empty! Please fill that!', 'warning', {'closeButton': true, timeOut: 2000});
+
+}
+else if(assign_to=="")
+{
+    toastr.warning('The Assign To is empty! Please fill that!', 'warning', {'closeButton': true, timeOut: 2000});
+
+}
+else if(note_value=="")
+{
+    toastr.warning('The Description is empty! Please fill that!', 'warning', {'closeButton': true, timeOut: 2000});
+
+}
+else
+{
+    var start_date = from_date.split("/");
+    var date1 = new Date( start_date[2], start_date[0] - 1, start_date[1]);
+
+    end_date = end_date.split("/");
+    var date2 = new Date(end_date[2], end_date[0] - 1, end_date[1]);
+
+    var delta = date2.getTime() - date1.getTime();
+
+    if(delta < 0)
+    {
+    toastr.warning('The end date must be greater than start date!', 'warning', {'closeButton': true, timeOut: 2000});
+    }
+    else {
+    $.ajax({
+        url: base_url + '/save_product_task',
+        method: 'get',
+        data: {
+        _token: $("[name='_token']").val(),
+        task_data: task_data,
+        service_id: service_id,
+        },
+        dataType: "JSON",
+        success: function(data){
+        if(data.result == 'success') {
+            console.log(data);
+
+            toastr.success('Saved New Task Successfully!', 'Success', {'closeButton': true, timeOut: 2000});
+
+            $('#task_detail_modal').modal('hide');
+            //location.reload();
+        }
+        else if(data.result == 'error')
+        {
+            toastr.warning('The task already exist!', 'warning', {'closeButton': true, timeOut: 2000});
+        }
+
+        }
+    });
+    }
+
+}
+}
+
 function day_selection_change() {
     var selected_day_id = $('#day_select').val();
     if(selected_day_id == 0){
@@ -1580,7 +1690,9 @@ function check_valid(index) {
 
 function save_pricing_item(index, pick_product_id, pick_date) {
     var flag = $("#pricing_item_save_" + index).data('category');
-    var category_tag = $("#product_pricing_tag_" + index).val();
+    var category_tag = $("#pricing_tag_" + index).val();
+    console.log(index);
+    console.log(category_tag);
     if(flag != 0) {
         toastr.warning('Already assigned item, Please Modify the Categoroy', 'Warnning', { "closeButton": true });
     }
@@ -1609,17 +1721,14 @@ function save_pricing_item(index, pick_product_id, pick_date) {
                 }
                 else if(response.flag == 'success') {
 
-                    var price_id = response.price_id;
                     var price_season = response.price_season;
-                    var price_product = response.price_product;
-                    var currency_label = response.currency_label;
+                    var price_amount = response.price_amount;
+                    var price_currency = response.price_currency;
 
-                    var price_label = price_product + '(' +currency_label + ')';
-
-                    $("#pricing_id_" + index).val(price_id);
                     $("#pricing_season_" + index).text('season: ' + price_season);
-                    $("#pricing_product_" + index).text('Price: ' + price_label);
-
+                    $("#pricing_product_" + index).val(price_amount);
+                    $("#pricing_currency_" + index).val(price_currency);
+                    
                     $("#pricing_item_save_" + index).html('<i class="bx bx-check"></i>');
                     $("#pricing_item_save_" + index).data('category', category_tag);
                 }
@@ -1645,20 +1754,29 @@ function new_product_pricing() {
         index = parseInt(index) + 1;
     }
 
+    console.log(currency_option_html);
+
     var pricing_content_html = '<div class="row" id="product_pricing_item_'+ index +'">'+
             '<input type="hidden" id="pricing_id_'+ index+'">'+
             '<div class="col-md-3">'+
                 '<fieldset class="form-group">'+
-                    '<select id="product_pricing_tag_'+ index +'" class="form-control" onchange="check_valid('+ index +')">' + tag_option_html + '</select>'+
+                    '<select id="pricing_tag_'+ index +'" class="form-control" onchange="check_valid('+ index +')">' + tag_option_html + '</select>'+
                 '</fieldset>'+
             '</div>'+
             '<div class="col-md-3">'+
-                '<div id="pricing_season_'+ index +'"></div>'+
+                '<div id="pricing_season_'+ index +'" style="margin-top:7px;"></div>'+
             '</div>'+
-            '<div class="col-md-3">'+
-                '<div id="pricing_product_'+ index +'"></div>'+
+            '<div class="col-md-2">'+
+                '<fieldset class="form-group">'+
+                    '<select id="pricing_currency_'+ index +'" class="form-control">' + currency_option_html + '</select>'+
+                '</fieldset>'+
             '</div>'+
-            '<div class="col-md-3">'+
+            '<div class="col-md-2">'+
+                '<fieldset class="form-group">'+
+                    '<input type="text" class="form-control" id="pricing_product_'+ index +'" value="">'+
+                '</fieldset>'+
+            '</div>'+
+            '<div class="col-md-2">'+
                 '<div class="d-flex align-item-center justify-content-between">'+
                     '<button type="button" class="btn btn-icon rounded-circle btn-outline-primary" data-category="0" onclick="save_pricing_item('+ index +', '+ pick_product_id +', \''+ pick_date +'\')" id="pricing_item_save_'+ index +'">'+
                         '<i class="bx bx-save"></i>'+
@@ -1694,23 +1812,53 @@ function set_all_product_price() {
             toastr.warning("Please set exactly all Price with available category. Seams like to be non-seting items.", 'Warning', { "closeButton": true });
         }
         else {
-            var price_id_obj = $("[id ^= 'pricing_id_']");
-            var price_id = '';
+            var price_tag_obj = $("[id ^= 'pricing_tag_']");
+            var price_season_obj = $("[id ^= 'pricing_season_']");
+            var price_currency_obj = $("[id ^= 'pricing_currency_']");
+            var price_id_obj = $("[id ^= 'pricing_product_']");
+            
+
+            var product_price_id = '';
+            var product_price_tag = '';
+            var product_price_currency = '';
+            var product_price_season = '';
 
             for(var i=0; i<price_id_obj.length; i++) {
                 if(i == 0) {
-                    price_id += $(price_id_obj[i]).val();
+                    product_price_id += $(price_id_obj[i]).val();
+                    product_price_tag += $(price_tag_obj[i]).val();
+                    
+                    var temp_season = $(price_season_obj[i]).text();
+                    temp_season = temp_season.split(': ');
+                    product_price_season += temp_season[1];
+
+                    product_price_currency += $(price_currency_obj[i]).val();
                 }
                 else {
-                    price_id += ':'+$(price_id_obj[i]).val();
+                    product_price_id += ':'+$(price_id_obj[i]).val();
+                    product_price_tag += ':'+$(price_tag_obj[i]).val();
+                    
+                    var temp_season = $(price_season_obj[i]).text();
+                    temp_season = temp_season.split(': ');
+                    product_price_season += ':'+temp_season[1];
+
+                    product_price_currency += ':'+$(price_currency_obj[i]).val();
                 }
             }
+
+            console.log(global_time);
 
             if(update_flag == 0) {
                 var html_each = '<li class="product-list-each" id="daily-list-' + global_obj_id + '-' + k[global_obj_id] + '">' +
                                 '<div class="daily-products-class">' +
                                 '<input type="hidden" name="product_id" id="product_id" value="' + global_custom_product.id +'">' +
-                                '<input type="hidden" name="product_price_id" id="product_price_id" value="' + price_id +'">' +
+// new 
+                                '<input type="hidden" name="itinerary_daily_id" id="itinerary_daily_id" value="0">' +
+                                '<input type="hidden" name="product_price_tag" id="product_price_tag" value="' + product_price_tag +'">' +
+                                '<input type="hidden" name="product_price_season" id="product_price_season" value="' + product_price_season +'">' +
+                                '<input type="hidden" name="product_price_currency" id="product_price_currency" value="' + product_price_currency +'">' +
+                                '<input type="hidden" name="product_price_id" id="product_price_id" value="' + product_price_id +'">' +
+// new
                                 '<input type="hidden" name="product_margin_price" id="product_margin_price" value="0">' +
                                 '<div class="daily-products-left">'+
                                     '<i class="bx bx-grid-vertical" style="font-size: 25px; margin: auto 0; cursor: move"></i>'+
@@ -1733,10 +1881,11 @@ function set_all_product_price() {
                                     '<span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"'+
                                         'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu"></span>'+
                                     '<div class="dropdown-menu dropdown-menu-right">'+
-
                                         `<a class="dropdown-item dropdown-edit-time" href="javascript:void(0)" onClick="edit_product_time(${global_obj_id}, ${k[global_obj_id]})"><i class="bx bx-edit-alt mr-1"></i> Edit Time</a>`+
                                         `<a class="dropdown-item dropdown-edit-travellers" href="javascript:void(0)" onClick="edit_product_travellers(${global_obj_id}, ${k[global_obj_id]})"><i class="bx bx-edit-alt mr-1"></i> Travellers</a>`+
-                                        `<a class="dropdown-item dropdown-edit-price" href="javascript:void(0)" onClick="edit_product_price(${global_obj_id}, ${k[global_obj_id]}, '${price_id}', 0)"><i class="bx bx-edit-alt mr-1"></i> Edit Price</a>`+
+// new
+                                        `<a class="dropdown-item dropdown-edit-price" href="javascript:void(0)" onClick="edit_product_price(${global_obj_id}, ${k[global_obj_id]}, 0, '${product_price_tag}', '${product_price_season}', '${product_price_currency}', '${product_price_id}', 0)"><i class="bx bx-edit-alt mr-1"></i> Edit Price</a>`+
+// new
                                         `<a class="dropdown-item dropdown-edit-margin" href="javascript:void(0)" onClick="edit_margin_price(${global_obj_id}, ${k[global_obj_id]}, 0)"><i class="bx bx-edit-alt mr-1"></i> Edit Margin</a>`+
                                         '<a class="dropdown-item dropdown-del-product" href="javascript:void(0)" onClick="daily_product_del(' + global_obj_id + ',' + k[global_obj_id] +')"><i class="bx bx-trash mr-1"></i> delete</a>'+
                                     '</div>'+
@@ -1762,7 +1911,14 @@ function set_all_product_price() {
                 var html_each = '<li class="product-list-each" id="daily-list-' + global_obj_id + '-' + update_key_index + '">' +
                                 '<div class="daily-products-class">' +
                                 '<input type="hidden" name="product_id" id="product_id" value="' + global_custom_product.id +'">' +
-                                '<input type="hidden" name="product_price_id" id="product_price_id" value="' + price_id +'">' +
+// new
+                                '<input type="hidden" name="itinerary_daily_id" id="itinerary_daily_id" value="'+ global_itinerary_daily_id +'">' +
+                                '<input type="hidden" name="product_price_tag" id="product_price_tag" value="' + product_price_tag +'">' +
+                                '<input type="hidden" name="product_price_season" id="product_price_season" value="' + product_price_season +'">' +
+                                '<input type="hidden" name="product_price_currency" id="product_price_currency" value="' + product_price_currency +'">' +
+                                '<input type="hidden" name="product_price_id" id="product_price_id" value="' + product_price_id +'">' +
+// new
+
                                 '<input type="hidden" name="product_margin_price" id="product_margin_price" value="' + global_margin_price +'">' +
                                 '<div class="daily-products-left">'+
                                     '<i class="bx bx-grid-vertical" style="font-size: 25px; margin: auto 0; cursor: move"></i>'+
@@ -1772,10 +1928,10 @@ function set_all_product_price() {
                                         global_custom_product.title + '<span class="daily-products-detail">('+ global_custom_product.city +', ' +global_custom_product.country +')</span>'+
                                     '</div>'+
                                     '<div class="daily-proudcts-option">'+
-                                        `<i class="bx bx-info-circle" style="color: rgb(210, 77, 83);padding-top: 2px;"></i> <span id="itinerary_price_margin_${global_obj_id}_${k[global_obj_id]}">Price Margin: ${global_margin_price}(%)</span>`+
+                                        `<i class="bx bx-info-circle" style="color: rgb(210, 77, 83);padding-top: 2px;"></i> <span id="itinerary_price_margin_${global_obj_id}_${update_key_index}">Price Margin: ${global_margin_price}(%)</span>`+
                                     '</div>'+
                                     '<div class="daily-proudcts-option">'+
-                                        `<i class="bx bx-time" style="color: rgb(210, 77, 83);padding-top: 2px;"></i> <span id="product_time_${global_obj_id}_${update_key_index}">00:00~00:00</span>&nbsp;&nbsp;`+
+                                        `<i class="bx bx-time" style="color: rgb(210, 77, 83);padding-top: 2px;"></i> <span id="product_time_${global_obj_id}_${update_key_index}">${global_time}</span>&nbsp;&nbsp;`+
                                         `<i class="bx bx-group" style="color: rgb(210, 77, 83);padding-top: 2px;"></i> <span id="product_travellers_${global_obj_id}_${update_key_index}">${itinerary.adult_number}&nbsp;adults-${itinerary.children_number}&nbsp;children</span>`+
                                     '</div>'+
                                     '</div>'+
@@ -1785,11 +1941,14 @@ function set_all_product_price() {
                                     '<span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"'+
                                         'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu"></span>'+
                                     '<div class="dropdown-menu dropdown-menu-right">'+
-
+                                        `<a class="dropdown-item dropdown-edit-time" href="javascript:void(0)" onClick="add_task(${global_itinerary_daily_id})"><i class="bx bx-edit-alt mr-1"></i> Add Task </a>`+
                                         `<a class="dropdown-item dropdown-edit-time" href="javascript:void(0)" onClick="edit_product_time(${global_obj_id}, ${update_key_index})"><i class="bx bx-edit-alt mr-1"></i> Edit Time</a>`+
                                         `<a class="dropdown-item dropdown-edit-travellers" href="javascript:void(0)" onClick="edit_product_travellers(${global_obj_id}, ${update_key_index})"><i class="bx bx-edit-alt mr-1"></i> Travellers</a>`+
-                                        `<a class="dropdown-item dropdown-edit-price" href="javascript:void(0)" onClick="edit_product_price(${global_obj_id}, ${update_key_index}, '${price_id}', ${global_margin_price})"><i class="bx bx-edit-alt mr-1"></i> Edit Price</a>`+
-                                        `<a class="dropdown-item dropdown-edit-margin" href="javascript:void(0)" onClick="edit_margin_price(${global_obj_id}, ${k[global_obj_id]}, ${global_margin_price})"><i class="bx bx-edit-alt mr-1"></i> Edit Margin</a>`+
+// new
+                                        `<a class="dropdown-item dropdown-edit-price" href="javascript:void(0)" onClick="edit_product_price(${global_obj_id}, ${update_key_index}, ${global_itinerary_daily_id}, '${product_price_tag}', '${product_price_season}', '${product_price_currency}', '${product_price_id}', ${global_margin_price})"><i class="bx bx-edit-alt mr-1"></i> Edit Price</a>`+
+// new
+                                    
+                                        `<a class="dropdown-item dropdown-edit-margin" href="javascript:void(0)" onClick="edit_margin_price(${global_obj_id}, ${update_key_index}, ${global_margin_price})"><i class="bx bx-edit-alt mr-1"></i> Edit Margin</a>`+
                                         '<a class="dropdown-item dropdown-del-product" href="javascript:void(0)" onClick="daily_product_del(' + global_obj_id + ',' + update_key_index +')"><i class="bx bx-trash mr-1"></i> delete</a>'+
                                     '</div>'+
                                     '</div>'+
@@ -1808,8 +1967,6 @@ function set_all_product_price() {
                                 '<sapn>Drag a product here to add it to the itinerary</span>' +
                             '</div>';
             }
-
-
 
             $("#each-day-products-" + global_obj_id).addClass('has-drop').html(str_tmp);
 
@@ -1860,6 +2017,7 @@ function set_all_product_price() {
                     length = `product_time_${global_obj_id}_`.length;
                     substr = str[global_obj_id][i].substring(str_index + length, str_index_temp);
                     str[global_obj_id][i] = str[global_obj_id][i].replace(`product_time_${global_obj_id}_${substr}`,`product_time_${global_obj_id}_${i}`);
+                    /////////////
 
                     str_index = str[global_obj_id][i].indexOf(`product_travellers_${global_obj_id}_`);
                     str_index_temp = str_index;
@@ -1872,6 +2030,7 @@ function set_all_product_price() {
                     length = `product_travellers_${global_obj_id}_`.length;
                     substr = str[global_obj_id][i].substring(str_index + length, str_index_temp);
                     str[global_obj_id][i] = str[global_obj_id][i].replace(`product_travellers_${global_obj_id}_${substr}`,`product_travellers_${global_obj_id}_${i}`);
+                    /////////////
 
                     str_index = str[global_obj_id][i].indexOf(`edit_product_time(${global_obj_id}, `);
                     str_index_temp = str_index;
@@ -1884,6 +2043,7 @@ function set_all_product_price() {
                     length = `edit_product_time(${global_obj_id}, `.length;
                     substr = str[global_obj_id][i].substring(str_index + length, str_index_temp);
                     str[global_obj_id][i] = str[global_obj_id][i].replace(`edit_product_time(${global_obj_id}, ${substr})`,`edit_product_time(${global_obj_id}, ${i})`);
+                    //////////////
 
                     str_index = str[global_obj_id][i].indexOf(`edit_product_travellers(${global_obj_id}, `);
                     str_index_temp = str_index;
@@ -1896,8 +2056,7 @@ function set_all_product_price() {
                     length = `edit_product_travellers(${global_obj_id}, `.length;
                     substr = str[global_obj_id][i].substring(str_index + length, str_index_temp);
                     str[global_obj_id][i] = str[global_obj_id][i].replace(`edit_product_travellers(${global_obj_id}, ${substr})`,`edit_product_travellers(${global_obj_id}, ${i})`);
-
-
+                    /////////////
 
                     str_index = str[global_obj_id][i].indexOf(`edit_product_price(${global_obj_id}, `);
                     str_index_temp = str_index;
@@ -1909,9 +2068,11 @@ function set_all_product_price() {
                     }
                     length = `edit_product_price(${global_obj_id}, `.length;
                     substr = str[global_obj_id][i].substring(str_index + length, str_index_temp);
-
                     var substr_arr = substr.split(", ");
-                    str[global_obj_id][i] = str[global_obj_id][i].replace(`edit_product_price(${global_obj_id}, ${substr})`, `edit_product_price(${global_obj_id}, ${i}, ${substr_arr[1]}, ${substr_arr[2]})`);
+// new
+                    str[global_obj_id][i] = str[global_obj_id][i].replace(`edit_product_price(${global_obj_id}, ${substr})`, `edit_product_price(${global_obj_id}, ${i}, ${substr_arr[1]}, ${substr_arr[2]}, ${substr_arr[3]}, ${substr_arr[4]}, ${substr_arr[5]}, ${substr_arr[6]})`);
+// new
+                    //////////////
 
 
                     str_index = str[global_obj_id][i].indexOf(`daily_product_del(${global_obj_id},`);
@@ -1938,12 +2099,14 @@ function set_all_product_price() {
     }
 }
 
-function edit_product_price(obj_id, key_id, product_price_id, margin_price) {
+function edit_product_price(obj_id, key_id, itinerary_daily_id, product_price_tag, product_price_season, product_price_currency, product_price_id, margin_price) {
     var product_id = $("#daily-list-"+obj_id+"-"+key_id+" #product_id").val();
 
     pick_product_id = product_id;
     global_margin_price = margin_price;
-
+    global_itinerary_daily_id = itinerary_daily_id;
+    global_time = $("#product_time_"+obj_id+"_"+key_id).text();
+    
     pick_date = $("#each_day_container_" + obj_id + " .day-date").data('pick');
 
     $.ajax({
@@ -1951,19 +2114,15 @@ function edit_product_price(obj_id, key_id, product_price_id, margin_price) {
         type: 'post',
         data: {
             _token: $("[name='_token']").val(),
-            product_id: product_id,
-            product_price_id: product_price_id
+            product_id: product_id
         },
         dataType: 'json',
         success: function(response) {
             var product_data = response.product_data;
-
             var product_tag = response.product_tag;
-            var product_price_data = response.product_price_data;
-
+            
             global_custom_product = product_data;
             global_custom_product.get_first_image = {};
-        
             global_custom_product.get_first_image.path = product_data.path;
             
             global_obj_id = obj_id;
@@ -1971,13 +2130,18 @@ function edit_product_price(obj_id, key_id, product_price_id, margin_price) {
             update_key_index = key_id;
             update_flag = 1;
 
+            product_price_tag = product_price_tag.split(':');
+            product_price_season = product_price_season.split(':');
+            product_price_currency = product_price_currency.split(':');
+            product_price_id = product_price_id.split(':');
+
             $("#product_pricing_container").empty();
 
             var total_html = '';
-            for(var i=0; i<product_price_data.length; i++) {
+            for(var i=0; i<product_price_id.length; i++) {
                 var tag_html = '<option value="0">Pricing Tag</option>';
                 for(var j=0; j<product_tag.length; j++) {
-                    if(product_tag[j].id == product_price_data[i].tag) {
+                    if(product_tag[j].id == product_price_tag[i]) {
                         tag_html += '<option selected value="'+ product_tag[j].id +'">'+ product_tag[j].title +'</option>';
                     }
                     else {
@@ -1987,22 +2151,40 @@ function edit_product_price(obj_id, key_id, product_price_id, margin_price) {
 
                 tag_option_html = tag_html;
 
+                var currency_html = '<option value="0">Currency</option>';
+                for(var j=0; j<currency.length; j++) {
+                    if(currency[j].id == product_price_currency[i]) {
+                        currency_html += '<option selected value="'+ currency[j].id +'">'+ currency[j].title +'</option>';
+                    }
+                    else {
+                        currency_html += '<option value="'+ currency[j].id +'">'+ currency[j].title +'</option>';
+                    }
+                }
+
+                currency_option_html = currency_html;
+
                 total_html += '<div class="row" id="product_pricing_item_'+ i +'">'+
-                    '<input type="hidden" id="pricing_id_'+ i+'" value="'+ product_price_data[i].id +'">'+
                     '<div class="col-md-3">'+
                         '<fieldset class="form-group">'+
-                            '<select id="product_pricing_tag_'+ i +'" class="form-control" onchange="check_valid('+ i +')">' + tag_html + '</select>'+
+                            '<select id="pricing_tag_'+ i +'" class="form-control" onchange="check_valid('+ i +')">' + tag_html + '</select>'+
                         '</fieldset>'+
                     '</div>'+
                     '<div class="col-md-3">'+
-                        '<div id="pricing_season_'+ i +'">season: '+ product_price_data[i].duration +'</div>'+
+                        '<div id="pricing_season_'+ i +'" style="margin-top: 7px;">season: '+ product_price_season[i] +'</div>'+
                     '</div>'+
-                    '<div class="col-md-3">'+
-                        '<div id="pricing_product_'+ i +'">Price: '+ product_price_data[i].price + '('+ product_price_data[i].currency_title +')' +'</div>'+
+                    '<div class="col-md-2">'+
+                        '<fieldset class="form-group">'+
+                            '<select id="pricing_currency_'+ i +'" class="form-control">' + currency_html + '</select>'+
+                        '</fieldset>'+
                     '</div>'+
-                    '<div class="col-md-3">'+
+                    '<div class="col-md-2">'+
+                        '<fieldset class="form-group">'+
+                            '<input type="text" class="form-control" id="pricing_product_'+ i +'" value="'+ product_price_id[i] +'">'+
+                        '</fieldset>'+
+                    '</div>'+
+                    '<div class="col-md-2">'+
                         '<div class="d-flex align-item-center justify-content-between">'+
-                            '<button type="button" class="btn btn-icon rounded-circle btn-outline-primary" data-category="'+ product_price_data[i].tag +'" onclick="save_pricing_item('+ i +', '+ product_id +', \''+ pick_date +'\')" id="pricing_item_save_'+ i +'">'+
+                            '<button type="button" class="btn btn-icon rounded-circle btn-outline-primary" data-category="'+ product_price_tag[i] +'" onclick="save_pricing_item('+ i +', '+ product_id +', \''+ pick_date +'\')" id="pricing_item_save_'+ i +'">'+
                                 '<i class="bx bx-check"></i>'+
                             '</button>'+
                             '<button type="button" class="btn btn-icon rounded-circle btn-outline-danger" onclick="delete_pricing_item('+ i +')">'+
@@ -2011,7 +2193,6 @@ function edit_product_price(obj_id, key_id, product_price_id, margin_price) {
                         '</div>'+
                     '</div>'+
                 '</div>';
-
             }
 
             $("#product_pricing_container").append(total_html);
@@ -2052,10 +2233,9 @@ function preview_template_itinerary(group_id) {
                 for(var i=0; i<itinerary_record.length; i++) {
                     var template_itinerary_title =  itinerary_record[i].template_title;
 
-                    sub_html += '<li class="product-list-each">' +
+                    sub_html += '<li class="product-list-each" style="list-style:none;">' +
                         '<div class="daily-products-class">' +
                         '<div class="daily-products-left">'+
-                            '<i class="bx bx-grid-vertical" style="font-size: 25px; margin: auto 0; cursor: move"></i>'+
                             '<img class="daily-products-img" src="/'+ itinerary_record[i].product_path +'"/>'+
                             '<div class="daily-products-explain">'+
                             '<div class="daily-products-title">'+
@@ -2118,7 +2298,6 @@ function delete_template_itinerary(group_id) {
 }
 
 function set_schedule_with_template(group_id, template_title, day_count) {
-
     if(day_count > days) {
         toastr.warning('This template is not fit with this itinerary. more days exist in this template.', 'Warnning', { "closeButton": true });
     }
@@ -2227,7 +2406,14 @@ function set_schedule_with_template(group_id, template_title, day_count) {
                                     var html_each = '<li class="product-list-each" id="daily-list-' + schedule_index + '-' + k[schedule_index] + '">' +
                                                         '<div class="daily-products-class">' +
                                                         '<input type="hidden" name="product_id" id="product_id" value="' + template_itinerary_data[dd][i].product_id +'">' +
-                                                        '<input type="hidden" name="product_price_id" id="product_price_id" value="' + template_itinerary_data[dd][i].product_price_id +'">' +
+// new
+                                                        '<input type="hidden" name="itinerary_daily_id" id="itinerary_daily_id" value="">' +
+                                                        '<input type="hidden" name="product_price_tag" id="product_price_tag" value="">' +
+                                                        '<input type="hidden" name="product_price_season" id="product_price_season" value="">' +
+                                                        '<input type="hidden" name="product_price_currency" id="product_price_currency" value="">' +
+                                                        '<input type="hidden" name="product_price_id" id="product_price_id" value="">' +
+// new
+                                                        
                                                         '<input type="hidden" name="product_margin_price" id="product_margin_price" value="0">' +
                                                         '<div class="daily-products-left" onClick="product_detail('+ template_itinerary_data[dd][i].product_id +')">'+
                                                             '<i class="bx bx-grid-vertical" style="font-size: 25px; margin: auto 0; cursor: move"></i>'+
@@ -2253,7 +2439,7 @@ function set_schedule_with_template(group_id, template_title, day_count) {
 
                                                                 `<a class="dropdown-item dropdown-edit-time" href="javascript:void(0)" onClick="edit_product_time(${schedule_index}, ${k[schedule_index]})"><i class="bx bx-edit-alt mr-1"></i> Edit Time</a>`+
                                                                 `<a class="dropdown-item dropdown-edit-travellers" href="javascript:void(0)" onClick="edit_product_travellers(${schedule_index}, ${k[schedule_index]})"><i class="bx bx-edit-alt mr-1"></i> Travellers</a>`+
-                                                                `<a class="dropdown-item dropdown-edit-price" href="javascript:void(0)" onClick="edit_product_price(${schedule_index}, ${k[schedule_index]}, '${template_itinerary_data[dd][i].product_price_id}', 0)"><i class="bx bx-edit-alt mr-1"></i> Edit Price</a>`+
+                                                                `<a class="dropdown-item dropdown-edit-price" href="javascript:void(0)" onClick="edit_product_price(${schedule_index}, ${k[schedule_index]}, 0, '', '', '', '', 0)"><i class="bx bx-edit-alt mr-1"></i> Edit Price</a>`+
                                                                 `<a class="dropdown-item dropdown-edit-margin" href="javascript:void(0)" onClick="edit_margin_price(${schedule_index}, ${k[schedule_index]}, 0)"><i class="bx bx-edit-alt mr-1"></i> Edit Margin</a>`+
                                                                 '<a class="dropdown-item dropdown-del-product" href="javascript:void(0)" onClick="daily_product_del(' + schedule_index + ',' + k[schedule_index] +')"><i class="bx bx-trash mr-1"></i> delete</a>'+
                                                             '</div>'+
@@ -2369,7 +2555,7 @@ function set_schedule_with_template(group_id, template_title, day_count) {
                                         length = `edit_product_price(${obj_id}, `.length;
                                         substr = str[obj_id][i].substring(str_index + length, str_index_temp);
                                         var substr_arr = substr.split(", ");
-                                        str[obj_id][i] = str[obj_id][i].replace(`edit_product_price(${obj_id}, ${substr})`, `edit_product_price(${obj_id}, ${i}, ${substr_arr[1]}, ${substr_arr[2]})`);
+                                        str[obj_id][i] = str[obj_id][i].replace(`edit_product_price(${obj_id}, ${substr})`, `edit_product_price(${obj_id}, ${i}, ${substr_arr[1]}, ${substr_arr[2]}, ${substr_arr[3]}, ${substr_arr[4]}, ${substr_arr[5]}, ${substr_arr[6]})`);
 
                                         str_index = str[obj_id][i].indexOf(`daily_product_del(${obj_id},`);
                                         str_index_temp = str_index;

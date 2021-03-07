@@ -587,7 +587,7 @@ label{
     aria-labelledby="myModalLabel150" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content">
-        <div class="modal-header bg-danger white">
+        <div class="modal-header">
           <span class="modal-title" id="myModalLabel150">Day Title</span>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <i class="bx bx-x"></i>
@@ -614,7 +614,7 @@ label{
     aria-labelledby="myModalLabel150" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content">
-        <div class="modal-header bg-danger white">
+        <div class="modal-header">
           <span class="modal-title" id="myModalLabel150">Product Time</span>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <i class="bx bx-x"></i>
@@ -657,7 +657,7 @@ label{
     aria-labelledby="myModalLabel150" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content">
-        <div class="modal-header bg-danger white">
+        <div class="modal-header">
           <span class="modal-title" id="myModalLabel150">Template Itinerary</span>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <i class="bx bx-x"></i>
@@ -691,7 +691,7 @@ label{
     aria-labelledby="myModalLabel150" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content">
-        <div class="modal-header bg-danger white">
+        <div class="modal-header">
           <span class="modal-title" id="myModalLabel150">Product Travellers</span>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <i class="bx bx-x"></i>
@@ -728,7 +728,7 @@ label{
     aria-labelledby="myModalLabel150" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content">
-        <div class="modal-header bg-danger white">
+        <div class="modal-header">
           <span class="modal-title" id="myModalLabel150">Itinerary Price Margin</span>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <i class="bx bx-x"></i>

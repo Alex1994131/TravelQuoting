@@ -279,6 +279,8 @@ class ProductController extends Controller
             array_push($pricing_data, $temp);
         }
 
+        // dd($pricing_data);
+
         return view('pages.product_edit', array(
             'pageConfigs' => $pageConfigs,
             'category' => $category,
@@ -461,8 +463,6 @@ class ProductController extends Controller
 
         $product_id = $request->price_product_id;
 
-        dd($request);
-
         $rule = [
             'fromdate.*' => 'required',
             'todate.*' => 'required',
@@ -485,7 +485,7 @@ class ProductController extends Controller
 
         $this->validate($request, $rule, $customMessages);
 
-        ProductPricing::where('product_id', $product_id)->delete();
+        // ProductPricing::where('product_id', $product_id)->delete();
 
         $flag = 0;
 
@@ -493,33 +493,10 @@ class ProductController extends Controller
         $todate = $request->todate;
         $currency = $request->currency;
 
-        // $fromdate = array();
-        // $todate = array();
-        // $currency = array();
-
-        // $ff = 0;
-        // for($f=count($fdate)-1; $f>=0; $f--) {
-        //     $fromdate[$ff] = $fdate[$f];
-        //     $todate[$ff] = $tdate[$f];
-        //     $currency[$ff] = $cur[$f];
-        //     $ff++;
-        // }
-
         $tag = $request->tag;
         $price = $request->price;
         $description = $request->description;
-
-        // $kk = 0;
-        // $tag_temp = array();
-        // $price_temp = array();
-        // $description_temp = array();
-
-        // while($kk < count($tag)) {
-        //     $tag_temp[$kk] = $tag[$kk];
-        //     $price_temp[$kk] = $price[$kk];
-        //     $description_temp[$kk] = $description[$kk];
-        //     $kk++;
-        // }
+        $priceID = $request->priceID;
 
         $kk = 0;
         $tag_temp = array();
@@ -539,6 +516,13 @@ class ProductController extends Controller
         $description_temp = array();
         foreach($description as $dr) {
             $description_temp[$kk] = $dr;
+            $kk++;
+        }
+
+        $kk = 0;
+        $priceID_temp = array();
+        foreach($priceID as $pi) {
+            $priceID_temp[$kk] = $pi;
             $kk++;
         }
 
@@ -599,22 +583,48 @@ class ProductController extends Controller
           array_push($blackout_m, $blackoutmsg_temp);
         }
 
+        $origin_pricing_id_arr = ProductPricing::where('product_id', $product_id)->pluck('id')->toArray();
+        $new_pricing_id_arr = array();
+        
         for($i=0; $i<count($fromdate); $i++) {
             for($j=0; $j<count($tag_temp[$i]); $j++) {
-                $product_pricing = ProductPricing::create(
-                    [
-                    'product_id' => $product_id,
-                    'tag' => $tag_temp[$i][$j],
-                    'description' => $description_temp[$i][$j],
-                    'price' => $price_temp[$i][$j],
-                    'currency' => $currency[$i],
-                    'duration' => $fromdate[$i].' ~ '.$todate[$i],
-                    'blackout' => $blackout_d[$i],
-                    'blackout_msg' => $blackout_m[$i]
-                    ]
-                );
+                if($priceID_temp[$i][$j] != NULL) {
+                    array_push($new_pricing_id_arr, intval($priceID_temp[$i][$j]));
+
+                    $product_pricing = ProductPricing::find($priceID_temp[$i][$j])->update([
+                        'product_id' => $product_id,
+                        'tag' => $tag_temp[$i][$j],
+                        'description' => $description_temp[$i][$j],
+                        'price' => $price_temp[$i][$j],
+                        'currency' => $currency[$i],
+                        'duration' => $fromdate[$i].' ~ '.$todate[$i],
+                        'blackout' => $blackout_d[$i],
+                        'blackout_msg' => $blackout_m[$i]
+                    ]);
+                }
+                else {
+                    $product_pricing = ProductPricing::create(
+                        [
+                            'product_id' => $product_id,
+                            'tag' => $tag_temp[$i][$j],
+                            'description' => $description_temp[$i][$j],
+                            'price' => $price_temp[$i][$j],
+                            'currency' => $currency[$i],
+                            'duration' => $fromdate[$i].' ~ '.$todate[$i],
+                            'blackout' => $blackout_d[$i],
+                            'blackout_msg' => $blackout_m[$i]
+                        ]
+                    );
+                }
                 $flag = 1;
             }
+        }
+
+        //dd($new_pricing_id_arr);
+
+        $diff_arr = array_diff($origin_pricing_id_arr, $new_pricing_id_arr);
+        foreach($diff_arr as $df) {
+            ProductPricing::find($df)->delete();
         }
 
         if($flag == 1) {

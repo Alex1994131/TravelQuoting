@@ -538,6 +538,7 @@
                         @php
                           $pricing_sub_data =$pricing_data[$j-1]['pricing_data'];
                         @endphp
+                        
                         @for($i=1; $i<=count($pricing_sub_data); $i++)
                         <div class="row" id="pricinglist_{{ $j }}_{{ $i }}">
                           <input type="hidden" id="priceID_{{ $j }}_{{ $i }}" name="priceID[{{$j-1}}][]" value="{{ $pricing_sub_data[$i-1]['id'] }}" />
