@@ -223,14 +223,14 @@ $(document).ready(function() {
                                             '<span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"'+
                                                 'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu"></span>'+
                                             '<div class="dropdown-menu dropdown-menu-right">'+
-                                                `<a class="dropdown-item dropdown-edit-time" href="javascript:void(0)" onClick="add_task(${daily_schedule_data[dd][i].daily_id}, ${daily_schedule_data[dd][i].task_id})"><i class="bx bx-edit-alt mr-1"></i> Task </a>`+
+                                                `<a class="dropdown-item dropdown-edit-time" href="javascript:void(0)" onClick="add_task(${schedule_index}, ${k[schedule_index]}, ${daily_schedule_data[dd][i].daily_id}, ${daily_schedule_data[dd][i].task_id})"><i class="bx bx-edit-alt mr-1"></i> Task </a>`+
                                                 `<a class="dropdown-item dropdown-edit-time" href="javascript:void(0)" onClick="edit_product_time(${schedule_index}, ${k[schedule_index]})"><i class="bx bx-edit-alt mr-1"></i> Edit Time</a>`+
                                                 `<a class="dropdown-item dropdown-edit-travellers" href="javascript:void(0)" onClick="edit_product_travellers(${schedule_index}, ${k[schedule_index]})"><i class="bx bx-edit-alt mr-1"></i> Travellers</a>`+
 // new
                                                 `<a class="dropdown-item dropdown-edit-price" href="javascript:void(0)" onClick="edit_product_price(${schedule_index}, ${k[schedule_index]}, ${daily_schedule_data[dd][i].daily_id}, ${daily_schedule_data[dd][i].task_id}, '${daily_schedule_data[dd][i].product_price_tag}', '${daily_schedule_data[dd][i].product_price_season}', '${daily_schedule_data[dd][i].product_price_currency}', '${daily_schedule_data[dd][i].product_price_id}', ${daily_schedule_data[dd][i].itinerary_margin_price})"><i class="bx bx-edit-alt mr-1"></i> Edit Price</a>`+
 // bew
                                                 `<a class="dropdown-item dropdown-edit-margin" href="javascript:void(0)" onClick="edit_margin_price(${schedule_index}, ${k[schedule_index]}, ${daily_schedule_data[dd][i].itinerary_margin_price})"><i class="bx bx-edit-alt mr-1"></i> Edit Margin</a>`+
-                                                '<a class="dropdown-item dropdown-del-product" href="javascript:void(0)" onClick="daily_product_del(' + schedule_index + ',' + k[schedule_index] +')"><i class="bx bx-trash mr-1"></i> delete</a>'+
+                                                `<a class="dropdown-item dropdown-del-product" href="javascript:void(0)" onClick="daily_product_del(${schedule_index}, ${k[schedule_index]}, ${daily_schedule_data[dd][i].task_id})"><i class="bx bx-trash mr-1"></i> delete</a>`+
                                             '</div>'+
                                             '</div>'+
                                         '</div>'+
@@ -312,6 +312,20 @@ $(document).ready(function() {
                     str[obj_id][i] = str[obj_id][i].replace(`product_travellers_${obj_id}_${substr}`,`product_travellers_${obj_id}_${i}`);
                     /////////////
 
+                    str_index = str[obj_id][i].indexOf(`add_task(${obj_id}, `);
+                    str_index_temp = str_index;
+                    while(true)
+                    {
+                        if(str[obj_id][i][str_index_temp] == ')')
+                            break;
+                        str_index_temp ++;
+                    }
+                    length = `add_task(${obj_id}, `.length;
+                    substr = str[obj_id][i].substring(str_index + length, str_index_temp);
+                    var substr_arr = substr.split(", ");
+                    str[obj_id][i] = str[obj_id][i].replace(`add_task(${obj_id}, ${substr})`,`add_task(${obj_id}, ${i}, ${substr_arr[1]}, ${substr_arr[2]})`);
+                    /////////////
+
                     str_index = str[obj_id][i].indexOf(`edit_product_time(${obj_id}, `);
                     str_index_temp = str_index;
                     while(true)
@@ -380,7 +394,8 @@ $(document).ready(function() {
                     }
                     length = `daily_product_del(${obj_id},`.length;
                     substr = str[obj_id][i].substring(str_index + length, str_index_temp);
-                    str[obj_id][i] = str[obj_id][i].replace(`daily_product_del(${obj_id},${substr})`,`daily_product_del(${obj_id},${i})`);
+                    var substr_arr = substr.split(", ");
+                    str[obj_id][i] = str[obj_id][i].replace(`daily_product_del(${obj_id},${substr})`,`daily_product_del(${obj_id}, ${i}, ${substr_arr[1]})`);
                     /////////////
 
                     temp_string += str[obj_id][i];
@@ -640,153 +655,351 @@ $('#filter_button').click(function() {
     }
 });
 
-function daily_product_del(obj_id, list_id){
-    var index_i = 0;
+function daily_product_del(obj_id, list_id, task_id){
     
-    jQuery('.product-list-each').each(function(index, customElement) {
-        var str_id = customElement.id;
-        var str_id_arr = str_id.split('-');
-        if(obj_id == parseInt(str_id_arr[2])){
-            if(index_i == list_id){
-                $(this).remove();
+    if(task_id != null || task_id != undefined) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You would be able to lost the task data!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Delete!',
+            confirmButtonClass: 'btn btn-primary',
+            cancelButtonClass: 'btn btn-danger ml-1',
+            buttonsStyling: false,
+        }).then(function (result) {
+            if (result.value) {
+                var index_i = 0;
+    
+                jQuery('.product-list-each').each(function(index, customElement) {
+                    var str_id = customElement.id;
+                    var str_id_arr = str_id.split('-');
+                    if(obj_id == parseInt(str_id_arr[2])){
+                        if(index_i == list_id){
+                            $(this).remove();
+                        }
+                        index_i ++;
+                    }
+                });
+
+                str[obj_id].splice(list_id, 1);
+                k[obj_id] --;
+
+                for(index = 0; index < k[obj_id]; index ++){
+                    var substr_search = `daily-list-${obj_id}-`;
+                    var substr_index = str[obj_id][index].indexOf(substr_search);
+                    substr_index += substr_search.length;
+                    var temp_substr_index = substr_index;
+                    while(true){
+                        if(str[obj_id][index][temp_substr_index] == '"')
+                            break;
+                        temp_substr_index ++;
+                    }
+                    var substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+                    str[obj_id][index] = str[obj_id][index].replace(`daily-list-${obj_id}-${substr}`, `daily-list-${obj_id}-${index}`);
+
+                    /////////////
+                    substr_search = `itinerary_price_margin_${obj_id}_`;
+                    substr_index = str[obj_id][index].indexOf(substr_search);
+                    substr_index += substr_search.length;
+                    temp_substr_index = substr_index;
+                    while(true){
+                        if(str[obj_id][index][temp_substr_index] == '"')
+                            break;
+                        temp_substr_index ++;
+                    }
+                    substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+                    str[obj_id][index] = str[obj_id][index].replace(`itinerary_price_margin_${obj_id}_${substr}`, `itinerary_price_margin_${obj_id}_${index}`);
+                    /////////////
+
+                    substr_search = `product_time_${obj_id}_`;
+                    substr_index = str[obj_id][index].indexOf(substr_search);
+                    substr_index += substr_search.length;
+                    temp_substr_index = substr_index;
+                    while(true){
+                        if(str[obj_id][index][temp_substr_index] == '"')
+                            break;
+                        temp_substr_index ++;
+                    }
+                    substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+                    str[obj_id][index] = str[obj_id][index].replace(`product_time_${obj_id}_${substr}`, `product_time_${obj_id}_${index}`);
+                    /////////////
+
+                    substr_search = `product_travellers_${obj_id}_`;
+                    substr_index = str[obj_id][index].indexOf(substr_search);
+                    substr_index += substr_search.length;
+                    temp_substr_index = substr_index;
+                    while(true){
+                        if(str[obj_id][index][temp_substr_index] == '"')
+                            break;
+                        temp_substr_index ++;
+                    }
+                    substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+                    str[obj_id][index] = str[obj_id][index].replace(`product_travellers_${obj_id}_${substr}`, `product_travellers_${obj_id}_${index}`);
+                    /////////////
+
+                    substr_search = `add_task(${obj_id}, `;
+                    substr_index = str[obj_id][index].indexOf(substr_search);
+                    substr_index += substr_search.length;
+                    temp_substr_index = substr_index;
+                    while(true)
+                    {
+                        if(str[obj_id][index][temp_substr_index] == ')')///////////////
+                            break;
+                        temp_substr_index ++;
+                    }
+                    substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+                    var substr_arr = substr.split(", ");
+                    str[obj_id][index] = str[obj_id][index].replace(`add_task(${obj_id}, ${substr})`, `add_task(${obj_id}, ${index}, ${substr_arr[1]}, ${substr_arr[2]})`);
+                    /////////////
+
+                    substr_search = `edit_product_time(${obj_id}, `;
+                    substr_index = str[obj_id][index].indexOf(substr_search);
+                    substr_index += substr_search.length;
+                    temp_substr_index = substr_index;
+                    while(true){
+                        if(str[obj_id][index][temp_substr_index] == ')')
+                            break;
+                        temp_substr_index ++;
+                    }
+                    substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+                    str[obj_id][index] = str[obj_id][index].replace(`edit_product_time(${obj_id}, ${substr}`, `edit_product_time(${obj_id}, ${index})`);
+                    /////////////
+
+                    substr_search = `edit_product_travellers(${obj_id}, `;
+                    substr_index = str[obj_id][index].indexOf(substr_search);
+                    substr_index += substr_search.length;
+                    temp_substr_index = substr_index;
+                    while(true){
+                        if(str[obj_id][index][temp_substr_index] == ')')
+                            break;
+                        temp_substr_index ++;
+                    }
+                    substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+                    str[obj_id][index] = str[obj_id][index].replace(`edit_product_travellers(${obj_id}, ${substr}`, `edit_product_travellers(${obj_id}, ${index})`);
+                    /////////////
+                    
+                    substr_search = `edit_product_price(${obj_id}, `;
+                    substr_index = str[obj_id][index].indexOf(substr_search);
+                    substr_index += substr_search.length;
+                    temp_substr_index = substr_index;
+                    while(true)
+                    {
+                        if(str[obj_id][index][temp_substr_index] == ')')///////////////
+                            break;
+                        temp_substr_index ++;
+                    }
+                    substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+                    var substr_arr = substr.split(", ");
+            // new
+                    str[obj_id][index] = str[obj_id][index].replace(`edit_product_price(${obj_id}, ${substr})`, `edit_product_price(${obj_id}, ${index}, ${substr_arr[1]}, ${substr_arr[2]}, ${substr_arr[3]}, ${substr_arr[4]}, ${substr_arr[5]}, ${substr_arr[6]}, ${substr_arr[7]})`);
+            // new
+                    /////////////
+
+                    substr_search = `edit_margin_price(${obj_id}, `;
+                    substr_index = str[obj_id][index].indexOf(substr_search);
+                    substr_index += substr_search.length;
+                    while(true)
+                    {
+                        if(str[obj_id][index][temp_substr_index] == ')')
+                            break;
+                        temp_substr_index ++;
+                    }
+                    substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+                    var substr_arr = substr.split(", ");
+                    str[obj_id][index] = str[obj_id][index].replace(`edit_margin_price(${obj_id}, ${substr})`, `edit_margin_price(${obj_id}, ${index}, ${substr_arr[1]})`);
+                    ///////////////
+
+                    substr_search = `daily_product_del(${obj_id},`;
+                    substr_index = str[obj_id][index].indexOf(substr_search);
+                    substr_index += substr_search.length;
+                    temp_substr_index = substr_index;
+                    while(true){
+                        if(str[obj_id][index][temp_substr_index] == '"')
+                            break;
+                        temp_substr_index ++;
+                    }
+                    substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+                    var substr_arr = substr.split(", ");
+                    str[obj_id][index] = str[obj_id][index].replace(`daily_product_del(${obj_id},${substr}`, `daily_product_del(${obj_id}, ${index}, ${substr_arr[1]})`);
+                    ////////////////
+                }
+
+                $(`#daily-schedule-id-${obj_id}`).empty();
+                var str_temp = "";
+                for(index = 0; index < k[obj_id]; index ++) {
+                    str_temp += str[obj_id][index];
+                }
+                $(`#daily-schedule-id-${obj_id}`).append(str_temp);
             }
-            index_i ++;
-        }
-    });
-
-    str[obj_id].splice(list_id, 1);
-    k[obj_id] --;
-
-    for(index = 0; index < k[obj_id]; index ++){
-        var substr_search = `daily-list-${obj_id}-`;
-        var substr_index = str[obj_id][index].indexOf(substr_search);
-        substr_index += substr_search.length;
-        var temp_substr_index = substr_index;
-        while(true){
-            if(str[obj_id][index][temp_substr_index] == '"')
-                break;
-            temp_substr_index ++;
-        }
-        var substr = str[obj_id][index].substring(substr_index, temp_substr_index);
-        str[obj_id][index] = str[obj_id][index].replace(`daily-list-${obj_id}-${substr}`, `daily-list-${obj_id}-${index}`);
-
-        /////////////
-        substr_search = `itinerary_price_margin_${obj_id}_`;
-        substr_index = str[obj_id][index].indexOf(substr_search);
-        substr_index += substr_search.length;
-        temp_substr_index = substr_index;
-        while(true){
-            if(str[obj_id][index][temp_substr_index] == '"')
-                break;
-            temp_substr_index ++;
-        }
-        substr = str[obj_id][index].substring(substr_index, temp_substr_index);
-        str[obj_id][index] = str[obj_id][index].replace(`itinerary_price_margin_${obj_id}_${substr}`, `itinerary_price_margin_${obj_id}_${index}`);
-        /////////////
-
-        substr_search = `product_time_${obj_id}_`;
-        substr_index = str[obj_id][index].indexOf(substr_search);
-        substr_index += substr_search.length;
-        temp_substr_index = substr_index;
-        while(true){
-            if(str[obj_id][index][temp_substr_index] == '"')
-                break;
-            temp_substr_index ++;
-        }
-        substr = str[obj_id][index].substring(substr_index, temp_substr_index);
-        str[obj_id][index] = str[obj_id][index].replace(`product_time_${obj_id}_${substr}`, `product_time_${obj_id}_${index}`);
-        /////////////
-
-        substr_search = `product_travellers_${obj_id}_`;
-        substr_index = str[obj_id][index].indexOf(substr_search);
-        substr_index += substr_search.length;
-        temp_substr_index = substr_index;
-        while(true){
-            if(str[obj_id][index][temp_substr_index] == '"')
-                break;
-            temp_substr_index ++;
-        }
-        substr = str[obj_id][index].substring(substr_index, temp_substr_index);
-        str[obj_id][index] = str[obj_id][index].replace(`product_travellers_${obj_id}_${substr}`, `product_travellers_${obj_id}_${index}`);
-        /////////////
-
-        substr_search = `edit_product_time(${obj_id}, `;
-        substr_index = str[obj_id][index].indexOf(substr_search);
-        substr_index += substr_search.length;
-        temp_substr_index = substr_index;
-        while(true){
-            if(str[obj_id][index][temp_substr_index] == ')')
-                break;
-            temp_substr_index ++;
-        }
-        substr = str[obj_id][index].substring(substr_index, temp_substr_index);
-        str[obj_id][index] = str[obj_id][index].replace(`edit_product_time(${obj_id}, ${substr}`, `edit_product_time(${obj_id}, ${index})`);
-        /////////////
-
-        substr_search = `edit_product_travellers(${obj_id}, `;
-        substr_index = str[obj_id][index].indexOf(substr_search);
-        substr_index += substr_search.length;
-        temp_substr_index = substr_index;
-        while(true){
-            if(str[obj_id][index][temp_substr_index] == ')')
-                break;
-            temp_substr_index ++;
-        }
-        substr = str[obj_id][index].substring(substr_index, temp_substr_index);
-        str[obj_id][index] = str[obj_id][index].replace(`edit_product_travellers(${obj_id}, ${substr}`, `edit_product_travellers(${obj_id}, ${index})`);
-        /////////////
-        
-        substr_search = `edit_product_price(${obj_id}, `;
-        substr_index = str[obj_id][index].indexOf(substr_search);
-        substr_index += substr_search.length;
-        temp_substr_index = substr_index;
-        while(true)
-        {
-            if(str[obj_id][index][temp_substr_index] == ')')///////////////
-                break;
-            temp_substr_index ++;
-        }
-        substr = str[obj_id][index].substring(substr_index, temp_substr_index);
-        var substr_arr = substr.split(", ");
-// new
-        str[obj_id][index] = str[obj_id][index].replace(`edit_product_price(${obj_id}, ${substr})`, `edit_product_price(${obj_id}, ${index}, ${substr_arr[1]}, ${substr_arr[2]}, ${substr_arr[3]}, ${substr_arr[4]}, ${substr_arr[5]})`);
-// new
-        /////////////
-
-        substr_search = `edit_margin_price(${obj_id}, `;
-        substr_index = str[obj_id][index].indexOf(substr_search);
-        substr_index += substr_search.length;
-        while(true)
-        {
-            if(str[obj_id][index][temp_substr_index] == ')')
-                break;
-            temp_substr_index ++;
-        }
-        substr = str[obj_id][index].substring(substr_index, temp_substr_index);
-        var substr_arr = substr.split(", ");
-        str[obj_id][index] = str[obj_id][index].replace(`edit_margin_price(${obj_id}, ${substr})`, `edit_margin_price(${obj_id}, ${index}, ${substr_arr[1]})`);
-        ///////////////
-
-        substr_search = `daily_product_del(${obj_id},`;
-        substr_index = str[obj_id][index].indexOf(substr_search);
-        substr_index += substr_search.length;
-        temp_substr_index = substr_index;
-        while(true){
-            if(str[obj_id][index][temp_substr_index] == '"')
-                break;
-            temp_substr_index ++;
-        }
-        substr = str[obj_id][index].substring(substr_index, temp_substr_index);
-        str[obj_id][index] = str[obj_id][index].replace(`daily_product_del(${obj_id},${substr}`, `daily_product_del(${obj_id},${index})`);
-        ////////////////
+        })
     }
+    else {
+        var index_i = 0;
+    
+        jQuery('.product-list-each').each(function(index, customElement) {
+            var str_id = customElement.id;
+            var str_id_arr = str_id.split('-');
+            if(obj_id == parseInt(str_id_arr[2])){
+                if(index_i == list_id){
+                    $(this).remove();
+                }
+                index_i ++;
+            }
+        });
 
-    $(`#daily-schedule-id-${obj_id}`).empty();
-    var str_temp = "";
-    for(index = 0; index < k[obj_id]; index ++) {
-        str_temp += str[obj_id][index];
+        str[obj_id].splice(list_id, 1);
+        k[obj_id] --;
+
+        for(index = 0; index < k[obj_id]; index ++){
+            var substr_search = `daily-list-${obj_id}-`;
+            var substr_index = str[obj_id][index].indexOf(substr_search);
+            substr_index += substr_search.length;
+            var temp_substr_index = substr_index;
+            while(true){
+                if(str[obj_id][index][temp_substr_index] == '"')
+                    break;
+                temp_substr_index ++;
+            }
+            var substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+            str[obj_id][index] = str[obj_id][index].replace(`daily-list-${obj_id}-${substr}`, `daily-list-${obj_id}-${index}`);
+
+            /////////////
+            substr_search = `itinerary_price_margin_${obj_id}_`;
+            substr_index = str[obj_id][index].indexOf(substr_search);
+            substr_index += substr_search.length;
+            temp_substr_index = substr_index;
+            while(true){
+                if(str[obj_id][index][temp_substr_index] == '"')
+                    break;
+                temp_substr_index ++;
+            }
+            substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+            str[obj_id][index] = str[obj_id][index].replace(`itinerary_price_margin_${obj_id}_${substr}`, `itinerary_price_margin_${obj_id}_${index}`);
+            /////////////
+
+            substr_search = `product_time_${obj_id}_`;
+            substr_index = str[obj_id][index].indexOf(substr_search);
+            substr_index += substr_search.length;
+            temp_substr_index = substr_index;
+            while(true){
+                if(str[obj_id][index][temp_substr_index] == '"')
+                    break;
+                temp_substr_index ++;
+            }
+            substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+            str[obj_id][index] = str[obj_id][index].replace(`product_time_${obj_id}_${substr}`, `product_time_${obj_id}_${index}`);
+            /////////////
+
+            substr_search = `product_travellers_${obj_id}_`;
+            substr_index = str[obj_id][index].indexOf(substr_search);
+            substr_index += substr_search.length;
+            temp_substr_index = substr_index;
+            while(true){
+                if(str[obj_id][index][temp_substr_index] == '"')
+                    break;
+                temp_substr_index ++;
+            }
+            substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+            str[obj_id][index] = str[obj_id][index].replace(`product_travellers_${obj_id}_${substr}`, `product_travellers_${obj_id}_${index}`);
+            /////////////
+
+            substr_search = `add_task(${obj_id}, `;
+            substr_index = str[obj_id][index].indexOf(substr_search);
+            substr_index += substr_search.length;
+            temp_substr_index = substr_index;
+            while(true)
+            {
+                if(str[obj_id][index][temp_substr_index] == ')')///////////////
+                    break;
+                temp_substr_index ++;
+            }
+            substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+            var substr_arr = substr.split(", ");
+            str[obj_id][index] = str[obj_id][index].replace(`add_task(${obj_id}, ${substr})`, `add_task(${obj_id}, ${index}, ${substr_arr[1]}, ${substr_arr[2]})`);
+            /////////////
+
+            substr_search = `edit_product_time(${obj_id}, `;
+            substr_index = str[obj_id][index].indexOf(substr_search);
+            substr_index += substr_search.length;
+            temp_substr_index = substr_index;
+            while(true){
+                if(str[obj_id][index][temp_substr_index] == ')')
+                    break;
+                temp_substr_index ++;
+            }
+            substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+            str[obj_id][index] = str[obj_id][index].replace(`edit_product_time(${obj_id}, ${substr}`, `edit_product_time(${obj_id}, ${index})`);
+            /////////////
+
+            substr_search = `edit_product_travellers(${obj_id}, `;
+            substr_index = str[obj_id][index].indexOf(substr_search);
+            substr_index += substr_search.length;
+            temp_substr_index = substr_index;
+            while(true){
+                if(str[obj_id][index][temp_substr_index] == ')')
+                    break;
+                temp_substr_index ++;
+            }
+            substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+            str[obj_id][index] = str[obj_id][index].replace(`edit_product_travellers(${obj_id}, ${substr}`, `edit_product_travellers(${obj_id}, ${index})`);
+            /////////////
+            
+            substr_search = `edit_product_price(${obj_id}, `;
+            substr_index = str[obj_id][index].indexOf(substr_search);
+            substr_index += substr_search.length;
+            temp_substr_index = substr_index;
+            while(true)
+            {
+                if(str[obj_id][index][temp_substr_index] == ')')///////////////
+                    break;
+                temp_substr_index ++;
+            }
+            substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+            var substr_arr = substr.split(", ");
+    // new
+            str[obj_id][index] = str[obj_id][index].replace(`edit_product_price(${obj_id}, ${substr})`, `edit_product_price(${obj_id}, ${index}, ${substr_arr[1]}, ${substr_arr[2]}, ${substr_arr[3]}, ${substr_arr[4]}, ${substr_arr[5]}, ${substr_arr[6]}, ${substr_arr[7]})`);
+    // new
+            /////////////
+
+            substr_search = `edit_margin_price(${obj_id}, `;
+            substr_index = str[obj_id][index].indexOf(substr_search);
+            substr_index += substr_search.length;
+            while(true)
+            {
+                if(str[obj_id][index][temp_substr_index] == ')')
+                    break;
+                temp_substr_index ++;
+            }
+            substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+            var substr_arr = substr.split(", ");
+            str[obj_id][index] = str[obj_id][index].replace(`edit_margin_price(${obj_id}, ${substr})`, `edit_margin_price(${obj_id}, ${index}, ${substr_arr[1]})`);
+            ///////////////
+
+            substr_search = `daily_product_del(${obj_id},`;
+            substr_index = str[obj_id][index].indexOf(substr_search);
+            substr_index += substr_search.length;
+            temp_substr_index = substr_index;
+            while(true){
+                if(str[obj_id][index][temp_substr_index] == '"')
+                    break;
+                temp_substr_index ++;
+            }
+            substr = str[obj_id][index].substring(substr_index, temp_substr_index);
+            var substr_arr = substr.split(", ");
+            str[obj_id][index] = str[obj_id][index].replace(`daily_product_del(${obj_id},${substr}`, `daily_product_del(${obj_id}, ${index}, ${substr_arr[1]})`);
+            ////////////////
+        }
+
+        $(`#daily-schedule-id-${obj_id}`).empty();
+        var str_temp = "";
+        for(index = 0; index < k[obj_id]; index ++) {
+            str_temp += str[obj_id][index];
+        }
+        $(`#daily-schedule-id-${obj_id}`).append(str_temp);
     }
-    $(`#daily-schedule-id-${obj_id}`).append(str_temp);
 }
 
 let map;
@@ -1943,10 +2156,10 @@ function set_all_product_price() {
                                         `<a class="dropdown-item dropdown-edit-time" href="javascript:void(0)" onClick="edit_product_time(${global_obj_id}, ${k[global_obj_id]})"><i class="bx bx-edit-alt mr-1"></i> Edit Time</a>`+
                                         `<a class="dropdown-item dropdown-edit-travellers" href="javascript:void(0)" onClick="edit_product_travellers(${global_obj_id}, ${k[global_obj_id]})"><i class="bx bx-edit-alt mr-1"></i> Travellers</a>`+
 // new
-                                        `<a class="dropdown-item dropdown-edit-price" href="javascript:void(0)" onClick="edit_product_price(${global_obj_id}, ${k[global_obj_id]}, 0, '${product_price_tag}', '${product_price_season}', '${product_price_currency}', '${product_price_id}', 0)"><i class="bx bx-edit-alt mr-1"></i> Edit Price</a>`+
+                                        `<a class="dropdown-item dropdown-edit-price" href="javascript:void(0)" onClick="edit_product_price(${global_obj_id}, ${k[global_obj_id]}, 0, NULL '${product_price_tag}', '${product_price_season}', '${product_price_currency}', '${product_price_id}', 0)"><i class="bx bx-edit-alt mr-1"></i> Edit Price</a>`+
 // new
                                         `<a class="dropdown-item dropdown-edit-margin" href="javascript:void(0)" onClick="edit_margin_price(${global_obj_id}, ${k[global_obj_id]}, 0)"><i class="bx bx-edit-alt mr-1"></i> Edit Margin</a>`+
-                                        '<a class="dropdown-item dropdown-del-product" href="javascript:void(0)" onClick="daily_product_del(' + global_obj_id + ',' + k[global_obj_id] +')"><i class="bx bx-trash mr-1"></i> delete</a>'+
+                                        `<a class="dropdown-item dropdown-del-product" href="javascript:void(0)" onClick="daily_product_del(${global_obj_id}, ${k[global_obj_id]}, NULL)"><i class="bx bx-trash mr-1"></i> delete</a>`+
                                     '</div>'+
                                     '</div>'+
                                 '</div>'+
@@ -2002,14 +2215,14 @@ function set_all_product_price() {
                                             `<i class="bx bx-group" style="color: rgb(210, 77, 83);padding-top: 2px;"></i> <span id="product_travellers_${global_obj_id}_${update_key_index}">${itinerary.adult_number}&nbsp;adults-${itinerary.children_number}&nbsp;children</span>`+
                                         '</div>'+
                                     '</div>'+
-                                    global_task_id +
+                                    bullet_html +
                                 '</div>'+
                                 '<div class="daily-products-right">'+
                                     '<div class="dropdown">'+
                                     '<span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"'+
                                         'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu"></span>'+
                                     '<div class="dropdown-menu dropdown-menu-right">'+
-                                        `<a class="dropdown-item dropdown-edit-time" href="javascript:void(0)" onClick="add_task(${global_itinerary_daily_id}, ${global_task_id})"><i class="bx bx-edit-alt mr-1"></i> Task </a>`+
+                                        `<a class="dropdown-item dropdown-edit-time" href="javascript:void(0)" onClick="add_task(${global_obj_id}, ${update_key_index}, ${global_itinerary_daily_id}, ${global_task_id})"><i class="bx bx-edit-alt mr-1"></i> Task </a>`+
                                         `<a class="dropdown-item dropdown-edit-time" href="javascript:void(0)" onClick="edit_product_time(${global_obj_id}, ${update_key_index})"><i class="bx bx-edit-alt mr-1"></i> Edit Time</a>`+
                                         `<a class="dropdown-item dropdown-edit-travellers" href="javascript:void(0)" onClick="edit_product_travellers(${global_obj_id}, ${update_key_index})"><i class="bx bx-edit-alt mr-1"></i> Travellers</a>`+
 // new
@@ -2017,7 +2230,7 @@ function set_all_product_price() {
 // new
                                     
                                         `<a class="dropdown-item dropdown-edit-margin" href="javascript:void(0)" onClick="edit_margin_price(${global_obj_id}, ${update_key_index}, ${global_margin_price})"><i class="bx bx-edit-alt mr-1"></i> Edit Margin</a>`+
-                                        '<a class="dropdown-item dropdown-del-product" href="javascript:void(0)" onClick="daily_product_del(' + global_obj_id + ',' + update_key_index +')"><i class="bx bx-trash mr-1"></i> delete</a>'+
+                                        `<a class="dropdown-item dropdown-del-product" href="javascript:void(0)" onClick="daily_product_del(${global_obj_id}, ${update_key_index}, ${global_task_id})"><i class="bx bx-trash mr-1"></i> delete</a>`+
                                     '</div>'+
                                     '</div>'+
                                 '</div>'+
@@ -2100,6 +2313,20 @@ function set_all_product_price() {
                     str[global_obj_id][i] = str[global_obj_id][i].replace(`product_travellers_${global_obj_id}_${substr}`,`product_travellers_${global_obj_id}_${i}`);
                     /////////////
 
+                    str_index = str[global_obj_id][i].indexOf(`add_task(${global_obj_id}, `);
+                    str_index_temp = str_index;
+                    while(true)
+                    {
+                        if(str[global_obj_id][i][str_index_temp] == ')')
+                            break;
+                        str_index_temp ++;
+                    }
+                    length = `add_task(${global_obj_id}, `.length;
+                    substr = str[global_obj_id][i].substring(str_index + length, str_index_temp);
+                    var substr_arr = substr.split(", ");
+                    str[global_obj_id][i] = str[global_obj_id][i].replace(`add_task(${global_obj_id}, ${substr})`, `add_task(${global_obj_id}, ${i}, ${substr_arr[1]}, ${substr_arr[2]})`);
+                    //////////////
+
                     str_index = str[global_obj_id][i].indexOf(`edit_product_time(${global_obj_id}, `);
                     str_index_temp = str_index;
                     while(true)
@@ -2125,7 +2352,7 @@ function set_all_product_price() {
                     substr = str[global_obj_id][i].substring(str_index + length, str_index_temp);
                     str[global_obj_id][i] = str[global_obj_id][i].replace(`edit_product_travellers(${global_obj_id}, ${substr})`,`edit_product_travellers(${global_obj_id}, ${i})`);
                     /////////////
-
+                    
                     str_index = str[global_obj_id][i].indexOf(`edit_product_price(${global_obj_id}, `);
                     str_index_temp = str_index;
                     while(true)
@@ -2142,7 +2369,6 @@ function set_all_product_price() {
 // new
                     //////////////
 
-
                     str_index = str[global_obj_id][i].indexOf(`daily_product_del(${global_obj_id},`);
                     str_index_temp = str_index;
                     while(true)
@@ -2153,7 +2379,8 @@ function set_all_product_price() {
                     }
                     length = `daily_product_del(${global_obj_id},`.length;
                     substr = str[global_obj_id][i].substring(str_index + length, str_index_temp);
-                    str[global_obj_id][i] = str[global_obj_id][i].replace(`daily_product_del(${global_obj_id},${substr})`,`daily_product_del(${global_obj_id},${i})`);
+                    var substr_arr = substr.split(", ");
+                    str[global_obj_id][i] = str[global_obj_id][i].replace(`daily_product_del(${global_obj_id},${substr})`,`daily_product_del(${global_obj_id}, ${i}, ${substr_arr[1]})`);
 
                     temp_string += str[global_obj_id][i];
                 }
@@ -2506,12 +2733,11 @@ function set_schedule_with_template(group_id, template_title, day_count) {
                                                             '<span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"'+
                                                                 'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu"></span>'+
                                                             '<div class="dropdown-menu dropdown-menu-right">'+
-
                                                                 `<a class="dropdown-item dropdown-edit-time" href="javascript:void(0)" onClick="edit_product_time(${schedule_index}, ${k[schedule_index]})"><i class="bx bx-edit-alt mr-1"></i> Edit Time</a>`+
                                                                 `<a class="dropdown-item dropdown-edit-travellers" href="javascript:void(0)" onClick="edit_product_travellers(${schedule_index}, ${k[schedule_index]})"><i class="bx bx-edit-alt mr-1"></i> Travellers</a>`+
                                                                 `<a class="dropdown-item dropdown-edit-price" href="javascript:void(0)" onClick="edit_product_price(${schedule_index}, ${k[schedule_index]}, 0, null, '', '', '', '', 0)"><i class="bx bx-edit-alt mr-1"></i> Edit Price</a>`+
                                                                 `<a class="dropdown-item dropdown-edit-margin" href="javascript:void(0)" onClick="edit_margin_price(${schedule_index}, ${k[schedule_index]}, 0)"><i class="bx bx-edit-alt mr-1"></i> Edit Margin</a>`+
-                                                                '<a class="dropdown-item dropdown-del-product" href="javascript:void(0)" onClick="daily_product_del(' + schedule_index + ',' + k[schedule_index] +')"><i class="bx bx-trash mr-1"></i> delete</a>'+
+                                                                `<a class="dropdown-item dropdown-del-product" href="javascript:void(0)" onClick="daily_product_del(${schedule_index}, ${k[schedule_index]}, NULL)"><i class="bx bx-trash mr-1"></i> delete</a>`+
                                                             '</div>'+
                                                             '</div>'+
                                                         '</div>'+
@@ -2589,7 +2815,22 @@ function set_schedule_with_template(group_id, template_title, day_count) {
                                         length = `product_travellers_${obj_id}_`.length;
                                         substr = str[obj_id][i].substring(str_index + length, str_index_temp);
                                         str[obj_id][i] = str[obj_id][i].replace(`product_travellers_${obj_id}_${substr}`,`product_travellers_${obj_id}_${i}`);
+                                        ///////////////
 
+                                        str_index = str[obj_id][i].indexOf(`add_task(${obj_id}, `);
+                                        str_index_temp = str_index;
+                                        while(true)
+                                        {
+                                            if(str[obj_id][i][str_index_temp] == ')')
+                                                break;
+                                            str_index_temp ++;
+                                        }
+                                        length = `add_task(${obj_id}, `.length;
+                                        substr = str[obj_id][i].substring(str_index + length, str_index_temp);
+                                        var substr_arr = substr.split(", ");
+                                        str[obj_id][i] = str[obj_id][i].replace(`add_task(${obj_id}, ${substr})`,`add_task(${obj_id}, ${i}, ${substr_arr[1]}, ${substr_arr[2]})`);
+                                        /////////////////
+                                        
                                         str_index = str[obj_id][i].indexOf(`edit_product_time(${obj_id}, `);
                                         str_index_temp = str_index;
                                         while(true)
@@ -2637,7 +2878,8 @@ function set_schedule_with_template(group_id, template_title, day_count) {
                                         }
                                         length = `daily_product_del(${obj_id},`.length;
                                         substr = str[obj_id][i].substring(str_index + length, str_index_temp);
-                                        str[obj_id][i] = str[obj_id][i].replace(`daily_product_del(${obj_id},${substr})`,`daily_product_del(${obj_id},${i})`);
+                                        var substr_arr = substr.split(", ");
+                                        str[obj_id][i] = str[obj_id][i].replace(`daily_product_del(${obj_id},${substr})`,`daily_product_del(${obj_id}, ${i}, ${substr_arr[1]})`);
 
                                         temp_string += str[obj_id][i];
                                     }

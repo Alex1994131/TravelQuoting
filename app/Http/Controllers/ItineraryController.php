@@ -17,6 +17,9 @@ use App\Models\Category;
 use App\Models\Language;
 use App\Models\ItineraryDaily;
 use App\Models\ItineraryTemplate;
+use App\Models\Confirmation;
+use App\Models\Task;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use DB;
@@ -528,6 +531,14 @@ class ItineraryController extends Controller
     $diff_arr = array_diff($origin_daily_arr, $new_daily_arr);
     foreach($diff_arr as $df) {
       ItineraryDaily::find($df)->delete();
+      $confirmation = Confirmation::where('itinerary_daily_id', $df)->first();
+      $task_id = $confirmation->task_id;
+      $confirmation->delete();
+
+      $task_model = Confirmation::where('task_id', $task_id)->get();
+      if(count($task_model) == 0) {
+        Task::find($task_id)->delete();
+      }
     }
 
     $insert_string = '';
