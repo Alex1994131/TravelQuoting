@@ -75,8 +75,6 @@ class ItineraryController extends Controller
       $itinerary->status = 0;
       $itinerary->account_id = $enquiry->account_id;
       $itinerary->created_id = Auth::user()->id;
-      //$itinerary->save(); /** save the itinerary basic info from enquiry. */
-      // dd($itinerary->id);
     }
     else
     {
@@ -95,8 +93,6 @@ class ItineraryController extends Controller
 
       $enquiry_id = $itinerary->enquiry_id;
       $enquiry = Enquiry::where('id',$enquiry_id)->get()->first();
-
-      // return view('pages.itinerary_add_info',compact('enquiry', 'itinerary', 'pageConfigs', 'breadcrumbs'));
     }
 
     /** get the daily info from itinerary id  */
@@ -178,8 +174,9 @@ class ItineraryController extends Controller
           ->get();
 
       $itinerary_daily = DB::table('product')
-        ->select('product.id', 'itinerary_daily.id as daily_id', 'product.title as product_title', 'itinerary_daily.product_price_tag', 'itinerary_daily.product_price_season', 'itinerary_daily.product_price_currency', 'itinerary_daily.product_price_id', 'itinerary_daily.itinerary_margin_price', 'itinerary_daily.date', 'itinerary_daily.start_time', 'itinerary_daily.end_time', 'itinerary_daily.adults_num', 'itinerary_daily.children_num', 'product.country', 'product.city')
+        ->select('product.id', 'itinerary_daily.id as daily_id', 'confirm_check.status as task_status', 'confirm_check.task_id', 'product.title as product_title', 'itinerary_daily.product_price_tag', 'itinerary_daily.product_price_season', 'itinerary_daily.product_price_currency', 'itinerary_daily.product_price_id', 'itinerary_daily.itinerary_margin_price', 'itinerary_daily.date', 'itinerary_daily.start_time', 'itinerary_daily.end_time', 'itinerary_daily.adults_num', 'itinerary_daily.children_num', 'product.country', 'product.city')
         ->join('itinerary_daily', 'product.id', '=', 'itinerary_daily.product_id')
+        ->leftjoin('confirm_check', 'itinerary_daily.id', '=', 'confirm_check.itinerary_daily_id')
         ->joinSub($latestPosts, 'latest_posts', function ($join) {
           $join->on('product.id', '=', 'latest_posts.product_id');
         })

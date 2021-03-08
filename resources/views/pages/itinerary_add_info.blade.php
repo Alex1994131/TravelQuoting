@@ -34,6 +34,11 @@
 label{
   font-size: 0.86rem;
 }
+
+.daily-products-left {
+  align-items:center;
+  justify-content: space-between;
+}
 </style>
 
 @endsection
@@ -41,8 +46,8 @@ label{
 @section('content')
 <input type="hidden" name="service_id" id="service_id">
 <input type="hidden" name="task_type" id="task_type">
-<div class="modal fade text-left" id="task_detail_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel17"
-    aria-hidden="true">
+
+<div class="modal fade text-left" id="task_detail_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel17" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -64,9 +69,9 @@ label{
                   <div class="col-md-12 d-flex flex-column justify-content-around">
                     <div class="tab-content">
                       <div class="row mb-1">
+                        <input type="hidden" id="task_id" name="task_id" value="">
                         <div class="col-md-2">
                           <label>Task Name</label>
-
                         </div>
                         <div class="col-md-10 form-group" style = "padding-left: 70px;">
                           <input type="text" id="task_name" name="task_name" class="form-control" placeholder="Task Name" required>
@@ -285,7 +290,7 @@ label{
 <section id="basic-tabs-components">
 <div class="content-header-left col-12 mb-2 mt-1">
   <div class="row breadcrumbs-top">
-    <div class = "col-6">
+    <div class = "col-md-6 col-sm-12">
       <h5 class="content-header-title float-left pr-1 mb-0">@yield('title')</h5>
       <div class="breadcrumb-wrapper col-12">
       <?php $breadcrumbs1 = [
@@ -304,7 +309,7 @@ label{
         </ol>
       </div>
     </div>
-    <div class = "col-6">
+    <div class = "col-md-6 col-sm-12">
       <ul class="nav nav-tabs float-right" role="tablist">
           <li class="nav-item">
             <div class="dropdown">
@@ -349,41 +354,41 @@ label{
         <div class="card-content">
           <div class="card-body">
             <div class="row">
-              <div class="col-md-2 col-2" style="border-left: 1px solid #DFE3E7">
+              <div class="col-md-2 col-sm-6" style="border-left: 1px solid #DFE3E7">
                 <h6>Ref.No: {{$enquiry->reference_number}}</h6>
               </div>
-              <div class="col-md-2 col-2" style="border-left: 1px solid #DFE3E7">
+              <div class="col-md-2 col-sm-6" style="border-left: 1px solid #DFE3E7">
                 <h6>Title: {{$enquiry->title}}</h6>
               </div>
-              <div class="col-md-2 col-2" style="border-left: 1px solid #DFE3E7">
+              <div class="col-md-2 col-sm-6" style="border-left: 1px solid #DFE3E7">
                 <h6>Total Budget: {{$enquiry->budget}}$</h6>
               </div>
-              <div class="col-md-3 col-3" style="border-left: 1px solid #DFE3E7">
+              <div class="col-md-3 col-sm-6" style="border-left: 1px solid #DFE3E7">
                 <h6>From Date: &nbsp;&nbsp;&nbsp;&nbsp;{{$enquiry->from_date}}</h6>
               </div>
-              <div class="col-md-3 col-3" style="border-left: 1px solid #DFE3E7">
+              <div class="col-md-3 col-sm-6" style="border-left: 1px solid #DFE3E7">
                 <h6>End Date: &nbsp;&nbsp;&nbsp;&nbsp;{{$enquiry->to_date}}</h6>
               </div>
             </div>
             <div class="row" style="padding-top: 15px;">
-              <div class="col-md-6 col-6" style="border-left: 1px solid #DFE3E7">
+              <div class="col-md-6 col-sm-6" style="border-left: 1px solid #DFE3E7">
                 <h6>Travellers: &nbsp;&nbsp;{{$enquiry->adult_number}} Adult(s) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$enquiry->children_number}} Child(ren) </h6>
               </div>
             </div>
             <div class="row" style="padding-top: 15px;">
-              <div class="col-md-2 col-2" style="border-left: 1px solid #DFE3E7">
+              <div class="col-md-2 col-sm-6" style="border-left: 1px solid #DFE3E7">
                 <h6>Single Room: {{$enquiry->single_count}} Room(s)</h6>
               </div>
-              <div class="col-md-2 col-2" style="border-left: 1px solid #DFE3E7">
+              <div class="col-md-2 col-sm-6" style="border-left: 1px solid #DFE3E7">
                 <h6>Double Room: {{$enquiry->double_count}} Room(s)</h6>
               </div>
-              <div class="col-md-2 col-2" style="border-left: 1px solid #DFE3E7">
+              <div class="col-md-2 col-sm-6" style="border-left: 1px solid #DFE3E7">
                 <h6>Twin Room: {{$enquiry->twin_count}} Room(s)</h6>
               </div>
-              <div class="col-md-3 col-3" style="border-left: 1px solid #DFE3E7">
+              <div class="col-md-3 col-sm-6" style="border-left: 1px solid #DFE3E7">
                 <h6>Triple Room: {{$enquiry->triple_count}} Room(s)</h6>
               </div>
-              <div class="col-md-3 col-3" style="border-left: 1px solid #DFE3E7">
+              <div class="col-md-3 col-sm-6" style="border-left: 1px solid #DFE3E7">
                 <h6>Family Room: {{$enquiry->family_count}} Room(s)</h6>
               </div>
             </div>
@@ -423,7 +428,7 @@ label{
               <input type="hidden" name="itinerary_id" id="itinerary_id" value="{{ $itinerary->id }}">
 
               <div class="row">
-                <div class="col-md-6 col-sm-6">
+                <div class="col-md-6 col-sm-12">
                   <h6>Itinerary Title</h6>
                   <fieldset class="form-group position-relative has-icon-left">
                       <div class="controls">
@@ -435,7 +440,7 @@ label{
                   </fieldset>
                 </div>
 
-                <div class="col-md-2 col-sm-2">
+                <div class="col-md-2 col-sm-6">
                   <h6>Pick up duration</h6>
                   <fieldset class="form-group position-relative has-icon-left">
                       @php
@@ -455,13 +460,13 @@ label{
                       </div>
                   </fieldset>
                 </div>
-                <div class="col-md-2 col-sm-2">
+                <div class="col-md-2 col-sm-6">
                     <h6>Adults Number:</h6>
                     <div class="d-inline-block mb-1 mr-1">
                         <input type="number" class="touchspin" value="{{ $itinerary->adult_number }}" id="adults_num" name="adults_num" required data-validation-required-message="This Title field is required" aria-invalid="false">
                     </div>
                 </div>
-                <div class="col-md-2 col-sm-2">
+                <div class="col-md-2 col-sm-6">
                     <h6>Children Number:</h6>
                     <div class="d-inline-block mb-1 mr-1">
                         <input type="number" class="touchspin" value="{{ $itinerary->children_number}}" id="children_num" name="children_num">
@@ -469,31 +474,31 @@ label{
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-2 col-sm-2">
+                <div class="col-md-2 col-sm-6">
                   <h6>Single Rooms:</h6>
                   <div class="d-inline-block mb-1 mr-1">
                     <input type="number" class="touchspin" value="{{ $itinerary->single_count }}" id="single_room" name="single_room">
                   </div>
                 </div>
-                <div class="col-2 col-sm-2">
+                <div class="col-2 col-sm-6">
                   <h6>Double Rooms:</h6>
                   <div class="d-inline-block mb-1 mr-1">
                     <input type="number" class="touchspin" value="{{ $itinerary->double_count }}" id="double_room" name="double_room">
                   </div>
                 </div>
-                <div class="col-2 col-sm-2">
+                <div class="col-2 col-sm-6">
                   <h6>Twin Rooms:</h6>
                   <div class="d-inline-block mb-1 mr-1">
                     <input type="number" class="touchspin" value="{{ $itinerary->twin_count }}" id="twin_room" name="twin_room">
                   </div>
                 </div>
-                <div class="col-2 col-sm-2">
+                <div class="col-2 col-sm-6">
                   <h6>Triple Rooms:</h6>
                   <div class="d-inline-block mb-1 mr-1">
                     <input type="number" class="touchspin" value="{{ $itinerary->triple_count }}" id="triple_room" name="triple_room">
                   </div>
                 </div>
-                <div class="col-2 col-sm-2">
+                <div class="col-2 col-sm-6">
                   <h6>Family Rooms:</h6>
                   <div class="d-inline-block mb-1 mr-1">
                     <input type="number" class="touchspin" value="{{ $itinerary->family_count }}" id="family_room" name="family_room">
@@ -501,7 +506,7 @@ label{
                 </div>
               </div>
               <div class="row">
-                <div class="col-12 col-sm-12 col-md-12">
+                <div class="col-sm-12 col-md-12">
                   <h6>Note:</h6>
                   <textarea class="form-control" rows="6" name="note1" id="note1">
                     {{ $itinerary->note }}
@@ -958,7 +963,7 @@ label{
                 </div>
               </div>
 
-              <div class="col-sm-12 col-md-4" >
+              <div class="col-sm-12 col-md-4">
                 <div class="card" style="height: 650px;">
                   <div class="card-header" style = "border: 0px !important;">
                     <h5>Template Itinerary</h5>
@@ -1017,7 +1022,7 @@ label{
 
                     @foreach($budget as $key => $val)
                     <div class="row">
-                      <div class="col-md-6">
+                      <div class="col-md-6 col-sm-12">
                         <div class="form-group">
                           <input type="text" class="form-control" value="{{ $key }}" readonly>
                         </div>
@@ -1030,7 +1035,7 @@ label{
                     </div>
                     @endforeach
                   </div>
-                  <div class="col-md-2 col-sm-4">
+                  <div class="col-md-2 col-sm-6">
                     <h6>Currency</h6>
                     <fieldset class="form-group position-relative has-icon-left">
                         <div class="controls">
@@ -1045,12 +1050,12 @@ label{
                         </div>
                     </fieldset>
                   </div>
-                  <div class="col-md-2 col-sm-2">
+                  <div class="col-md-2 col-sm-6">
                       <div class="form-group">
                         <button type="button" class="btn btn-primary" id="currency_converter" style="margin-top: 26px;">Currency Converter</button>
                       </div>
                   </div>
-                  <div class="col-md-2 col-sm-4" id="margin_price_container">
+                  <div class="col-md-2 col-sm-6" id="margin_price_container">
                     <h6>Profit Price(%)</h6>
                     <fieldset class="form-group position-relative has-icon-left">
                         <div class="controls">

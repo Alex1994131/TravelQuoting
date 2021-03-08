@@ -49,10 +49,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/task_edit',['uses' => 'TaskController@edit_task'])->name('edit_task');
     Route::post('/del_task',['uses' => 'TaskController@delete_task']);
     Route::get('/task_detail',['as' => 'task_detail','uses' => 'TaskController@task_detail']);
-    Route::get('/task_product_detail',['as' => 'task_product_detail','uses' => 'TaskController@task_product_detail']);
-    Route::get('/save_product_task',['as' => 'save_product_task','uses' => 'TaskController@save_product_task']);
-
-    Route::get('/save_task', ['uses' => 'TaskController@save_task'])->name('save_task');
+    Route::post('/task_product_detail',['as' => 'task_product_detail','uses' => 'TaskController@task_product_detail']);
+    Route::post('/save_task', ['uses' => 'TaskController@save_task'])->name('save_task');
 
     //Contact
     Route::get('/contact_management/{itinerary_id}', ['uses' => 'ContactController@contact_management'])->name('contact_management');

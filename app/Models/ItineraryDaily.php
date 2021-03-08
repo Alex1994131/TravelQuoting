@@ -34,7 +34,7 @@ class ItineraryDaily extends Model
       return $product_prices;
 
     }
-    public function confirm_check(){
+    public function confirm_check() {
       $confirmation = Confirmation::where('itinerary_daily_id', $this->id)->where('flag', 1)->first();
       return $confirmation;
     }

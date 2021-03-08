@@ -8,7 +8,7 @@ class Task extends Model
     protected $table = 'task';
     protected $primaryKey = 'id';
 
-    protected $fillable = ["id", "itinerary_id", "service_id", "reference_number", "task_name", "task_type", "customer", "task_des", "assigned_by", "assigned_to", "start_date", "start_time", "end_date", "end_time", "priority", "status", "tags"];
+    protected $fillable = ["id", "itinerary_id", "reference_number", "task_name", "task_type", "customer", "task_des", "assigned_by", "assigned_to", "start_date", "start_time", "end_date", "end_time", "priority", "status", "tags"];
 
     public function get_itinerary() {
         return $this->hasOne('App\Models\itinerary', 'id', 'itinerary_id');
