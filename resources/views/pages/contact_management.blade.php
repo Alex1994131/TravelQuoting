@@ -31,8 +31,13 @@
     .select2-container--default .select2-selection--single .select2-selection__rendered {
       margin-left: 25px;
     }
+
+    .widget-chat .widget-chat-container {
+      height: 380px;
+    }
   </style>
 @endsection
+
 @section('content')
 <!-- Widgets Advance start -->
 <input type="hidden" id="auth_id" val="{{ Auth::user()->id }}">
@@ -163,13 +168,13 @@
     </div>
     </div>
   </div>
+
   <div class="row">
     <!-- Services Starts -->
-    <div class="col-xl-6 col-md-6 earnings-card" id="widget-earnings">
+    <div class="col-xl-6 col-md-6 col-sm-12 earnings-card" id="widget-earnings">
       <div class="card">
         <div class="card-header border-bottom d-flex justify-content-between align-items-center">
-          <h5 class="card-title">Services </h5>
-          <i class="bx bx-dots-vertical-rounded font-medium-3 cursor-pointer"></i>
+          <h5 class="card-title">Tasks </h5>
         </div>
         <div class="card-content">
           <div class="card-body py-1">
@@ -185,16 +190,10 @@
                 </div>
                 @endforeach
               </div>
-              <div class="swiper-button-prev"></div>
-              <div class="swiper-button-next"></div>
             </div>
             <!-- services swiper ends -->
-          </div>
-        </div>
-        <div class="main-wrapper-content">
-          @foreach($confirm_tasks as $confirm_task)
-          <div class="wrapper-content" data-earnings="service_{{$confirm_task->itinerary_daily_id}}">
-              
+            @foreach($confirm_tasks as $confirm_task)
+            <div class="wrapper-content" data-earnings="service_{{$confirm_task->itinerary_daily_id}}">
               @php
                   $product_gallery = $product_gallery_model->where('product_id', $confirm_task->product_id)->first();
                   $path = $product_gallery?$product_gallery->path:'';
@@ -206,81 +205,60 @@
                   $product_tags = $confirm_task->get_product_tags();
                   $product_currencies = $confirm_task->get_product_currencies();
               @endphp
-              
-            <div class="widget-earnings-scroll table-responsive">
-              <table class="table table-borderless widget-earnings-width mb-0">
-                <tbody>
-                  <tr>
-                    <td>
-                      <div class="row">
-                        <div class = "col-md-8">
-                          <div class="d-flex align-items-center mt-75">
-                            <p style="margin-right: 20px;" class="text-danger">Category:</p>
-                            <p class="font-weight-bold" id="category_title">{{ $product->get_category()->title?$product->get_category()->title:''  }}</p>
-                          </div>
-                          <div class="d-flex align-items-center">
-                              <p style="margin-right: 20px;" class="text-danger">location:</p>
-                              <p class="font-weight-bold" id="location">{{ $product->country?$product->country:'' }} {{  $product->city?$product->city:'' }}</p>
-                          </div>
-                        </div>
-                        <div class = "col-md-4 mt-75" style="color: green">
-                          <button type="button" onClick="confirm_check({{$confirm_task->id}})" class="btn btn-danger confirm_btn" {{ $confirm_task->status == 1 ? "disabled" : ""}}> confirm </button>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
 
-                  <tr>
-                    <td class="col-lg-6 col-md-6 col-sm-6">
-                      <div class="card border shadow-none mb-1 app-file-info p-act">
-                        <div class="card-content">
-                          <i class="bx bx-dots-vertical-rounded app-file-edit-icon d-block float-right"></i>
-                        </div>
+              <div class="row">
+                <div class = "col-md-8">
+                  <div class="d-flex align-items-center mt-75">
+                    <p style="margin-right: 20px;" class="text-danger">Category:</p>
+                    <p class="font-weight-bold" id="category_title">{{ $product->get_category()->title?$product->get_category()->title:''  }}</p>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <p style="margin-right: 20px;" class="text-danger">location:</p>
+                    <p class="font-weight-bold" id="location">{{ $product->country?$product->country:'' }} {{  $product->city?$product->city:'' }}</p>
+                  </div>
+                </div>
+                <div class = "col-md-4 mt-75" style="color: green; text-align: right;">
+                  <button type="button" onClick="confirm_check({{$confirm_task->id}})" class="btn btn-danger confirm_btn" {{ $confirm_task->status == 1 ? "disabled" : ""}}> confirm </button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <div class="d-flex align-items-center mt-75">
+                      <p style="margin-right: 20px;" class="text-danger">Travelers:</p>
+                      <p class="font-weight-bold" id="category_title">adults: {{ $confirm_task->get_itinerary_daily()->adults_num}}</p>
+                      <p style="margin-left: 30px;" class="font-weight-bold" id="category_title">childs: {{ $confirm_task->get_itinerary_daily()->children_num}}</p>
+                  </div>
 
-                        <div class="card-body p-50">
-                          <div class="d-flex align-items-center mt-75">
-                              <p style="margin-right: 20px;" class="text-danger">Travelers:</p>
-                              <p class="font-weight-bold" id="category_title">adults: {{ $confirm_task->get_itinerary_daily()->adults_num}}</p>
-                              <p style="margin-left: 30px;" class="font-weight-bold" id="category_title">childs: {{ $confirm_task->get_itinerary_daily()->children_num}}</p>
-                          </div>
-                          <div class="app-file-recent-details">
-                            
-                            @for ($i=0; $i<count($product_prices); $i++)
-                              <div class="d-flex align-items-center mt-75">
-                                <p style="margin-right: 20px;" class="text-danger">Tag:</p>
-                                <p class="font-weight-bold" id="category_title">{{ $product_tags[$i]}}</p>
+                  @for ($i=0; $i<count($product_prices); $i++)
+                    <div class="d-flex align-items-center mt-75">
+                      <p style="margin-right: 20px;" class="text-danger">Service Type:</p>
+                      <p class="font-weight-bold" id="category_title">{{ $product_tags[$i]}}</p>
 
-                                <p style="margin-left: 30px;" class="font-weight-bold" id="season_duration">{{ $product_seasons[$i]}}</p>
-                                <p style="margin-left: 30px;" class="font-weight-bold" id="category_price">{{ $product_prices[$i]}}({{ $product_currencies[$i] }})</p>
-                              </div>
-                            @endfor
+                      <p style="margin-left: 30px;" class="font-weight-bold" id="season_duration">{{ $product_seasons[$i]}}</p>
+                      <p style="margin-left: 30px;" class="font-weight-bold" id="category_price">{{ $product_prices[$i]}}({{ $product_currencies[$i] }})</p>
+                    </div>
+                  @endfor
 
-                            <div class="d-flex align-items-center mt-75">
-                              <p style="margin-right: 20px;" class="text-danger">Margin Price:</p>
-                              <p class="font-weight-bold" id="category_title">{{ $confirm_task->get_itinerary_daily()->itinerary_margin_price  }}(%)</p>
-                            </div>
-                            <div class="d-flex align-items-center mt-75">
-                              <p style="margin-right: 20px;" class="text-danger">Supplier:</p>
-                              <p class="font-weight-bold" id="category_title">{{ $confirm_task->get_product()->get_supplier()->first_name . '.' . $confirm_task->get_product()->get_supplier()->last_name }}</p>
-                            </div>
-
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                  <div class="d-flex align-items-center mt-75">
+                    <p style="margin-right: 20px;" class="text-danger">Margin Price:</p>
+                    <p class="font-weight-bold" id="category_title">{{ $confirm_task->get_itinerary_daily()->itinerary_margin_price  }}(%)</p>
+                  </div>
+                  <div class="d-flex align-items-center mt-75">
+                    <p style="margin-right: 20px;" class="text-danger">Supplier:</p>
+                    <p class="font-weight-bold" id="category_title">{{ $confirm_task->get_product()->get_supplier()->first_name . '.' . $confirm_task->get_product()->get_supplier()->last_name }}</p>
+                  </div>
+                </div>
+              </div>    
             </div>
+            @endforeach
           </div>
-          @endforeach
         </div>
       </div>
     </div>
     <!-- Earnings Widget Swiper Ends -->
 
     <!-- chat Widget Starts -->
-    <div class="col-xl-6 col-md-6 widget-chat-card">
+    <div class="col-xl-6 col-md-6 col-sm-12 widget-chat-card">
       <div class="widget-chat widget-chat-messages">
         <div class="card">
           <div class="card-header border-bottom p-0">

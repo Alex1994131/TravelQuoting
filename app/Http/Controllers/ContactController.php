@@ -41,7 +41,7 @@ class ContactController extends Controller
       $task = Task::find($task_id);
       $itinerary_id = Task::find($task_id)->itinerary_id;
       $itinerary = Itinerary::find($itinerary_id);
-      
+
       $confirm_tasks = Confirmation::where('task_id', $task_id)->get();
 
       $staff_id = Account::where('user_id', Auth::user()->id)->first()->id;
