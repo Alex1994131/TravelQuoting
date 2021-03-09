@@ -1,11 +1,11 @@
 const firebaseConfig = {
-    apiKey: "AIzaSyDAZygc5nbXTCF_fhz-dMQk6qg6-VlaBsw",
-    authDomain: "travel-quoting-system.firebaseapp.com",
-    projectId: "travel-quoting-system",
-    storageBucket: "travel-quoting-system.appspot.com",
-    messagingSenderId: "953109990456",
-    appId: "1:953109990456:web:cb8e417800c83c871beacd",
-    measurementId: "G-RZ2WCFQ51F"
+    apiKey: "AIzaSyDVZFn0zP0X3gpC-a7_DA-fwU-UhPr2iKU",
+    authDomain: "thetravelcrm-ca8c5.firebaseapp.com",
+    projectId: "thetravelcrm-ca8c5",
+    storageBucket: "thetravelcrm-ca8c5.appspot.com",
+    messagingSenderId: "449430559091",
+    appId: "1:449430559091:web:48456ff640d47e13960d06",
+    measurementId: "G-6Y4TQ5G29R"
 };
 
 firebase.initializeApp(firebaseConfig);

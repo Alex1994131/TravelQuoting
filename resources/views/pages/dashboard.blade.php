@@ -512,11 +512,8 @@ label{
                   <tr>
                     <td></td>
                     <td></td>
-
                     <td class="text-bold-600">{{$enquiry->title}}</td>
-
                     <td>{{$enquiry->reference_number}}</td>
-
                     <td>{{$enquiry->get_account->first_name.' '.$enquiry->get_account->last_name}}</td>
                     <td>{{$enquiry->get_created_by->first_name.' '.$enquiry->get_created_by->last_name}}</td>
                     <td>
@@ -525,9 +522,9 @@ label{
                       @else
                         ---
                       @endif
-
                     </td>
-                    <td class="text-bold-600"><span>{{$enquiry->travel_number}}</span>
+                    <td class="text-bold-600">
+                      <span>{{$enquiry->travel_number}}</span>
                     </td>
                     <td class="text-bold-600">
                       {{$enquiry->budget}}
