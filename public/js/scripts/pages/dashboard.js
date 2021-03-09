@@ -369,7 +369,7 @@ function task_edit(task_id)
   var accounts = [];
   task_id = task_id;
   $.ajax({
-    url: '/task_edit',
+    url: base_url + '/task_edit',
     method: 'get',
     data: {
       task_id: task_id,
@@ -381,8 +381,6 @@ function task_edit(task_id)
       if(data['result'] == 'success') {
 
           $('#task_id').val(data.task['id']);
-
-          console.log(data);
 
           var task_type_str = "";
           var active = "";
@@ -428,6 +426,7 @@ function task_edit(task_id)
   });
   $('#task_detail_modal').modal();
 }
+
 function select_task(type_id)
 {
   console.log(type_id);
@@ -449,7 +448,7 @@ function save_task(){
   var assign_to = $('#assign_to').val();
   var note_value = CKEDITOR.instances.note.getData();
   var task_type = $('#task_type').val();
-  task_data['service_id'] = product_id;
+  
   task_data['task_name'] = task_name;
   task_data['start_date'] = from_date;
   task_data['start_time'] = start_time;
@@ -461,7 +460,6 @@ function save_task(){
   task_data['task_des'] = note_value;
   task_data['task_type'] = task_type;
   task_data['reference_number'] = $('#itinerary_ref_num').val();
-  task_data['service_id'] = 0;
   task_data['customer'] = 0;
   task_data['tags'] = "aa";
 
@@ -512,7 +510,7 @@ function save_task(){
     else {
       $.ajax({
         url: base_url + '/save_task',
-        method: 'get',
+        method: 'post',
         data: {
           _token: $("[name='_token']").val(),
           task_data: task_data,
@@ -534,6 +532,7 @@ function save_task(){
 
   }
 }
+
 function task_del(val){
   Swal.fire({
       title: 'Are you sure?',

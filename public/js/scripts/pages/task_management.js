@@ -151,55 +151,6 @@ $(window).on("load", function () {
     );
     multiradialChart.render();
 });
-function enquiry_del(val){
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
-        confirmButtonClass: 'btn btn-warning',
-        cancelButtonClass: 'btn btn-danger ml-1',
-        buttonsStyling: false,
-      }).then(function (result) {
-        if (result.value) {
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            });
-            jQuery.ajax({
-            url: base_url + '/del_enquiry',
-            method: 'get',
-            data: {
-                enquiry_id:val,
-            },
-            success: function(data){
-                if(data == "Success!")
-                {
-                    Swal.fire({
-                        type: "success",
-                        title: 'Deleted!',
-                        text: 'Selected Enquiry has been deleted.',
-                        confirmButtonClass: 'btn btn-success',
-                    }).then(function (result){
-                        if(result.value){
-                            var url = '../';
-                            window.location.href = url;
-                        }
-                    });
-
-
-                }
-            }});
-        }
-        else if (result.dismiss === Swal.DismissReason.cancel) {
-        }
-      });
-}
 
 function task_del(val){
   Swal.fire({
@@ -299,9 +250,10 @@ function task_detail(product_id){
   var accounts = [];
   $('#product_id').val(product_id);
   $.ajax({
-    url: '/task_detail',
+    url: base_url + '/task_detail',
     method: 'get',
     data: {
+      _token: $("[name='_token']").val(),
       product_id: product_id,
       itinerary_id: itinerary_id,
     },
@@ -351,7 +303,6 @@ function save_task(){
   var task_id = $('#task_id').val();
   var task_data = {};
   var itinerary_id = $('#itinerary_id').val();
-  var product_id = $('#product_id').val();
   var task_name = $('#task_name').val();
   var from_date = $('#from_date').val();
   var start_time =$('#start_time').val();
@@ -362,8 +313,8 @@ function save_task(){
   var assign_to = $('#assign_to').val();
   var note_value = CKEDITOR.instances.note.getData();
   var task_type = $('#task_type').val();
+
   task_data['itinerary_id'] = itinerary_id;
-  task_data['service_id'] = product_id;
   task_data['task_name'] = task_name;
   task_data['start_date'] = from_date;
   task_data['start_time'] = start_time;
@@ -424,7 +375,7 @@ function save_task(){
     else {
       $.ajax({
         url: base_url + '/save_task',
-        method: 'get',
+        method: 'post',
         data: {
           _token: $("[name='_token']").val(),
           task_data: task_data,
@@ -450,6 +401,7 @@ function save_task(){
     }
   }
 }
+
 function select_task(type_id)
 {
   console.log(type_id);
@@ -463,9 +415,10 @@ function task_edit(task_id)
   var accounts = [];
   task_id = task_id;
   $.ajax({
-    url: '/task_edit',
+    url: base_url + '/task_edit',
     method: 'get',
     data: {
+      _token: $("[name='_token']").val(),
       task_id: task_id,
     },
     dataType: 'JSON',
@@ -476,8 +429,7 @@ function task_edit(task_id)
 
           $('#task_id').val(data.task['id']);
           $('#product_id').val(data.task['service_id']);
-          console.log(data);
-
+          
           var task_type_str = "";
           var active = "";
           for(var i = 0; i < data.task_type.length; i++)
@@ -530,7 +482,6 @@ function task_edit(task_id)
             $('#head_title').hide();
 
             $('#myModalLabel17').show();
-
           }
           CKEDITOR.instances.note.setData(data.task['task_des']);
       }

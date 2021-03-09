@@ -19,12 +19,12 @@ class DashboardController extends Controller
         $breadcrumbs = [
         ["link" => "/", "name" => "Home"],["name" => "Dashboard"]
         ];
-        $enquiries = Enquiry::all();
-        $itineraries = Itinerary::all();
+        $enquiries = Enquiry::orderBy('created_at', 'desc')->get();
+        $itineraries = Itinerary::orderBy('created_at', 'desc')->get();
 
         $user_id = Auth::user()->id;
 
-        $task_list = Task::where('assigned_to', $user_id)->get();
+        $task_list = Task::where('assigned_to', $user_id)->orderBy('created_at', 'desc')->get();
 
         $msg = '';
         //dd(compact('enquiries', 'itineraries', 'pageConfigs', 'breadcrumbs', 'msg'));

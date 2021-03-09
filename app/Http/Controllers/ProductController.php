@@ -43,7 +43,7 @@ class ProductController extends Controller
                         $join->on('product.id', '=', 'first_gallery.product_id');
                     })
                     ->join('category', 'product.category', '=', 'category.id')
-                    ->orderBy('product.id');
+                    ->orderBy('created_at', 'desc');
 
             if($search_flag == 'my') {
                 $my_category_id = Account::where('user_id', auth()->user()->id)->first()->id;
@@ -84,7 +84,7 @@ class ProductController extends Controller
             return view('pages.product_search', $data)->render();
         }
 
-        $product = Product::paginate(18);
+        $product = Product::orderBy('created_at', 'desc')->paginate(18);
         $allcount = Product::all()->count();
 
         $account = Account::where('user_id', auth()->user()->id)->first();

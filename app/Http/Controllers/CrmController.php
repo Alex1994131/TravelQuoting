@@ -19,7 +19,7 @@ class CrmController extends Controller
             ["link" => "/", "name" => "Home"],["name" => "CRM"]
         ];
 
-        $accounts = Account::all();
+        $accounts = Account::orderBy('created_at', 'desc')->get();;
 
         return view('pages.crm',compact('pageConfigs','breadcrumbs','accounts'));
     }

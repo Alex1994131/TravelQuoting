@@ -381,7 +381,7 @@ label{
 
 
   <div class="row">
-    <div class="col-12 col-xl-12">
+    <div class="col-md-12 col-sm-12">
       <div class="card">
         <div class="card-header" style="border-left: 5px solid #ffdede">
           <h5 class="card-title" style="color: #FF5B5C">Task List</h5>
@@ -462,7 +462,7 @@ label{
   </div>
 
   <div class="row">
-    <div class="col-12 col-xl-12">
+    <div class="col-md-12 col-sm-12">
       <div class="card">
         <div class="card-header" style="border-left: 5px solid #ffdede">
           <h5 class="card-title" style="color: #FF5B5C">Enquiry List</h5>
@@ -565,7 +565,7 @@ label{
 
 
   <div class="row">
-    <div class="col-12 col-xl-12">
+    <div class="col-md-12 col-sm-12">
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
           <a class="nav-link active" id="itinerary-tab" data-toggle="tab" href="#itinerary-pan" aria-controls="itinerary-pan" role="tab"
