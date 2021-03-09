@@ -257,7 +257,7 @@ class ItineraryController extends Controller
       /** COMPLETE   */
     }
 
-    return view('pages.itinerary_add_info',compact('enquiry', 'itinerary', 'itinerary_status', 'itinerary_id', 'template_itinerary_data', 'product', 'language', 'product_gallery', 'product_description', 'product_pricing' ,'pageConfigs', 'from_date', 'to_date', 'days', 'itinerary_schedule_data', 'currency', 'categoryTag', 'category', 'budget', 'currency',  'pageConfigs'));
+    return view('pages.itinerary_add_info',compact('enquiry', 'type', 'itinerary', 'itinerary_status', 'itinerary_id', 'template_itinerary_data', 'product', 'language', 'product_gallery', 'product_description', 'product_pricing' ,'pageConfigs', 'from_date', 'to_date', 'days', 'itinerary_schedule_data', 'currency', 'categoryTag', 'category', 'budget', 'currency',  'pageConfigs'));
   }
 
 

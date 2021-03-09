@@ -51,10 +51,9 @@
               <span class="align-middle">
               Itinerary Information | Ref.No:
               <?php
-              $str = $itinerary->reference_number;
-
-              echo $str;
-                ?>
+                $str = $itinerary->reference_number;
+                echo $str;
+              ?>
               </span>
             </span>
         </div>
@@ -177,11 +176,11 @@
             <!-- services swiper starts -->
             <div class="widget-earnings-swiper swiper-container p-1">
               <div class="swiper-wrapper">
-                @foreach($itinerary_dailys as $itinerary_daily)
-                <div class="swiper-slide rounded swiper-shadow py-75 px-2 d-flex align-items-center" id="service_{{$itinerary_daily->id}}">
+                @foreach($confirm_tasks as $confirm_task)
+                <div class="swiper-slide rounded swiper-shadow py-75 px-2 d-flex align-items-center" id="service_{{$confirm_task->itinerary_daily_id}}">
                   <i class="bx bx-pyramid mr-50 font-large-1"></i>
-                  <div class="swiper-text">{{$itinerary_daily->get_product()->title}}
-                    <p class="mb-0 font-small-2 font-weight-normal">{{$itinerary_daily->get_time()}}</p>
+                  <div class="swiper-text">{{$confirm_task->get_product()->title}}
+                    <p class="mb-0 font-small-2 font-weight-normal">{{$confirm_task->get_time()}}</p>
                   </div>
                 </div>
                 @endforeach
@@ -193,14 +192,21 @@
           </div>
         </div>
         <div class="main-wrapper-content">
-          @foreach($itinerary_dailys as $itinerary_daily)
-          <div class="wrapper-content" data-earnings="service_{{$itinerary_daily->id}}">
+          @foreach($confirm_tasks as $confirm_task)
+          <div class="wrapper-content" data-earnings="service_{{$confirm_task->itinerary_daily_id}}">
+              
               @php
-                  $product_gallery = $product_gallery_model->where('product_id', $itinerary_daily->product_id)->first();
+                  $product_gallery = $product_gallery_model->where('product_id', $confirm_task->product_id)->first();
                   $path = $product_gallery?$product_gallery->path:'';
-                  $product = $itinerary_daily->get_product();
-                  $product_prices = $itinerary_daily->get_product_prices();
+
+                  $product = $confirm_task->get_product();
+                  
+                  $product_prices = $confirm_task->get_product_prices();
+                  $product_seasons = $confirm_task->get_product_seasons();
+                  $product_tags = $confirm_task->get_product_tags();
+                  $product_currencies = $confirm_task->get_product_currencies();
               @endphp
+              
             <div class="widget-earnings-scroll table-responsive">
               <table class="table table-borderless widget-earnings-width mb-0">
                 <tbody>
@@ -218,7 +224,7 @@
                           </div>
                         </div>
                         <div class = "col-md-4 mt-75" style="color: green">
-                          <button type="button" onClick="confirm_check({{$itinerary_daily->confirm_check()->id}})" class="btn btn-danger confirm_btn" {{$itinerary_daily->confirm_check()->status == 1 ? "disabled" : ""}}> confirm </button>
+                          <button type="button" onClick="confirm_check({{$confirm_task->id}})" class="btn btn-danger confirm_btn" {{ $confirm_task->status == 1 ? "disabled" : ""}}> confirm </button>
                         </div>
                       </div>
                     </td>
@@ -226,8 +232,6 @@
 
                   <tr>
                     <td class="col-lg-6 col-md-6 col-sm-6">
-                      <!-- <div class="app-file-content-logo card-img-top act-image" style="background: url({{asset($path)}}); width: 100%; height: 300px">
-                      </div> -->
                       <div class="card border shadow-none mb-1 app-file-info p-act">
                         <div class="card-content">
                           <i class="bx bx-dots-vertical-rounded app-file-edit-icon d-block float-right"></i>
@@ -236,28 +240,28 @@
                         <div class="card-body p-50">
                           <div class="d-flex align-items-center mt-75">
                               <p style="margin-right: 20px;" class="text-danger">Travelers:</p>
-                              <p class="font-weight-bold" id="category_title">adults: {{ $itinerary_daily->adults_num}}</p>
-                              <p style="margin-left: 30px;" class="font-weight-bold" id="category_title">childs: {{ $itinerary_daily->children_num}}</p>
+                              <p class="font-weight-bold" id="category_title">adults: {{ $confirm_task->get_itinerary_daily()->adults_num}}</p>
+                              <p style="margin-left: 30px;" class="font-weight-bold" id="category_title">childs: {{ $confirm_task->get_itinerary_daily()->children_num}}</p>
                           </div>
                           <div class="app-file-recent-details">
-                            @foreach($product_prices as $product_price)
-
+                            
+                            @for ($i=0; $i<count($product_prices); $i++)
                               <div class="d-flex align-items-center mt-75">
                                 <p style="margin-right: 20px;" class="text-danger">Tag:</p>
-                                <p class="font-weight-bold" id="category_title">{{ $product_price->getTagg($product_price->tag)->title}}</p>
+                                <p class="font-weight-bold" id="category_title">{{ $product_tags[$i]}}</p>
 
-                                <p style="margin-left: 30px;" class="font-weight-bold" id="season_duration">{{ $product_price->duration}}</p>
-                                <p style="margin-left: 30px;" class="font-weight-bold" id="category_price">{{ $product_price->price}}({{$product_price->getCurr($product_price->currency)->title}})</p>
+                                <p style="margin-left: 30px;" class="font-weight-bold" id="season_duration">{{ $product_seasons[$i]}}</p>
+                                <p style="margin-left: 30px;" class="font-weight-bold" id="category_price">{{ $product_prices[$i]}}({{ $product_currencies[$i] }})</p>
                               </div>
+                            @endfor
 
-                            @endforeach
                             <div class="d-flex align-items-center mt-75">
                               <p style="margin-right: 20px;" class="text-danger">Margin Price:</p>
-                              <p class="font-weight-bold" id="category_title">{{ $itinerary_daily->itinerary_margin_price  }}(%)</p>
+                              <p class="font-weight-bold" id="category_title">{{ $confirm_task->get_itinerary_daily()->itinerary_margin_price  }}(%)</p>
                             </div>
                             <div class="d-flex align-items-center mt-75">
                               <p style="margin-right: 20px;" class="text-danger">Supplier:</p>
-                              <p class="font-weight-bold" id="category_title">{{ $itinerary_daily->get_product()->get_supplier()->first_name . '.' . $itinerary_daily->get_product()->get_supplier()->last_name }}</p>
+                              <p class="font-weight-bold" id="category_title">{{ $confirm_task->get_product()->get_supplier()->first_name . '.' . $confirm_task->get_product()->get_supplier()->last_name }}</p>
                             </div>
 
                           </div>

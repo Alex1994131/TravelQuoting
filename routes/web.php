@@ -45,7 +45,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     //Task
-    Route::get('/task_management/with_itinerary_id/{itinerary_id}', ['uses' => 'TaskController@task_management'])->name('task_management');
+    Route::get('/task_management/with_itinerary_id/{itinerary_id}/{type}', ['uses' => 'TaskController@task_management'])->name('task_management');
     Route::get('/task_edit',['uses' => 'TaskController@edit_task'])->name('edit_task');
     Route::post('/del_task',['uses' => 'TaskController@delete_task']);
     Route::get('/task_detail',['as' => 'task_detail','uses' => 'TaskController@task_detail']);

@@ -22,7 +22,7 @@ class ItineraryDaily extends Model
       return $time;
 
     }
-    
+
     public function get_product_prices(){
       $price_ids = explode(':', $this->product_price_id);
       $product_prices = collect([]);
@@ -32,8 +32,8 @@ class ItineraryDaily extends Model
       }
 
       return $product_prices;
-
     }
+  
     public function confirm_check() {
       $confirmation = Confirmation::where('itinerary_daily_id', $this->id)->where('flag', 1)->first();
       return $confirmation;

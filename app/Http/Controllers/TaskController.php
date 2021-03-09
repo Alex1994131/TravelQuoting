@@ -31,7 +31,7 @@ use PDF;
 
 class TaskController extends Controller
 {
-  public function task_management($itinerary_id){
+  public function task_management($itinerary_id, $type){
       $pageConfigs = ['pageHeader' => true];
       // $breadcrumbs = [
       //   ["link" => "/", "name" => "Home"],["name" => "Task List"]
@@ -42,7 +42,7 @@ class TaskController extends Controller
       $itinerary = Itinerary::find($itinerary_id);
 
       // dd($task_list);
-      return view('pages.task_management',compact('itinerary', 'itinerary_id', 'task_list', 'task_type','pageConfigs'));
+      return view('pages.task_management',compact('itinerary', 'itinerary_id', 'task_list', 'task_type', 'pageConfigs', 'type'));
   }
 
   public function edit_task(Request $request) {

@@ -326,7 +326,7 @@ label{
             </div>
           </li>
           <li class="nav-item">
-              <a class="nav-link btn-primary glow white" id="account-tab" href="{{asset('/')}}">
+              <a class="nav-link btn-primary glow white" id="account-tab" href="{{route('add_itinerary_info', ['id' => $itinerary->id, 'type' => $type])}}">
                   <i class="bx bx-user align-middle"></i>
                   <span class="align-middle">Back</span>
               </a>

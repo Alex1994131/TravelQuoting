@@ -320,7 +320,7 @@ label{
                 </span>
                 <div class="dropdown-menu dropdown-menu-right">
                   @if($itinerary->id != null)
-                  <a class="dropdown-item" href="{{ route('task_management', ['itinerary_id' => $itinerary->id]) }}"><i class="bx bx-task mr-1"></i> Task</a>
+                  <a class="dropdown-item" href="{{ route('task_management', ['itinerary_id' => $itinerary->id, 'type' => $type]) }}"><i class="bx bx-task mr-1"></i> Task</a>
                   @endif
                   <a class="dropdown-item" href="javascript:void(0)" onClick=""><i class="bx bx-trash mr-1"></i> Notes</a>
                   <a class="dropdown-item" href="javascript:void(0)"><i class="bx bx-trash mr-1"></i>Email Quote</a>
