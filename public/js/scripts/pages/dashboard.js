@@ -362,8 +362,34 @@ $(document).ready(function() {
 
 });
 
-function task_edit(task_id)
+function task_edit(task_id, task_status)
 {
+  if(task_status == 2) {
+    Swal.fire({
+      title: 'Warning?',
+      text: "You could not be able to edit this task. this is completed task!",
+      type: 'warning',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'Ok!',
+      confirmButtonClass: 'btn btn-warning',
+      buttonsStyling: false,
+    });
+    return;
+  }
+
+  if(task_status == -1) {
+    Swal.fire({
+      title: 'Warning?',
+      text: "You could not be able to edit this task. this is closed task!",
+      type: 'warning',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'Ok!',
+      confirmButtonClass: 'btn btn-warning',
+      buttonsStyling: false,
+    });
+    return;
+  }
+  
   //task section
   var str_assign_by = '<option value="">--- Please select ---</option>';
   var accounts = [];

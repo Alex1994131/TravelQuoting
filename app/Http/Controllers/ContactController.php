@@ -39,6 +39,15 @@ class ContactController extends Controller
       $product_gallery_model = new ProductGallery;
       
       $task = Task::find($task_id);
+      if($task->status == 2) {
+        $msg = "Already Completed Task!";
+        return redirect()->route('index')->with('msg', $msg);
+      }
+      else if($task->status == -1) {
+        $msg = "Closed Task!";
+        return redirect()->route('index')->with('msg', $msg);
+      }
+
       $itinerary_id = Task::find($task_id)->itinerary_id;
       $itinerary = Itinerary::find($itinerary_id);
 

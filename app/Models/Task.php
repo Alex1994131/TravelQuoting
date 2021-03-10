@@ -35,34 +35,12 @@ class Task extends Model
       return  $assigned_to;
     }
     public function get_priority() {
-      if($this->priority == 1)
-        return "High";
-      else if($this->priority == 2)
-        return "Medium";
-      else if($this->priority == 3)
-        return "Low";
-
+      return $this->priority;
     }
     public function get_status() {
-      if($this->status == 1)
-        return "Open";
-      else if($this->status == 2)
-        return "Close";
-      else if($this->status == 3)
-        return "On Hold";
-
+      return $this->status;
     }
-    public function get_product_title() {
-      if($this->service_id != 0)
-      {
-        $itinerary_daily = ItineraryDaily::find($this->service_id);
-        $product = Product::find($itinerary_daily->product_id);
-        return $product->title;
-      }
-      else{
-        return "Itinerary";
-      }
-    }
+    
     public function get_service() {
         return $this->hasOne('App\Models\Product', 'id', 'product_id');
     }

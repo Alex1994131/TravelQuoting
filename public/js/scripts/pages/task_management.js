@@ -274,6 +274,8 @@ function task_detail(product_id){
           $('#task_type_ul').empty();
           $('#task_type_ul').append(task_type_str);
 
+          $("#radioStatus2").attr("disabled");
+          $("#radioStatus3").attr("disabled");
 
           current_account_str = data.current_account.first_name + ' ' + data.current_account.last_name + ', ' + data.current_account.main_email + ', ' + data.current_account.title;
           $('#assign_by').val(current_account_str);
@@ -408,8 +410,34 @@ function select_task(type_id)
   $('#task_type').val(type_id);
 }
 
-function task_edit(task_id)
+function task_edit(task_id, task_status)
 {
+  if(task_status == 2) {
+    Swal.fire({
+      title: 'Warning?',
+      text: "You could not be able to edit this task. this is completed task!",
+      type: 'warning',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'Ok!',
+      confirmButtonClass: 'btn btn-warning',
+      buttonsStyling: false,
+    });
+    return;
+  }
+
+  if(task_status == -1) {
+    Swal.fire({
+      title: 'Warning?',
+      text: "You could not be able to edit this task. this is closed task!",
+      type: 'warning',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'Ok!',
+      confirmButtonClass: 'btn btn-warning',
+      buttonsStyling: false,
+    });
+    return;
+  }
+  
   //task section
   var str_assign_by = '<option value="">--- Please select ---</option>'
   var accounts = [];

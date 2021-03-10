@@ -164,24 +164,24 @@ label{
                                   <fieldset>
                                     <div class="radio radio-primary radio-glow">
                                         <input type="radio" id="radioStatus1" name="radioStatus" checked value="1">
-                                        <label for="radioStatus1">Open</label>
-                                    </div>
-                                  </fieldset>
-                                </li>
-                                <li class="d-inline-block mr-2 mb-1">
-                                  <fieldset>
-                                    <div class="radio radio-secondary radio-glow">
-                                        <input type="radio" id="radioStatus2" name="radioStatus" value="2">
-                                        <label for="radioStatus2">Close</label>
+                                        <label for="radioStatus1">Pending</label>
                                     </div>
                                   </fieldset>
                                 </li>
                                 <li class="d-inline-block mr-2 mb-1">
                                   <fieldset>
                                       <div class="radio radio-success radio-glow">
-                                          <input type="radio" id="radioStatus3" name="radioStatus" value="3">
-                                          <label for="radioStatus3">On Hold</label>
+                                          <input type="radio" id="radioStatus2" name="radioStatus" value="2">
+                                          <label for="radioStatus3">Completed</label>
                                       </div>
+                                  </fieldset>
+                                </li>
+                                <li class="d-inline-block mr-2 mb-1">
+                                  <fieldset>
+                                    <div class="radio radio-secondary radio-glow">
+                                        <input type="radio" id="radioStatus3" name="radioStatus" value="-1">
+                                        <label for="radioStatus2">Closed</label>
+                                    </div>
                                   </fieldset>
                                 </li>
                               </ul>
@@ -407,10 +407,8 @@ label{
                     <tr>
                       <th></th>
                       <th>REF.NO</th>
-                      <th>Product Name</th>
                       <th>Task Name</th>
                       <th>Task Type</th>
-                      <th>Customer</th>
                       <th>Assigned By</th>
                       <th>Assigned To</th>
                       <th>Start Date</th>
@@ -426,22 +424,36 @@ label{
                   <tr>
                     <td></td>
                     <td>{{$task->reference_number}}</td>
-                    <td>{{$task->get_product_title()}}</td>
                     <td>{{$task->task_name}}</td>
                     <td>{{$task->get_task_type()}}</td>
-                    <td>{{$task->get_customer()}}</td>
                     <td>{{$task->get_assigned_by()}}</td>
                     <td>{{$task->get_assigned_to()}}</td>
                     <td>{{$task->start_date}}</td>
                     <td>{{$task->end_date}}</td>
-                    <td><button class="btn btn-outline-danger">{{$task->get_priority()}}</button></td>
-                    <td><button class="btn btn-outline-danger">{{$task->get_status()}}</button></td>
+                    <td>
+                      @if($task->get_priority() == 1)
+                        <div class="badge badge-pill badge-danger">High</div>
+                      @elseif($task->get_priority() == 2)
+                        <div class="badge badge-pill badge-light-danger">Medium</div>
+                      @else
+                        <div>Low</div>
+                      @endif
+                    </td>
+                    <td>
+                      @if($task->get_status() == 1)
+                        <div class="badge badge-pill badge-primary">Pending</div>
+                      @elseif($task->get_status() == 2)
+                        <div class="badge badge-pill badge-success">Compledted</div> 
+                      @else
+                        <div class="badge badge-pill badge-warning">Closed</div>
+                      @endif
+                    </td>
 
                     <td>
                       <div class="dropdown">
                         <span class="bx bx-slider-alt font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu"></span>
                         <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item" href="javascript:void(0)" onClick="task_edit({{$task->id}})"><i class="bx bx-edit-alt mr-1"></i> edit</a>
+                          <a class="dropdown-item" href="javascript:void(0)" onClick="task_edit({{$task->id}}, {{ $task->status }})"><i class="bx bx-edit-alt mr-1"></i> edit</a>
                           <a class="dropdown-item" href="javascript:void(0)" onClick="task_del({{$task->id}})"><i class="bx bx-trash mr-1"></i> delete</a>
                           <a class="dropdown-item" href="{{ route('contact_management', $task->id) }}"><i class="bx bx-edit-alt mr-1"></i> contact</a>
                         </div>

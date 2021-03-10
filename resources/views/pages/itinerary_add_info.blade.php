@@ -172,7 +172,7 @@ label{
                                   <fieldset>
                                     <div class="radio radio-primary radio-glow">
                                         <input type="radio" id="radioStatus1" name="radioStatus" checked value="1">
-                                        <label for="radioStatus1">Open</label>
+                                        <label for="radioStatus1">Pending</label>
                                     </div>
                                   </fieldset>
                                 </li>
@@ -180,15 +180,15 @@ label{
                                   <fieldset>
                                     <div class="radio radio-secondary radio-glow">
                                         <input type="radio" id="radioStatus2" name="radioStatus" value="2">
-                                        <label for="radioStatus2">Close</label>
+                                        <label for="radioStatus2">Completed</label>
                                     </div>
                                   </fieldset>
                                 </li>
                                 <li class="d-inline-block mr-2 mb-1">
                                   <fieldset>
                                       <div class="radio radio-success radio-glow">
-                                          <input type="radio" id="radioStatus3" name="radioStatus" value="3">
-                                          <label for="radioStatus3">On Hold</label>
+                                          <input type="radio" id="radioStatus3" name="radioStatus" value="-1">
+                                          <label for="radioStatus3">Closed</label>
                                       </div>
                                   </fieldset>
                                 </li>

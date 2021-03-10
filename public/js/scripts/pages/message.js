@@ -28,5 +28,9 @@ $(document).ready(function () {
             toastr.error('Not Completed Itinerary. Please complete it first!', 'Error', { "closeButton": true });
         else if(msg == "Already Sent Itinerary!")
             toastr.warning('Already Sent Itinerary!', 'Warning', { "closeButton": true });
+        else if(msg == "Already Completed Task!")
+            toastr.warning('Already Completed Task!', 'Warning', { "closeButton": true });
+        else if(msg == "Closed Itinerary!")
+            toastr.warning('Closed Task!', 'Warning', { "closeButton": true });
     }
 })
